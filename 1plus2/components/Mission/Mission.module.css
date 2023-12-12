@@ -1,0 +1,19 @@
+.centered {
+  margin: 50px 10px;
+  padding: 0.5em 2em;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+@media screen and (orientation: landscape) {
+  .buttonsWrapper {
+    margin: 20px 10px;
+    padding: 0.5em 1em;
+  }
+
+  .button {
+    font-size: 1.2em;
+    margin-right: 7%;
+  }
+}
