@@ -12,13 +12,13 @@ export default function Home() {
       <SectionTitle name="Обери завдання" />
       <section id="results" hidden></section>
 
-      <Mission />
+      <Mission isHidden={true} />
 
       <MathCategories isHidden={true} />
 
       <Monitor isHidden={false} isDelButtonHidden={false} n1="1" n2="2" answer="3" minusPlus="+" />
 
-      <Keyboard isEnterBtnHidden={true} />
+      <Keyboard isEnterBtnHidden={false} />
 
       <EndLevelScreen isHidden={true} />
     </main>

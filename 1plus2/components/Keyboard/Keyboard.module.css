@@ -1,1 +1,12 @@
-.Keyboard {}
+.Keyboard {
+  display: flex;
+  flex-direction: column;
+    padding: 0 10px;
+}
+
+.keyboardLine {
+  user-select: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
