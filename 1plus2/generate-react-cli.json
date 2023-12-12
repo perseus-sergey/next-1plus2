@@ -3,7 +3,7 @@
   "usesStyledComponents": false,
   "testLibrary": "Testing Library",
   "usesCssModule": true,
-  "cssPreprocessor": "css",
+  "cssPreprocessor": "scss",
   "component": {
     "default": {
       "path": "components",
