@@ -16,7 +16,7 @@ export default function Home() {
 
       <MathCategories isHidden={true} />
 
-      <Monitor isHidden={true} />
+      <Monitor isHidden={false} isDelButtonHidden={false} n1="1" n2="2" answer="3" minusPlus="+" />
 
       <Keyboard isEnterBtnHidden={true} />
 
