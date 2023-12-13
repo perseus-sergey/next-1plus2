@@ -3,24 +3,14 @@ import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.css';
 
 interface MonitorProps {
-  isHidden: boolean;
-  isDelButtonHidden: boolean;
   minusPlus: string;
   n1: string;
   n2: string;
   answer: string;
 }
 
-const Monitor: FC<MonitorProps> = ({
-  isHidden = true,
-  isDelButtonHidden = true,
-  minusPlus,
-  n1,
-  n2,
-  answer,
-}) => (
-  <section className={styles.Monitor} data-testid="Monitor" hidden={isHidden}>
-    {/* <section className="computer" hidden> */}
+const Monitor: FC<MonitorProps> = ({ minusPlus, n1, n2, answer }) => (
+  <section className={styles.Monitor} data-testid="Monitor">
     <div className={styles.displayWrapper}>
       <div className={styles.display} id="display">
         <table className={styles.columnExs} hidden={false}>
@@ -45,7 +35,9 @@ const Monitor: FC<MonitorProps> = ({
       <div className={styles.progressBlock}>
         <div className={styles.progressBar}>progress..</div>
       </div>
-      <TextButton hidden={isDelButtonHidden}>⋖⋖⋖⋖</TextButton>
+      <TextButton className="cancelButton" style={{ padding: '0 1rem' }}>
+        {'<<<'}
+      </TextButton>
     </div>
   </section>
 );

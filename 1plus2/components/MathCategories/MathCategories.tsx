@@ -1,12 +1,10 @@
 import React, { FC } from 'react';
 import styles from './MathCategories.module.css';
 
-interface MathCategoriesProps {
-  isHidden: boolean;
-}
+interface MathCategoriesProps {}
 
-const MathCategories: FC<MathCategoriesProps> = ({ isHidden = true }) => (
-  <section className={styles.MathCategories} data-testid="MathCategories" hidden={isHidden}>
+const MathCategories: FC<MathCategoriesProps> = () => (
+  <section className={styles.MathCategories} data-testid="MathCategories">
     <div className="keyboard-line">
       <button className="glass-button category" type="button" id="sequence">
         1 2 ?

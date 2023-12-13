@@ -3,15 +3,20 @@ import TextButton from '../TextButton/TextButton';
 import style from './Mission.module.css';
 
 interface MissionProps {
-  isHidden: boolean;
+  catButtonClicked: () => void;
+  levelButtonClicked: () => void;
 }
 
-const Mission: FC<MissionProps> = ({ isHidden = true }) => {
+const Mission: FC<MissionProps> = ({ catButtonClicked, levelButtonClicked }) => {
   return (
-    <section hidden={isHidden}>
+    <section>
       <div className={style.centered}>
-        <TextButton id="level">Рівні</TextButton>
-        <TextButton id="step">Категорії</TextButton>
+        <TextButton id="level" onClick={levelButtonClicked}>
+          Рівні
+        </TextButton>
+        <TextButton id="step" onClick={catButtonClicked}>
+          Категорії
+        </TextButton>
       </div>
     </section>
   );

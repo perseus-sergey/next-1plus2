@@ -2,11 +2,9 @@ import React, { FC } from 'react';
 import KeyboardButton from '../KeyboardButton/KeyboardButton';
 import TextButton from '../TextButton/TextButton';
 import styles from './Keyboard.module.css';
-import { createArray } from './utils';
+import { createArray } from '../../libs/utils';
 
-interface KeyboardProps {
-  isEnterBtnHidden: boolean;
-}
+interface KeyboardProps {}
 
 // function makeBtns4Eq() {
 //   for (let i = 1; i < 11; i++) {
@@ -75,9 +73,8 @@ interface KeyboardProps {
 //   enter_btn.hidden = false;
 // }
 
-const Keyboard: FC<KeyboardProps> = ({ isEnterBtnHidden }) => (
+const Keyboard: FC<KeyboardProps> = () => (
   <section className={styles.Keyboard} data-testid="Keyboard">
-    {/* <section className="keyboard"> */}
     <div id="key_btns" className={styles.keyboardLine}>
       {createArray(10).map((_, i) => (
         <KeyboardButton key={i}>{(i + 1) % 10}</KeyboardButton>
@@ -85,9 +82,7 @@ const Keyboard: FC<KeyboardProps> = ({ isEnterBtnHidden }) => (
     </div>
 
     <div className={styles.keyboardLine}>
-      <TextButton id="btn_enter" hidden={isEnterBtnHidden}>
-        Підтвердити
-      </TextButton>
+      <TextButton id="btn_enter">Підтвердити</TextButton>
     </div>
   </section>
 );
