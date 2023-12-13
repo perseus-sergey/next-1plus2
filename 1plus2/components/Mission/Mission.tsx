@@ -1,22 +1,23 @@
-import { FC } from 'react';
+import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
 import style from './Mission.module.css';
+import { TLang, getTitleFromMap } from '@/libs/langMessages';
 
 interface MissionProps {
-  catButtonClicked: () => void;
   levelButtonClicked: () => void;
+  lang: TLang;
 }
 
-const Mission: FC<MissionProps> = ({ catButtonClicked, levelButtonClicked }) => {
+const Mission = ({ levelButtonClicked, lang }: MissionProps) => {
   return (
     <section>
       <div className={style.centered}>
         <TextButton id="level" onClick={levelButtonClicked}>
-          Рівні
+          {getTitleFromMap('btnLevels', lang)}
         </TextButton>
-        <TextButton id="step" onClick={catButtonClicked}>
-          Категорії
-        </TextButton>
+        <Link href={`/${lang}/math/category`}>
+          <TextButton>{getTitleFromMap('btnCat', lang)}</TextButton>
+        </Link>
       </div>
     </section>
   );

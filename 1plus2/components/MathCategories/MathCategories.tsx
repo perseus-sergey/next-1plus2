@@ -1,40 +1,28 @@
-import React, { FC } from 'react';
+import { ICatPageProps } from '@/app/[lang]/math/category/page';
+import TextButton from '../TextButton/TextButton';
+import SectionTitle from '../sectionTitle/SectionTitle';
 import styles from './MathCategories.module.css';
+import { getTitleFromMap } from '@/libs/langMessages';
 
-interface MathCategoriesProps {}
+const MathCategories = (props: ICatPageProps) => {
+  const { lang = 'en' } = props.params;
 
-const MathCategories: FC<MathCategoriesProps> = () => (
-  <section className={styles.MathCategories} data-testid="MathCategories">
-    <div className="keyboard-line">
-      <button className="glass-button category" type="button" id="sequence">
-        1 2 ?
-      </button>
-      <button className="glass-button category" type="button" id="equality">
-        1 + 2
-      </button>
-      <button className="glass-button category" type="button" id="pairs">
-        1 + 1
-      </button>
-      <button className="glass-button category" type="button" id="linkEquality">
-        1 + ?
-      </button>
-      <button className="glass-button category" type="button" id="inequality">
-        ⋖ ⋗
-      </button>
-      <button className="glass-button category" type="button" id="equalTen">
-        1 + 10
-      </button>
-      <button className="glass-button category" type="button" id="composition">
-        Склад 11..19
-      </button>
-      <button className="glass-button category" type="button" id="equalFive">
-        10 + 5
-      </button>
-      <button className="glass-button category" type="button" id="equalOverTen">
-        7 + 8
-      </button>
-    </div>
-  </section>
-);
+  return (
+    <section data-testid="MathCategories">
+      <SectionTitle name={getTitleFromMap('categoryChoice', lang)} />
+      <div className={styles.MathCategories}>
+        <TextButton id="sequence">1 2 ?</TextButton>
+        <TextButton id="equality">1 + 2</TextButton>
+        <TextButton id="pairs">1 + 1</TextButton>
+        <TextButton id="linkEquality">1 + ?</TextButton>
+        <TextButton id="inequality">{'< = >'}</TextButton>
+        <TextButton id="equalTen">1 + 10</TextButton>
+        <TextButton id="composition">{getTitleFromMap('btnCompos', lang)}</TextButton>
+        <TextButton id="equalFive">10 + 5</TextButton>
+        <TextButton id="equalOverTen">7 + 8</TextButton>
+      </div>
+    </section>
+  );
+};
 
 export default MathCategories;
