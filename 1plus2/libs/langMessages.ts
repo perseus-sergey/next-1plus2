@@ -26,6 +26,34 @@ export const titleMap: ITitleMap = new Map([
   ['btnCat', { en: 'Categories', ua: 'Категорії' }],
   ['btnCompos', { en: 'Composition 11..19', ua: 'Склад 11..19' }],
   ['btnEnter', { en: 'Confirm', ua: 'Далі' }],
+  [
+    'pageDescriptionMain',
+    {
+      en: 'Interactive online resource, homework, exams and tests. Useful for teachers, students and parents.',
+      ua: 'Інтерактивний розвиваючий онлайн ресурс, домашні роботи, іспити та тести. Корисно для вчителів, учнів та батьків.',
+    },
+  ],
+  [
+    'pageKeywordsMain',
+    {
+      en: 'Interactive, homework, exams, tests, mathematics, children, teachers, students and parents.',
+      ua: 'дитяча математика, рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
+    },
+  ],
+  [
+    'pageDescriptionMath',
+    {
+      en: "Fun children's mathematics, initial level, learn to count, add, subtract, comparison, more, less, equal.",
+      ua: 'Весела дитяча математика, початковий рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
+    },
+  ],
+  [
+    'pageKeywordsMath',
+    {
+      en: 'children mathematics, level, learn, count, add, subtract, comparison, more, less, equal.',
+      ua: 'дитяча математика, рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
+    },
+  ],
 ]);
 
 export const getTitleFromMap = (
