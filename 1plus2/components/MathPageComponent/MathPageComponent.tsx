@@ -8,13 +8,13 @@ import Mission from '../Mission/Mission';
 import Monitor from '../Monitor/Monitor';
 import Keyboard from '../Keyboard/Keyboard';
 import EndLevelScreen from '../EndLevelScreen/EndLevelScreen';
-import { ELang, getTitleFromMap } from '@/libs/langMessages';
+import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { IMathPageProps } from '@/app/[lang]/math/page';
 
 const MathPageComponent = (props: IMathPageProps) => {
   const { lang = ELang.ENGLISH } = props.params;
 
-  const [titleH1, setTitleH1] = useState(getTitleFromMap('choiceMiss', lang));
+  const [titleH1, setTitleH1] = useState(getTitleFromMap(EMessageNames.MISSION_CHOICE, lang));
   const [isMissionSection, setIsMissionSection] = useState(true);
   const [isResultsSection, setIsResultsSection] = useState(false);
   // const [isCategoriesSection, setIsCategoriesSection] = useState(false);
@@ -35,7 +35,7 @@ const MathPageComponent = (props: IMathPageProps) => {
   // }
 
   const levelButtonClicked = () => {
-    setTitleH1(getTitleFromMap('choiceMaxNumOfExs', lang));
+    setTitleH1(getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, lang));
   };
 
   return (

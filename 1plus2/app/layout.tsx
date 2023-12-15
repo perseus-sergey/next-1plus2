@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { getMetaFromMap } from '@/libs/langMessages';
+import { ELang, EMetaTypes, EPageTitles, metaMap } from '@/libs/langMessages';
 import { Lobster } from 'next/font/google';
 
 const lobsterFont = Lobster({
@@ -11,9 +11,9 @@ const lobsterFont = Lobster({
 });
 
 export const metadata: Metadata = {
-  title: '1plus2 Fan',
-  description: getMetaFromMap('pageDescriptionMain'),
-  keywords: getMetaFromMap('pageKeywordsMain'),
+  title: metaMap.get(EPageTitles.MAIN)?.[EMetaTypes.TITLE][ELang.ENGLISH],
+  description: metaMap.get(EPageTitles.MAIN)?.[EMetaTypes.DESCRIPTION][ELang.ENGLISH],
+  keywords: metaMap.get(EPageTitles.MAIN)?.[EMetaTypes.KEYWORDS][ELang.ENGLISH],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

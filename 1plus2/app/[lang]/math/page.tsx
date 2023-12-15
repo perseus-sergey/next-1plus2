@@ -1,5 +1,5 @@
 import MathPageComponent from '@/components/MathPageComponent/MathPageComponent';
-import { ELang, getMetaFromMap } from '@/libs/langMessages';
+import { ELang, EMetaTypes, EPageTitles, metaMap } from '@/libs/langMessages';
 import { Metadata } from 'next';
 
 export interface IMathPageProps {
@@ -7,9 +7,9 @@ export interface IMathPageProps {
 }
 
 export const generateMetadata = ({ params }: IMathPageProps): Metadata => ({
-  title: '1plus2 | Math',
-  description: getMetaFromMap('pageDescriptionMath', params.lang),
-  keywords: getMetaFromMap('pageKeywordsMath', params.lang),
+  title: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.TITLE][params.lang],
+  description: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.DESCRIPTION][params.lang],
+  keywords: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.KEYWORDS][params.lang],
 });
 
 export function generateStaticParams(): {
