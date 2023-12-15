@@ -1,10 +1,8 @@
-import React, { FC } from 'react';
 import KeyboardButton from '../KeyboardButton/KeyboardButton';
 import TextButton from '../TextButton/TextButton';
-import styles from './Keyboard.module.css';
 import { createArray } from '../../libs/utils';
 
-interface KeyboardProps {}
+// interface KeyboardProps {}
 
 // function makeBtns4Eq() {
 //   for (let i = 1; i < 11; i++) {
@@ -73,15 +71,15 @@ interface KeyboardProps {}
 //   enter_btn.hidden = false;
 // }
 
-const Keyboard: FC<KeyboardProps> = () => (
-  <section className={styles.Keyboard} data-testid="Keyboard">
-    <div id="key_btns" className={styles.keyboardLine}>
+const Keyboard = () => (
+  <section className="keyboard" data-testid="Keyboard">
+    <div id="key_btns" className="keyboard-line">
       {createArray(10).map((_, i) => (
-        <KeyboardButton key={i}>{(i + 1) % 10}</KeyboardButton>
+        <KeyboardButton key={i} value={(i + 1) % 10} />
       ))}
     </div>
 
-    <div className={styles.keyboardLine}>
+    <div className="keyboard-line">
       <TextButton id="btn_enter">Підтвердити</TextButton>
     </div>
   </section>

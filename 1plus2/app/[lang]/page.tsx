@@ -1,21 +1,19 @@
-import { TLang, getTitleFromMap } from '@/libs/langMessages';
+import { ELang, getMetaFromMap } from '@/libs/langMessages';
 import styles from '../page.module.css';
 import { Metadata } from 'next';
 
 export interface IMathPageProps {
-  params: { lang: TLang };
+  params: { lang: ELang };
 }
 
 export const generateMetadata = ({ params }: IMathPageProps): Metadata => ({
   title: '1plus2 | Math',
-  description: getTitleFromMap('pageDescriptionMain', params.lang),
-  keywords: getTitleFromMap('pageKeywordsMain', params.lang),
+  description: getMetaFromMap('pageDescriptionMain', params.lang),
+  keywords: getMetaFromMap('pageKeywordsMain', params.lang),
 });
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <h1>Home Page</h1>
-    </main>
-  );
-}
+export default () => (
+  <main className={styles.main}>
+    <h1>Home Page</h1>
+  </main>
+);

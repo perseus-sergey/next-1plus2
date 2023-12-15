@@ -1,9 +1,9 @@
 import TextButton from '../TextButton/TextButton';
 import styles from './EndLevelScreen.module.css';
-import { TLang, getTitleFromMap } from '@/libs/langMessages';
+import { ELang, getTitleFromMap } from '@/libs/langMessages';
 
 interface EndLevelScreenProps {
-  lang: TLang;
+  lang: ELang;
 }
 
 const EndLevelScreen = ({ lang }: EndLevelScreenProps) => (

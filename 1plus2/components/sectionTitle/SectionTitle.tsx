@@ -1,7 +1,7 @@
 type Props = { name: string };
 
 const SectionTitle = ({ name }: Props) => {
-  return <span className="section-title">{name}</span>;
+  return <h1 className="section-title">{name}</h1>;
 };
 
 export default SectionTitle;

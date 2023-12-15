@@ -1,10 +1,8 @@
 import MathCategories from '@/components/MathCategories/MathCategories';
-import { TLang } from '@/libs/langMessages';
+import { ELang } from '@/libs/langMessages';
 
 export interface ICatPageProps {
-  params: { lang: TLang };
+  params: { lang: ELang };
 }
 
-export default function CatPage(props: ICatPageProps) {
-  return <MathCategories {...props} />;
-}
+export default (props: ICatPageProps) => <MathCategories {...props} />;

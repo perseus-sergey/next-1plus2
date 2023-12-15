@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
 import style from './Mission.module.css';
-import { TLang, getTitleFromMap } from '@/libs/langMessages';
+import { ELang, getTitleFromMap } from '@/libs/langMessages';
 
 interface MissionProps {
   levelButtonClicked: () => void;
-  lang: TLang;
+  lang: ELang;
 }
 
 const Mission = ({ levelButtonClicked, lang }: MissionProps) => {

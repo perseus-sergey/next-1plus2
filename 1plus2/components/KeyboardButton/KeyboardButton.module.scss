@@ -1,6 +1,6 @@
 $keyColorYellow: rgb(252, 222, 27);
 $keyColorOrange: rgb(251, 129, 85);
-$keyColorBlue: rgb(60, 138, 221);;
+$keyColorBlue: rgb(60, 138, 221);
 $keyColorGreen: rgb(146, 199, 32);
 $keyColorPink: rgb(241, 23, 110);
 $keyColorViolet: rgb(137, 93, 232);
@@ -40,14 +40,16 @@ $keyBgColorDefault: $keyBgColorBlue;
 }
 
 .KeyboardButton {
+  cursor: pointer;
   background-image: linear-gradient(rgb(255 58 126), rgb(251 0 86));
   color: rgb(60, 138, 221);
   text-shadow:
     3px 3px 0 #40287c,
     1px -1px 1px #fff;
+  font-family: var(--font-lobster);
   font-size: 4em;
   border-radius: 50%;
-  width: 1.25em;
+  min-width: 1.25em;
   outline: none;
   border: none;
 }

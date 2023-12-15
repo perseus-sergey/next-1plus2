@@ -1,14 +1,1 @@
-.Keyboard {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  padding: 0 10px;
-}
-
-.keyboardLine {
-  user-select: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
+.Keyboard {}

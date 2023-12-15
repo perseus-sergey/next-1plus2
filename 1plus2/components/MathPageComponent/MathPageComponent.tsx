@@ -4,20 +4,20 @@ import { useState } from 'react';
 // import styles from './MathPageComponent.module.css';
 import SectionTitle from '../sectionTitle/SectionTitle';
 import Mission from '../Mission/Mission';
-import MathCategories from '../MathCategories/MathCategories';
+// import MathCategories from '../MathCategories/MathCategories';
 import Monitor from '../Monitor/Monitor';
 import Keyboard from '../Keyboard/Keyboard';
 import EndLevelScreen from '../EndLevelScreen/EndLevelScreen';
-import { getTitleFromMap } from '@/libs/langMessages';
+import { ELang, getTitleFromMap } from '@/libs/langMessages';
 import { IMathPageProps } from '@/app/[lang]/math/page';
 
 const MathPageComponent = (props: IMathPageProps) => {
-  const { lang = 'en' } = props.params;
+  const { lang = ELang.ENGLISH } = props.params;
 
   const [titleH1, setTitleH1] = useState(getTitleFromMap('choiceMiss', lang));
   const [isMissionSection, setIsMissionSection] = useState(true);
   const [isResultsSection, setIsResultsSection] = useState(false);
-  const [isCategoriesSection, setIsCategoriesSection] = useState(false);
+  // const [isCategoriesSection, setIsCategoriesSection] = useState(false);
   const [isMonitorSection, setIsMonitorSection] = useState(false);
   const [isKeyboardSection, setIsKeyboardSection] = useState(false);
   const [isEndLevelSection, setIsEndLevelSection] = useState(false);

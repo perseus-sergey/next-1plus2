@@ -1,25 +1,8 @@
-import { Lobster } from 'next/font/google';
-import React, { FC } from 'react';
 import styles from './KeyboardButton.module.scss';
 
 interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
+  value: number;
 }
-
-const lobster = Lobster({
-  subsets: ['latin', 'cyrillic'],
-  weight: '400',
-  display: 'swap',
-});
-
-// const keyColorStyles = [
-//   { fontColor: 'key-btn_color_blue', bgColor: 'key-btn_bgcolor_blue' },
-//   { fontColor: 'key-btn_color_green', bgColor: 'key-btn_bgcolor_green' },
-//   { fontColor: 'key-btn_color_yellow', bgColor: 'key-btn_bgcolor_yellow' },
-//   { fontColor: 'key-btn_color_pink', bgColor: 'key-btn_bgcolor_pink' },
-//   { fontColor: 'key-btn_color_violet', bgColor: 'key-btn_bgcolor_violet' },
-//   { fontColor: 'key-btn_color_orange', bgColor: 'key-btn_bgcolor_orange' },
-// ];
 
 const generateRandomColor = (): string[] => {
   const keyColorStyles = [
@@ -42,20 +25,21 @@ const generateRandomColor = (): string[] => {
   return [keyColorStyles[colorIndx].fontColor, keyColorStyles[bgColorIndx].bgColor];
 };
 
-const KeyboardButton: FC<KeyboardButtonProps> = ({ children }) => {
+const KeyboardButton = ({ value }: KeyboardButtonProps) => {
   const [fontColor, bgColor] = generateRandomColor();
 
   return (
     <button
       type="button"
+      value={value}
       style={{
         color: fontColor,
         backgroundImage: bgColor,
       }}
-      className={`${styles.KeyboardButton} ${lobster.className}`}
+      className={styles.KeyboardButton}
       data-testid="KeyboardButton"
     >
-      {children}
+      {value}
     </button>
   );
 };
