@@ -7,13 +7,15 @@ export interface IExercisePageProps {
 export const generateStaticParams = () =>
   Object.values(ELang).reduce(
     (acc, langSlug) =>
-      acc.concat([...categoriesMap.keys()].map((catSlug) => ({ lang: langSlug, cat: catSlug }))),
+      acc.concat(
+        [...categoriesMap.keys()].map((catSlug) => ({ lang: langSlug, cat: catSlug, maxNum: '1' }))
+      ),
     [{}]
   );
 
 export default (props: IExercisePageProps) => {
-  // return <MathExercise {...props} />;
-  return <h1>hj</h1>;
+  return <h1>{props.params.maxNum}</h1>;
+  // return <ExercisePage {...props} />;
 };
 
 export const dynamicParams = false;
