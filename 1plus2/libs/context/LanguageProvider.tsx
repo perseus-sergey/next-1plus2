@@ -9,7 +9,7 @@ const LangContext = createContext<TLangContext>({} as TLangContext);
 export const useLanguage = () => useContext(LangContext);
 
 export default function LanguageProvider({ children }: TProps) {
-  const [language, setLanguage] = useState<ELang>(ELang.ENGLISH);
+  const [language, setLanguage] = useState<ELang>(ELang.en);
 
   return <LangContext.Provider value={{ language, setLanguage }}>{children}</LangContext.Provider>;
 }

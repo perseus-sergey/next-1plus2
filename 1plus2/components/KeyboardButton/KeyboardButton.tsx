@@ -1,7 +1,7 @@
 import styles from './KeyboardButton.module.scss';
 
 interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  value: number;
+  value: string;
 }
 
 const generateRandomColor = (): string[] => {

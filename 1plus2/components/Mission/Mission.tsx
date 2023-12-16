@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
-import style from './Mission.module.css';
+import style from './Mission.module.scss';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 
 interface MissionProps {

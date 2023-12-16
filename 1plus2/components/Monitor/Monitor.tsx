@@ -1,15 +1,16 @@
-import React, { FC } from 'react';
+import { TMinusPlus } from '../ExercisePage/ExercisePage';
 import TextButton from '../TextButton/TextButton';
-import styles from './Monitor.module.css';
+import styles from './Monitor.module.scss';
 
 interface MonitorProps {
-  minusPlus: string;
-  n1: string;
-  n2: string;
-  answer: string;
+  minusPlus: TMinusPlus;
+  n1: number;
+  n2: number;
+  answer: number;
+  isDelBtnActive?: boolean;
 }
 
-const Monitor: FC<MonitorProps> = ({ minusPlus, n1, n2, answer }) => (
+const Monitor = ({ minusPlus, n1, n2, answer, isDelBtnActive = true }: MonitorProps) => (
   <section className={styles.Monitor} data-testid="Monitor">
     <div className={styles.displayWrapper}>
       <div className={styles.display} id="display">
@@ -35,9 +36,11 @@ const Monitor: FC<MonitorProps> = ({ minusPlus, n1, n2, answer }) => (
       <div className={styles.progressBlock}>
         <div className={styles.progressBar}>progress..</div>
       </div>
-      <TextButton className="cancelButton" style={{ padding: '0 1rem' }}>
-        {'<<<'}
-      </TextButton>
+      {isDelBtnActive && (
+        <TextButton className="cancelButton" style={{ padding: '0 1rem' }}>
+          {'<<<'}
+        </TextButton>
+      )}
     </div>
   </section>
 );

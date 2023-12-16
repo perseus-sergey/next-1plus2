@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import styles from '../page.module.css';
+import styles from '../page.module.scss';
 import { ELang, EMetaTypes, EPageTitles, metaMap } from '@/libs/langMessages';
 
 export interface IMathPageProps {

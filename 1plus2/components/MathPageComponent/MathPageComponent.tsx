@@ -1,38 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-// import styles from './MathPageComponent.module.css';
-import SectionTitle from '../sectionTitle/SectionTitle';
+// import styles from './MathPageComponent.module.scss';
+import SectionTitle from '../SectionTitle/SectionTitle';
 import Mission from '../Mission/Mission';
 // import MathCategories from '../MathCategories/MathCategories';
 import Monitor from '../Monitor/Monitor';
 import Keyboard from '../Keyboard/Keyboard';
 import EndLevelScreen from '../EndLevelScreen/EndLevelScreen';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
-import { IMathPageProps } from '@/app/[lang]/math/page';
+import { IMathPageProps } from '@/app/[lang]/layout';
 
 const MathPageComponent = (props: IMathPageProps) => {
-  const { lang = ELang.ENGLISH } = props.params;
+  const { lang = ELang.en } = props.params;
 
   const [titleH1, setTitleH1] = useState(getTitleFromMap(EMessageNames.MISSION_CHOICE, lang));
   const [isMissionSection, setIsMissionSection] = useState(true);
   const [isResultsSection, setIsResultsSection] = useState(false);
-  // const [isCategoriesSection, setIsCategoriesSection] = useState(false);
-  const [isMonitorSection, setIsMonitorSection] = useState(false);
-  const [isKeyboardSection, setIsKeyboardSection] = useState(false);
   const [isEndLevelSection, setIsEndLevelSection] = useState(false);
-
-  // function begin() {
-  //   result_sec.innerHTML = '';
-  //   hideComputer(true);
-  //   mission_sec.hidden = true;
-
-  //   if (arrTest.length) {
-  //     choisePrintFunc();
-  //   } else {
-  //     cat ? choiseMiss() : category();
-  //   }
-  // }
 
   const levelButtonClicked = () => {
     setTitleH1(getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, lang));
@@ -47,9 +32,9 @@ const MathPageComponent = (props: IMathPageProps) => {
 
       {/* {isCategoriesSection && <MathCategories lang={lang} />} */}
 
-      {isMonitorSection && <Monitor n1="1" n2="2" answer="3" minusPlus="+" />}
+      {/* {isMonitorSection && <Monitor n1={1} n2={2} answer={3} minusPlus="+" />} */}
 
-      {isKeyboardSection && <Keyboard />}
+      {/* {isKeyboardSection && <Keyboard />} */}
 
       {isEndLevelSection && <EndLevelScreen lang={lang} />}
     </>

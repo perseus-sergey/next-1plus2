@@ -1,13 +1,14 @@
-// export type TLang = 'en' | 'ua';
+const NUMBER_OF_EXERCISES = 10;
+const HARD_LEVELS_IN_ARRAY = 2;
 
 export enum ELang {
-  ENGLISH = 'en',
-  UKRAINE = 'ua',
+  en = 'en',
+  ua = 'ua',
 }
 
 type TLang = {
-  [ELang.ENGLISH]: string;
-  [ELang.UKRAINE]: string;
+  [ELang.en]: string;
+  [ELang.ua]: string;
 };
 
 type TTitleMap = Map<string, TLang>;
@@ -17,21 +18,21 @@ type TCatObject = {
   description: string;
 };
 
-type TCatMap = Map<
-  string,
-  {
-    [ELang.ENGLISH]: TCatObject;
-    [ELang.UKRAINE]: TCatObject;
-    exercise: { start: number; max: number; step: number };
-  }
->;
+export interface IExerciseParams {
+  [ELang.en]: TCatObject;
+  [ELang.ua]: TCatObject;
+  exercise: { start: number; max: number; step: number };
+  keyboardKeys: string[];
+}
+
+type TCatMap = Map<string, IExerciseParams>;
 
 export enum EMessageNames {
   'MISSION_CHOICE' = 'choiceMiss',
   'SHOW_END_LEVEL' = 'showEndLevel',
   'CATEGORY_CHOICE' = 'categoryChoice',
   'CHOICE_MAX_EXS_NUM' = 'choiceMaxNumOfExs',
-  'LEFT_EXS_NUM' = 'leftExs',
+  'LEFT_EXS_NUM_MSG' = 'leftExs',
   'BRAVO' = 'bravo',
   'BAD' = 'bad',
   'NO_BAD' = 'notBad',
@@ -47,35 +48,32 @@ export enum EMessageNames {
 }
 
 export const titleMap: TTitleMap = new Map([
-  [
-    EMessageNames.MISSION_CHOICE,
-    { [ELang.ENGLISH]: 'Choose the task', [ELang.UKRAINE]: 'Обери завдання' },
-  ],
+  [EMessageNames.MISSION_CHOICE, { [ELang.en]: 'Choose the task', [ELang.ua]: 'Обери завдання' }],
   [
     EMessageNames.SHOW_END_LEVEL,
-    { [ELang.ENGLISH]: 'level is completed', [ELang.UKRAINE]: 'рівень пройдено' },
+    { [ELang.en]: 'level is completed', [ELang.ua]: 'рівень пройдено' },
   ],
   [
     EMessageNames.CATEGORY_CHOICE,
-    { [ELang.ENGLISH]: 'Choose the category', [ELang.UKRAINE]: 'Обери категорію' },
+    { [ELang.en]: 'Choose the category', [ELang.ua]: 'Обери категорію' },
   ],
   [
     EMessageNames.CHOICE_MAX_EXS_NUM,
-    { [ELang.ENGLISH]: 'Choose Level', [ELang.UKRAINE]: 'Рівень складності' },
+    { [ELang.en]: 'Choose Level', [ELang.ua]: 'Рівень складності' },
   ],
-  [EMessageNames.LEFT_EXS_NUM, { [ELang.ENGLISH]: 'Remains', [ELang.UKRAINE]: 'Залишилось' }],
-  [EMessageNames.BRAVO, { [ELang.ENGLISH]: 'BRAVO', [ELang.UKRAINE]: 'БРАВО!' }],
-  [EMessageNames.BAD, { [ELang.ENGLISH]: 'BAD!', [ELang.UKRAINE]: 'ПОГАНО!' }],
-  [EMessageNames.NO_BAD, { [ELang.ENGLISH]: 'NOT BAD', [ELang.UKRAINE]: 'НОРМАЛЬНО!' }],
-  [EMessageNames.CORRECTION, { [ELang.ENGLISH]: 'Correction', [ELang.UKRAINE]: 'Виправлення' }],
-  [EMessageNames.CONTINUE, { [ELang.ENGLISH]: 'Continue', [ELang.UKRAINE]: 'Далі' }],
-  [EMessageNames.RESULTS, { [ELang.ENGLISH]: 'Results', [ELang.UKRAINE]: 'Результати' }],
-  [EMessageNames.EXS_TIME, { [ELang.ENGLISH]: 'Execution time', [ELang.UKRAINE]: 'Час виконання' }],
-  [EMessageNames.CATEGORY, { [ELang.ENGLISH]: 'Category', [ELang.UKRAINE]: 'Категорія' }],
-  [EMessageNames.MISTAKES, { [ELang.ENGLISH]: 'Mistakes', [ELang.UKRAINE]: 'Помилки' }],
-  [EMessageNames.BTN_LEVELS, { [ELang.ENGLISH]: 'Levels', [ELang.UKRAINE]: 'Рівні' }],
-  [EMessageNames.BTN_CAT, { [ELang.ENGLISH]: 'Categories', [ELang.UKRAINE]: 'Категорії' }],
-  [EMessageNames.BTN_ENTER, { [ELang.ENGLISH]: 'Confirm', [ELang.UKRAINE]: 'Далі' }],
+  [EMessageNames.LEFT_EXS_NUM_MSG, { [ELang.en]: 'Remains', [ELang.ua]: 'Залишилось' }],
+  [EMessageNames.BRAVO, { [ELang.en]: 'BRAVO', [ELang.ua]: 'БРАВО!' }],
+  [EMessageNames.BAD, { [ELang.en]: 'BAD!', [ELang.ua]: 'ПОГАНО!' }],
+  [EMessageNames.NO_BAD, { [ELang.en]: 'NOT BAD', [ELang.ua]: 'НОРМАЛЬНО!' }],
+  [EMessageNames.CORRECTION, { [ELang.en]: 'Correction', [ELang.ua]: 'Виправлення' }],
+  [EMessageNames.CONTINUE, { [ELang.en]: 'Continue', [ELang.ua]: 'Далі' }],
+  [EMessageNames.RESULTS, { [ELang.en]: 'Results', [ELang.ua]: 'Результати' }],
+  [EMessageNames.EXS_TIME, { [ELang.en]: 'Execution time', [ELang.ua]: 'Час виконання' }],
+  [EMessageNames.CATEGORY, { [ELang.en]: 'Category', [ELang.ua]: 'Категорія' }],
+  [EMessageNames.MISTAKES, { [ELang.en]: 'Mistakes', [ELang.ua]: 'Помилки' }],
+  [EMessageNames.BTN_LEVELS, { [ELang.en]: 'Levels', [ELang.ua]: 'Рівні' }],
+  [EMessageNames.BTN_CAT, { [ELang.en]: 'Categories', [ELang.ua]: 'Категорії' }],
+  [EMessageNames.BTN_ENTER, { [ELang.en]: 'Confirm', [ELang.ua]: 'Далі' }],
 ]);
 
 export enum EPageTitles {
@@ -103,19 +101,19 @@ export const metaMap: TMetaMap = new Map([
     EPageTitles.MAIN,
     {
       [EMetaTypes.TITLE]: {
-        [ELang.ENGLISH]: '1+2 = Fun',
-        [ELang.UKRAINE]: '1+2 = Весело',
+        [ELang.en]: '1+2 = Fun',
+        [ELang.ua]: '1+2 = Весело',
       },
       [EMetaTypes.DESCRIPTION]: {
-        [ELang.ENGLISH]:
+        [ELang.en]:
           'Interactive online resource, homework, exams and tests. Useful for teachers, students and parents.',
-        [ELang.UKRAINE]:
+        [ELang.ua]:
           'Інтерактивний розвиваючий онлайн ресурс, домашні роботи, іспити та тести. Корисно для вчителів, учнів та батьків.',
       },
       [EMetaTypes.KEYWORDS]: {
-        [ELang.ENGLISH]:
+        [ELang.en]:
           'Interactive, homework, exams, tests, mathematics, children, teachers, students and parents.',
-        [ELang.UKRAINE]:
+        [ELang.ua]:
           'дитяча математика, рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
       },
     },
@@ -124,108 +122,187 @@ export const metaMap: TMetaMap = new Map([
     EPageTitles.MATH,
     {
       [EMetaTypes.TITLE]: {
-        [ELang.ENGLISH]: '1+2 | Fun Maths',
-        [ELang.UKRAINE]: '1+2 | Весела Математика',
+        [ELang.en]: '1+2 | Fun Maths',
+        [ELang.ua]: '1+2 | Весела Математика',
       },
       [EMetaTypes.DESCRIPTION]: {
-        [ELang.ENGLISH]:
+        [ELang.en]:
           "Fun children's mathematics, initial level, learn to count, add, subtract, comparison, more, less, equal.",
-        [ELang.UKRAINE]:
+        [ELang.ua]:
           'Весела дитяча математика, початковий рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
       },
       [EMetaTypes.KEYWORDS]: {
-        [ELang.ENGLISH]:
+        [ELang.en]:
           'children mathematics, level, learn, count, add, subtract, comparison, more, less, equal.',
-        [ELang.UKRAINE]:
+        [ELang.ua]:
           'дитяча математика, рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
       },
     },
   ],
 ]);
 
+const keyboardNumKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+const keyboardInEqualKeys = ['<', '=', '>'];
+
 export const categoriesMap: TCatMap = new Map([
   [
     'sequence',
     {
-      [ELang.ENGLISH]: { title: 'title', description: '1 2 ?' },
-      [ELang.UKRAINE]: { title: 'назва', description: '1 2 ?' },
+      [ELang.en]: { title: 'title', description: '1 2 ?' },
+      [ELang.ua]: { title: 'назва', description: '1 2 ?' },
       exercise: { start: 10, max: 100, step: 10 },
+      keyboardKeys: keyboardNumKeys,
     },
   ],
   [
     'equality',
     {
-      [ELang.ENGLISH]: { title: 'title', description: '1 + 2' },
-      [ELang.UKRAINE]: { title: 'назва', description: '1 + 2' },
+      [ELang.en]: { title: 'title', description: '1 + 2' },
+      [ELang.ua]: { title: 'назва', description: '1 + 2' },
       exercise: { start: 10, max: 100, step: 10 },
+      keyboardKeys: keyboardNumKeys,
     },
   ],
   [
     'pairs',
     {
-      [ELang.ENGLISH]: { title: 'title', description: '1 + 1' },
-      [ELang.UKRAINE]: { title: 'назва', description: '1 + 1' },
+      [ELang.en]: { title: 'title', description: '1 + 1' },
+      [ELang.ua]: { title: 'назва', description: '1 + 1' },
       exercise: { start: 10, max: 100, step: 10 },
+      keyboardKeys: keyboardNumKeys,
     },
   ],
   [
     'link-equality',
     {
-      [ELang.ENGLISH]: { title: 'title', description: '1 + ?' },
-      [ELang.UKRAINE]: { title: 'назва', description: '1 + ?' },
+      [ELang.en]: { title: 'title', description: '1 + ?' },
+      [ELang.ua]: { title: 'назва', description: '1 + ?' },
       exercise: { start: 10, max: 100, step: 10 },
+      keyboardKeys: keyboardNumKeys,
     },
   ],
   [
     'inequality',
     {
-      [ELang.ENGLISH]: { title: 'title', description: '< = >' },
-      [ELang.UKRAINE]: { title: 'назва', description: '< = >' },
+      [ELang.en]: { title: 'title', description: '< = >' },
+      [ELang.ua]: { title: 'назва', description: '< = >' },
       exercise: { start: 10, max: 100, step: 10 },
+      keyboardKeys: keyboardInEqualKeys,
     },
   ],
   [
     'equal-ten',
     {
-      [ELang.ENGLISH]: { title: 'title', description: '1 + 10' },
-      [ELang.UKRAINE]: { title: 'назва', description: '1 + 10' },
+      [ELang.en]: { title: 'title', description: '1 + 10' },
+      [ELang.ua]: { title: 'назва', description: '1 + 10' },
       exercise: { start: 10, max: 100, step: 10 },
+      keyboardKeys: keyboardNumKeys,
     },
   ],
   [
     'composition',
     {
-      [ELang.ENGLISH]: { title: 'title', description: 'Composition 11..19' },
-      [ELang.UKRAINE]: { title: 'назва', description: 'Склад 11..19' },
+      [ELang.en]: { title: 'title', description: 'Composition 11..19' },
+      [ELang.ua]: { title: 'назва', description: 'Склад 11..19' },
       exercise: { start: 5, max: 20, step: 1 },
+      keyboardKeys: keyboardNumKeys,
     },
   ],
   [
-    'equal-ive',
+    'equal-five',
     {
-      [ELang.ENGLISH]: { title: 'title', description: '10 + 5' },
-      [ELang.UKRAINE]: { title: 'назва', description: '10 + 5' },
+      [ELang.en]: { title: 'title', description: '10 + 5' },
+      [ELang.ua]: { title: 'назва', description: '10 + 5' },
       exercise: { start: 10, max: 100, step: 10 },
+      keyboardKeys: keyboardNumKeys,
     },
   ],
   [
     'equal-over-ten',
     {
-      [ELang.ENGLISH]: { title: 'title', description: '7 + 8' },
-      [ELang.UKRAINE]: { title: 'назва', description: '7 + 8' },
+      [ELang.en]: { title: 'title', description: '7 + 8' },
+      [ELang.ua]: { title: 'назва', description: '7 + 8' },
       exercise: { start: 10, max: 100, step: 10 },
+      keyboardKeys: keyboardNumKeys,
     },
   ],
 ]);
 
 export const getTitleFromMap = (
   msg: EMessageNames,
-  lang: ELang = ELang.ENGLISH,
+  lang: ELang = ELang.en,
   mapTitleObj = titleMap.get(msg)
 ) => (mapTitleObj ? mapTitleObj[lang] : '');
 
 export const getCatFromMap = (
   msg: string,
-  lang: ELang = ELang.ENGLISH,
+  lang: ELang = ELang.en,
   mapTitleObj = categoriesMap.get(msg)
 ): TCatObject => (mapTitleObj ? mapTitleObj[lang] : { title: '', description: '' });
+
+function makeRandForEqual(maxN = 100) {
+  const n1 = randN1();
+  const n2 = randN2();
+  function randN1() {
+    const a = Math.floor(Math.random() * maxN) + 1; //  1 to maxN   0,maxN(Math.random() * (maxN+1))
+    return a % 10 ? a : randN1();
+  }
+  function randN2() {
+    const a = Math.floor(Math.random() * (2 * maxN + 1)) - maxN; // -maxN,maxN
+    return a % 10 ? a : randN2();
+  }
+  return [n1, n2, n1 + n2];
+}
+
+function pushIntoArr(arr: number[], quan = 10, maxN = 100, arEx: number[]) {
+  const uniq = quan < maxN;
+  if (arEx[2] > maxN || arEx[2] <= 0) {
+    return arr;
+  }
+  if (uniq === false) {
+    arr.push(arEx);
+  } else if (!JSON.stringify(arr).includes(JSON.stringify(arEx))) {
+    arr.push(arEx);
+  }
+  return arr;
+}
+
+function setArrEqual(quan: number, maxN: number) {
+  // => [n1, n2, res]
+  let arr: number[] = [];
+  // alert("uniq= " + uniq);
+  while (arr.length < quan) {
+    const n = makeRandForEqual(maxN);
+    // 		if (cat == equality_btn.id || cat == inequality_btn.id || cat == linkEquality.id) {
+    // //			uniq = false;
+    // 			let max_n = Math.max(n[0], n[1]);
+    // 			let minTen = max_n - max_n % 10;
+
+    // 			if (n[2] > maxN || n[2] <= 0 || n[2] > minTen + 10 || n[2] < minTen) {
+    // 				continue;
+    // 			}
+    // 		}
+    arr = pushIntoArr(arr, quan, maxN, n);
+  }
+  // isHiddenColumn = false;
+  return arr;
+}
+
+const makeExerciseArray = (numOfExs = NUMBER_OF_EXERCISES, maxNum = 100) => {
+  const arrTest = [];
+  const maxNLev = ~~(maxNum / HARD_LEVELS_IN_ARRAY);
+  const qExLev = ~~(numOfExs / HARD_LEVELS_IN_ARRAY);
+
+  for (let n = 0; n++ < HARD_LEVELS_IN_ARRAY; ) {
+    const q = ~~(qExLev * 0.7 * n);
+    const mN = maxNLev * n;
+    const arrAdd = setArrEqual(q, mN);
+    arrTest.push(...arrAdd);
+    //		alert(JSON.stringify(arrAdd));
+  }
+  return arrTest;
+};
+console.log(
+  '🚀 ~ file: langMessages.ts:304 ~ makeExerciseArray ~ makeExerciseArray:',
+  makeExerciseArray()
+);

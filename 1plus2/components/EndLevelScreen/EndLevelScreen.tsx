@@ -1,5 +1,5 @@
 import TextButton from '../TextButton/TextButton';
-import styles from './EndLevelScreen.module.css';
+import styles from './EndLevelScreen.module.scss';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 
 interface EndLevelScreenProps {

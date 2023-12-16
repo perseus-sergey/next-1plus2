@@ -1,21 +1,29 @@
+import ExercisePage from '@/components/ExercisePage/ExercisePage';
 import { ELang, categoriesMap } from '@/libs/langMessages';
 
 export interface IExercisePageProps {
   params: { lang: ELang; cat: string; maxNum: string };
 }
 
-export const generateStaticParams = () =>
-  Object.values(ELang).reduce(
-    (acc, langSlug) =>
-      acc.concat(
-        [...categoriesMap.keys()].map((catSlug) => ({ lang: langSlug, cat: catSlug, maxNum: '1' }))
-      ),
-    [{}]
-  );
-
 export default (props: IExercisePageProps) => {
-  return <h1>{props.params.maxNum}</h1>;
-  // return <ExercisePage {...props} />;
-};
+  if (Object.values(ELang).indexOf(props.params.lang) === -1) return <h1>Wrong Language</h1>;
 
-export const dynamicParams = false;
+  const exerciseParams = categoriesMap.get(props.params.cat);
+  if (!exerciseParams) return <h1>Wrong Category</h1>;
+
+  const chosenMaxNum = +props.params.maxNum;
+  if (
+    !chosenMaxNum ||
+    chosenMaxNum < exerciseParams.exercise.start ||
+    chosenMaxNum > exerciseParams.exercise.max
+  )
+    return <h1>Wrong Max Number of Exercise</h1>;
+
+  return (
+    <ExercisePage
+      lang={props.params.lang}
+      exerciseParams={exerciseParams}
+      chosenMaxNum={chosenMaxNum}
+    />
+  );
+};

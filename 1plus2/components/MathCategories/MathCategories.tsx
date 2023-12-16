@@ -1,7 +1,7 @@
 import { ICatPageProps } from '@/app/[lang]/math/category/page';
 import TextButton from '../TextButton/TextButton';
-import SectionTitle from '../sectionTitle/SectionTitle';
-import styles from './MathCategories.module.css';
+import SectionTitle from '../SectionTitle/SectionTitle';
+import styles from './MathCategories.module.scss';
 import {
   ELang,
   EMessageNames,
@@ -12,7 +12,7 @@ import {
 import Link from 'next/link';
 
 const MathCategories = (props: ICatPageProps) => {
-  const { lang = ELang.ENGLISH } = props.params;
+  const { lang = ELang.en } = props.params;
 
   return (
     <section data-testid="MathCategories">
