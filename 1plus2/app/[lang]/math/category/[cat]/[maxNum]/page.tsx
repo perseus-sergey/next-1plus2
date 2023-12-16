@@ -5,13 +5,13 @@ export interface IExercisePageProps {
   params: { lang: ELang; cat: string; maxNum: string };
 }
 
-export default (props: IExercisePageProps) => {
-  if (Object.values(ELang).indexOf(props.params.lang) === -1) return <h1>Wrong Language</h1>;
+export default ({ params }: IExercisePageProps) => {
+  if (!ELang[params.lang]) return <h1>Wrong Language</h1>;
 
-  const exerciseParams = categoriesMap.get(props.params.cat);
+  const exerciseParams = categoriesMap.get(params.cat);
   if (!exerciseParams) return <h1>Wrong Category</h1>;
 
-  const chosenMaxNum = +props.params.maxNum;
+  const chosenMaxNum = +params.maxNum;
   if (
     !chosenMaxNum ||
     chosenMaxNum < exerciseParams.exercise.start ||
@@ -20,10 +20,6 @@ export default (props: IExercisePageProps) => {
     return <h1>Wrong Max Number of Exercise</h1>;
 
   return (
-    <ExercisePage
-      lang={props.params.lang}
-      exerciseParams={exerciseParams}
-      chosenMaxNum={chosenMaxNum}
-    />
+    <ExercisePage lang={params.lang} exerciseParams={exerciseParams} chosenMaxNum={chosenMaxNum} />
   );
 };
