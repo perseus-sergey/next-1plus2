@@ -73,6 +73,11 @@
   padding-right: 5px;
 }
 
+.displayExercise {
+  display: flex;
+  gap: 1rem;
+}
+
 .infoBlock {
   display: flex;
   justify-content: space-between;

@@ -1,8 +1,16 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import styles from './KeyboardButton.module.scss';
 
 interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
 }
+
+const keyInitStyle = {
+  fontColor: styles.keyColorPink,
+  bgColor: styles.keyBgColorYellow,
+};
 
 const generateRandomColor = (): string[] => {
   const keyColorStyles = [
@@ -21,12 +29,15 @@ const generateRandomColor = (): string[] => {
   if (colorIndx === bgColorIndx) {
     return generateRandomColor();
   }
-
   return [keyColorStyles[colorIndx].fontColor, keyColorStyles[bgColorIndx].bgColor];
 };
 
 const KeyboardButton = ({ value }: KeyboardButtonProps) => {
-  const [fontColor, bgColor] = generateRandomColor();
+  const [{ fontColor, bgColor }, setKeyStyle] = useState(keyInitStyle);
+  useEffect(() => {
+    const [fontColor, bgColor] = generateRandomColor();
+    setKeyStyle({ fontColor, bgColor });
+  }, []);
 
   return (
     <button

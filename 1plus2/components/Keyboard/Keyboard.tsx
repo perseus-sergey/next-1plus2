@@ -4,9 +4,10 @@ import TextButton from '../TextButton/TextButton';
 interface IKeyboardProps {
   keyboardKeys: string[];
   enterBtnTitle: string;
+  enterClickHandler: () => void;
 }
 
-const Keyboard = ({ keyboardKeys, enterBtnTitle }: IKeyboardProps) => (
+const Keyboard = ({ keyboardKeys, enterBtnTitle, enterClickHandler }: IKeyboardProps) => (
   <section className="keyboard" data-testid="Keyboard">
     <div id="key_btns" className="keyboard-line">
       {keyboardKeys.map((keyboardKey) => (
@@ -15,7 +16,7 @@ const Keyboard = ({ keyboardKeys, enterBtnTitle }: IKeyboardProps) => (
     </div>
 
     <div className="keyboard-line">
-      <TextButton>{enterBtnTitle}</TextButton>
+      <TextButton onClick={enterClickHandler}>{enterBtnTitle}</TextButton>
     </div>
   </section>
 );

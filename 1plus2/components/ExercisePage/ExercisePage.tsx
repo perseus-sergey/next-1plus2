@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SectionTitle from '../SectionTitle/SectionTitle';
 import styles from './ExercisePage.module.scss';
 import { ELang, EMessageNames, IExerciseParams, getTitleFromMap } from '@/libs/langMessages';
-import { getExerciseQuantity } from '@/libs/utils';
 import Monitor from '../Monitor/Monitor';
 import Keyboard from '../Keyboard/Keyboard';
+import { makeExerciseArray } from '@/libs/exercises/math';
 
 export type TMinusPlus = '-' | '+' | '>' | '<' | '=';
 
@@ -17,27 +17,38 @@ interface IExerciseComponentProps {
 }
 
 const ExercisePage = ({ lang, exerciseParams, chosenMaxNum }: IExerciseComponentProps) => {
-  const [exerciseLeft, setExerciseLeft] = useState(getExerciseQuantity(exerciseParams.exercise));
-  const [n1, setN1] = useState(1);
-  const [n2, setN2] = useState(2);
-  const [answer, setAnswer] = useState(3);
-  const [minPlus, setMinPlus] = useState<TMinusPlus>('+');
+  const [exerciseArray, setExerciseArray] = useState([[0, 0, 0]]);
+
+  useEffect(() => {
+    setExerciseArray(makeExerciseArray(chosenMaxNum));
+  }, []);
+
+  const enterClickHandler = () => {
+    if (!exerciseArray.length) return;
+    const [, ...rest] = exerciseArray;
+    setExerciseArray(rest);
+  };
+
+  if (!lang || !exerciseParams || !chosenMaxNum) return <h2>Loading...</h2>;
+  if (!exerciseArray.length) return <h2>EOA</h2>;
 
   return (
     <section className={styles.ExercisePage} data-testid="ExercisePage">
       <SectionTitle
-        name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exerciseLeft}`}
+        name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exerciseArray.length}`}
       />
       <Monitor
-        n1={n1}
-        n2={n2}
-        minusPlus={minPlus}
-        answer={answer}
+        n1={exerciseArray[0][0]}
+        n2={Math.abs(exerciseArray[0][1])}
+        minusPlus={exerciseArray[0][1] > 0 ? '+' : '-'}
+        answer={exerciseArray[0][2]}
+        arrExsLength={exerciseArray.length}
         isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
       />
       <Keyboard
         keyboardKeys={exerciseParams.keyboardKeys}
         enterBtnTitle={getTitleFromMap(EMessageNames.BTN_ENTER, lang)}
+        enterClickHandler={enterClickHandler}
       />
     </section>
   );
