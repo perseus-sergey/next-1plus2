@@ -1,13 +1,14 @@
 import { NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
-import { TMinusPlus } from '../ExercisePage/ExercisePage';
 import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
+
+export type TMinusPlus = '-' | '+' | '>' | '<' | '=';
 
 interface MonitorProps {
   minusPlus: TMinusPlus;
   n1: number;
   n2: number;
-  answer: number;
+  answer: string;
   arrExsLength: number;
   isDelBtnActive?: boolean;
 }
