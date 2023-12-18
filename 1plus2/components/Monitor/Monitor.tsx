@@ -66,9 +66,7 @@ const Monitor = ({
         </div>
       </div>
       {isDelBtnActive && (
-        <TextButton className="cancelButton" style={{ padding: '0 1rem' }}>
-          {'<<<'}
-        </TextButton>
+        <TextButton style={{ padding: '0 1rem', color: 'white' }}>{'<<<'}</TextButton>
       )}
     </div>
   </section>

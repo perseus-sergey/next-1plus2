@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import styles from './KeyboardButton.module.scss';
-import { useKeyClickedValue } from '@/libs/context/KeyProvider';
 
 interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
+  btnClickHandler?: (value: string) => void;
 }
 
 const keyInitStyle = {
@@ -33,24 +33,19 @@ const generateRandomColor = (): string[] => {
   return [keyColorStyles[colorIndx].fontColor, keyColorStyles[bgColorIndx].bgColor];
 };
 
-const KeyboardButton = ({ value }: KeyboardButtonProps) => {
+const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
   const [{ fontColor, bgColor }, setKeyStyle] = useState(keyInitStyle);
-  const { setKeyClickedValue } = useKeyClickedValue();
 
   useEffect(() => {
     const [fontColor, bgColor] = generateRandomColor();
     setKeyStyle({ fontColor, bgColor });
   }, []);
 
-  const btnClickHandler = () => {
-    setKeyClickedValue(value);
-  };
-
   return (
     <button
       type="button"
       value={value}
-      onClick={btnClickHandler}
+      onClick={btnClickHandler ? () => btnClickHandler(value) : () => {}}
       style={{
         color: fontColor,
         backgroundImage: bgColor,

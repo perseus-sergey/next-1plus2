@@ -1,11 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import SectionTitle from '../SectionTitle/SectionTitle';
-import styles from './ExercisePage.module.scss';
-import { ELang, EMessageNames, IExerciseParams, getTitleFromMap } from '@/libs/langMessages';
+import { ELang, IExerciseParams } from '@/libs/langMessages';
 import { makeExerciseArray } from '@/libs/exercises/math';
-import KeyClickedProvider from '@/libs/context/KeyProvider';
+// import KeyClickedProvider from '@/libs/context/KeyProvider';
 import Computer from '../Computer/Computer';
 
 export interface IExerciseComponentProps {
@@ -24,15 +22,10 @@ const ExercisePage = (props: IExerciseComponentProps) => {
   if (!exerciseArray[0].length) return <h2>Loading...</h2>;
 
   return (
-    <section className={styles.ExercisePage} data-testid="ExercisePage">
-      <SectionTitle
-        name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, props.lang)}: ${
-          exerciseArray.length
-        }`}
-      />
-      <KeyClickedProvider>
-        <Computer {...props} exerciseArray={exerciseArray} />
-      </KeyClickedProvider>
+    <section data-testid="ExercisePage">
+      {/* <KeyClickedProvider> */}
+      <Computer {...props} exerciseArray={exerciseArray} />
+      {/* </KeyClickedProvider> */}
     </section>
   );
 };
