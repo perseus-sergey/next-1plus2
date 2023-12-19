@@ -1,26 +1,60 @@
 import ExercisePage from '@/components/ExercisePage/ExercisePage';
+import TextButton from '@/components/TextButton/TextButton';
 import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
 import { ELang } from '@/libs/langMessages';
+import Link from 'next/link';
+
+type TWrongSegmentProps = {
+  wrongMessage: string;
+  redirectPath: string;
+  btnTitle: string;
+};
+
+const WrongSegment = ({ wrongMessage, redirectPath, btnTitle }: TWrongSegmentProps) => (
+  <>
+    <h1>{wrongMessage}</h1>
+    <Link href={redirectPath}>
+      <TextButton>{btnTitle}</TextButton>
+    </Link>
+  </>
+);
 
 export interface IExercisePageProps {
   params: { lang: ELang; cat: EExerciseCategories; maxNum: string };
 }
 
 export default ({ params }: IExercisePageProps) => {
-  if (!ELang[params.lang]) return <h1>Wrong Language</h1>;
+  const { lang, cat, maxNum } = params;
 
-  const exerciseParams = categoriesMap.get(params.cat);
-  if (!exerciseParams) return <h1>Wrong Category</h1>;
+  if (!ELang[lang])
+    return (
+      <WrongSegment wrongMessage="Wrong Language" redirectPath="/" btnTitle="Go to start page" />
+    );
 
-  const chosenMaxNum = +params.maxNum;
+  const exerciseParams = categoriesMap.get(cat);
+
+  if (!exerciseParams)
+    return (
+      <WrongSegment
+        wrongMessage="Wrong Category"
+        redirectPath={`/${lang}/math/category`}
+        btnTitle="Choose category"
+      />
+    );
+
+  const chosenMaxNum = +maxNum;
   if (
     !chosenMaxNum ||
     chosenMaxNum < exerciseParams.exercise.start ||
     chosenMaxNum > exerciseParams.exercise.max
   )
-    return <h1>Wrong Max Number of Exercise</h1>;
+    return (
+      <WrongSegment
+        wrongMessage="Wrong Max Number of Exercise"
+        redirectPath={`/${lang}/math/category/${cat}`}
+        btnTitle="Choose Max Number"
+      />
+    );
 
-  return (
-    <ExercisePage lang={params.lang} exerciseParams={exerciseParams} chosenMaxNum={chosenMaxNum} />
-  );
+  return <ExercisePage lang={lang} exerciseParams={exerciseParams} chosenMaxNum={chosenMaxNum} />;
 };

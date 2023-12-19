@@ -6,6 +6,7 @@ import Monitor, { TMinusPlus } from '../Monitor/Monitor';
 import Keyboard from '../Keyboard/Keyboard';
 import SectionTitle from '../SectionTitle/SectionTitle';
 import { arrayShift, sleep } from '@/libs/utils';
+import { ESoundPaths } from '@/libs/ESoundPaths';
 
 export interface IComputerProps extends IExerciseComponentProps {
   exerciseArray: number[][];
@@ -26,19 +27,19 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
   // import { audioDel, audioKey, audioRightAnsw, audioWrongAnsw } from '@/libs/sound';
 
   const audioDel = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio('/sounds/delete.wav') : undefined
+    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_DEL) : undefined
   );
 
   const audioKey = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio('/sounds/keyboard.wav') : undefined
+    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_KEY) : undefined
   );
 
   const audioRightAnsw = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio('/sounds/upali-dengi-na-igrovoy-schet.wav') : undefined
+    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_RIGHT_ANSWER) : undefined
   );
 
   const audioWrongAnsw = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio('/sounds/podgotovka-k-startu.wav') : undefined
+    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_WRONG_ANSWER) : undefined
   );
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
   }, [exercises]);
 
   const enterClickHandler = () => {
-    if (!exercises.length) return;
+    if (!exercises.length || answerElementValue === QUESTION_MARK) return;
     setIsEnterDisabled(true);
     checkAnswer();
   };
