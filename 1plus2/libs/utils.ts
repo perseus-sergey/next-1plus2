@@ -1,4 +1,14 @@
 export const createArray = (length: number) => [...Array(length)];
 
+export const arrayShift = <T>(array: T[][]): T[][] => {
+  const [, ...rest] = array;
+  return rest;
+};
+
+export const getExerciseQuantity = ({ start = 10, max = 100, step = 10 }) =>
+  Math.floor((max + step - start) / step);
+
 export const createMaxNumArray = ({ start = 10, max = 100, step = 10 }) =>
-  createArray(Math.floor((max + step - start) / step)).map((_, i) => i * step + start);
+  createArray(getExerciseQuantity({ start, max, step })).map((_, i) => i * step + start);
+
+export const sleep = (ms = 1000) => new Promise((resolve) => setTimeout(resolve, ms));

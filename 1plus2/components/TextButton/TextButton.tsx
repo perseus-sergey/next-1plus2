@@ -1,4 +1,4 @@
-import styles from './TextButton.module.css';
+import styles from './TextButton.module.scss';
 
 interface TextButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;

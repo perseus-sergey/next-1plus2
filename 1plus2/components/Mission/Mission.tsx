@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
-import style from './Mission.module.css';
-import { ELang, getTitleFromMap } from '@/libs/langMessages';
+import style from './Mission.module.scss';
+import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 
 interface MissionProps {
   levelButtonClicked: () => void;
@@ -13,10 +13,10 @@ const Mission = ({ levelButtonClicked, lang }: MissionProps) => {
     <section>
       <div className={style.centered}>
         <TextButton id="level" onClick={levelButtonClicked}>
-          {getTitleFromMap('btnLevels', lang)}
+          {getTitleFromMap(EMessageNames.BTN_LEVELS, lang)}
         </TextButton>
         <Link href={`/${lang}/math/category`}>
-          <TextButton>{getTitleFromMap('btnCat', lang)}</TextButton>
+          <TextButton>{getTitleFromMap(EMessageNames.BTN_CAT, lang)}</TextButton>
         </Link>
       </div>
     </section>
