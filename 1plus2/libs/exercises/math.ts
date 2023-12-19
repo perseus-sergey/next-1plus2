@@ -18,44 +18,41 @@ const makeRandForEqual = (maxN = 100): number[] => {
   return [n1, n2, n1 + n2];
 };
 
-function pushIntoArr(arr: number[][], quant: number, maxN: number, arEx: number[]): number[][] {
-  // console.log('🚀 ~ file: langMessages.ts:261 ~ pushIntoArr ~ arr:', arr);
-  // console.log('🚀 ~ file: langMessages.ts:261 ~ pushIntoArr ~ arEx:', arEx);
-  if (arEx[2] > maxN || arEx[2] <= 0) return arr;
-  if (!(quant < maxN) || !JSON.stringify(arr).includes(JSON.stringify(arEx))) return [...arr, arEx];
-  return arr;
-}
+const makeExsParts = (quant: number, maxN: number, existingParts: number[]): number[] => {
+  const exerciseParts = makeRandForEqual(maxN);
+  const max_n = Math.max(exerciseParts[0], exerciseParts[1]);
+  const minTen = max_n - (max_n % 10);
+  const uniq = quant < maxN;
+  if (
+    exerciseParts[2] > maxN ||
+    exerciseParts[2] <= 0 ||
+    exerciseParts[2] > minTen + 10 ||
+    exerciseParts[2] < minTen ||
+    (uniq && JSON.stringify(existingParts).includes(JSON.stringify(exerciseParts)))
+  ) {
+    return makeExsParts(quant, maxN, exerciseParts);
+  }
+  return exerciseParts;
+};
 
 // => [[n1, n2, res], [n1, n2, res]]
-const setArrEqual = (quant: number, maxN: number): number[][] =>
-  createArray(quant).reduce((acc) => {
-    const makeExsParts = (): number[] => {
-      const exerciseParts = makeRandForEqual(maxN);
-      const max_n = Math.max(exerciseParts[0], exerciseParts[1]);
-      const minTen = max_n - (max_n % 10);
-      if (
-        exerciseParts[2] > maxN ||
-        exerciseParts[2] <= 0 ||
-        exerciseParts[2] > minTen + 10 ||
-        exerciseParts[2] < minTen
-      ) {
-        return makeExsParts();
-      }
-      return exerciseParts;
-    };
-    return pushIntoArr(acc, quant, maxN, makeExsParts());
-  }, []);
+// const setArrEqual = (quant: number, maxN: number): number[][] =>
+//   createArray(quant).reduce((acc) => [...acc, makeExsParts(quant, maxN, acc)], []);
 
 export const makeExerciseArray = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): number[][] => {
   const maxNumOfLevel = Math.floor(maxNum / HARD_LEVELS_IN_ARRAY);
   const quantExsPerLevel = Math.floor(numOfExs / HARD_LEVELS_IN_ARRAY);
 
   const arrTest = createArray(HARD_LEVELS_IN_ARRAY).reduce((acc: number[][], _, n) => {
+    const quant = Math.floor(quantExsPerLevel * 0.7 * (n + 1));
     return [
       ...acc,
-      ...setArrEqual(Math.floor(quantExsPerLevel * 0.7 * (n + 1)), maxNumOfLevel * (n + 1)),
+      ...createArray(quant).reduce(
+        (acc) => [...acc, makeExsParts(quant, maxNumOfLevel * (n + 1), acc)],
+        []
+      ),
+      // ...setArrEqual(Math.floor(quantExsPerLevel * 0.7 * (n + 1)), maxNumOfLevel * (n + 1)),
     ];
   }, []);
-  console.log('🚀 ~ file: math.ts:60 ~ makeExerciseArray ~ arrTest:', arrTest);
   return arrTest;
 };
