@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { IExerciseComponentProps } from '../ExercisePage/ExercisePage';
@@ -6,7 +6,6 @@ import Monitor, { TMinusPlus } from '../Monitor/Monitor';
 import Keyboard from '../Keyboard/Keyboard';
 import SectionTitle from '../SectionTitle/SectionTitle';
 import { arrayShift, sleep } from '@/libs/utils';
-import { audioDel, audioKey, audioRightAnsw, audioWrongAnsw } from '@/libs/sound';
 
 export interface IComputerProps extends IExerciseComponentProps {
   exerciseArray: number[][];
@@ -24,6 +23,23 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
   const [mistakes, setMistakes] = useState<string[]>([]);
   const [compClassNames, setCompClassNames] = useState([styles.Computer]);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
+  // import { audioDel, audioKey, audioRightAnsw, audioWrongAnsw } from '@/libs/sound';
+
+  const audioDel = useRef<HTMLAudioElement | undefined>(
+    typeof Audio !== 'undefined' ? new Audio('/sounds/delete.wav') : undefined
+  );
+
+  const audioKey = useRef<HTMLAudioElement | undefined>(
+    typeof Audio !== 'undefined' ? new Audio('/sounds/keyboard.wav') : undefined
+  );
+
+  const audioRightAnsw = useRef<HTMLAudioElement | undefined>(
+    typeof Audio !== 'undefined' ? new Audio('/sounds/upali-dengi-na-igrovoy-schet.wav') : undefined
+  );
+
+  const audioWrongAnsw = useRef<HTMLAudioElement | undefined>(
+    typeof Audio !== 'undefined' ? new Audio('/sounds/podgotovka-k-startu.wav') : undefined
+  );
 
   useEffect(() => {
     if (!exercises.length) return;
@@ -42,7 +58,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
   const clearBtnHandler = () => {
     if (answerElementValue === QUESTION_MARK) return;
     setAnswerElementValue(QUESTION_MARK);
-    audioDel.play();
+    audioDel.current?.play();
   };
 
   const checkAnswer = async () => {
@@ -61,12 +77,12 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
   };
 
   const rightAnswer = () => {
-    audioRightAnsw.play();
+    audioRightAnsw.current?.play();
     setCompClassNames([...compClassNames, styles.properAnswer]);
   };
 
   const badAnswer = () => {
-    audioWrongAnsw.play();
+    audioWrongAnsw.current?.play();
     setBadAnswers([...badAnswers, exercises[0]]);
     setMistakes([...mistakes, `${n1} ${minusPlus} ${n2} ${'='} ${answerElementValue}`]);
     setCompClassNames([...compClassNames, styles.badAnswer]);
@@ -89,7 +105,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
   // }
 
   const keyboardBtnClickHandler = (value: string) => {
-    audioKey.play();
+    audioKey.current?.play();
     setAnswerElementValue(
       answerElementValue === QUESTION_MARK ? value : `${answerElementValue}${value}`
     );
