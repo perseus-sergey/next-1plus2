@@ -56,5 +56,12 @@ export default ({ params }: IExercisePageProps) => {
       />
     );
 
-  return <ExercisePage lang={lang} exerciseParams={exerciseParams} chosenMaxNum={chosenMaxNum} />;
+  return (
+    <ExercisePage
+      lang={lang}
+      exerciseParams={exerciseParams}
+      chosenMaxNum={chosenMaxNum}
+      cat={cat}
+    />
+  );
 };

@@ -98,7 +98,7 @@ export const categoriesMap: TCatMap = new Map([
     {
       [ELang.en]: { title: 'title', description: '10 + 5' },
       [ELang.ua]: { title: 'назва', description: '10 + 5' },
-      exercise: { start: 10, max: 100, step: 10 },
+      exercise: { start: 50, max: 50, step: 1 },
       keyboardKeys: keyboardNumKeys,
     },
   ],
