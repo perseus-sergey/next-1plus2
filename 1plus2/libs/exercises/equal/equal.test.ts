@@ -1,4 +1,4 @@
-import { getEqualArray } from './equal';
+import getEqualArray from './equal';
 
 describe('makeExerciseArray', () => {
   const testingArrayQuantity = 50;

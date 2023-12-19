@@ -1,5 +1,5 @@
 import { createArray } from '@/libs/utils';
-import { HARD_LEVELS_IN_ARRAY, NUMBER_OF_EXERCISES } from '../math';
+import { HARD_LEVELS_IN_ARRAY, NUMBER_OF_EXERCISES, isWrongPushArray } from '../math';
 
 const makeRandForEqual = (maxN = 100): number[] => {
   const randN1 = (): number => {
@@ -20,13 +20,10 @@ const makeExsParts = (quant: number, maxN: number, existingParts: number[]): num
   const exerciseParts = makeRandForEqual(maxN);
   const max_n = Math.max(exerciseParts[0], exerciseParts[1]);
   const minTen = max_n - (max_n % 10);
-  const uniq = quant < maxN;
   if (
-    exerciseParts[2] > maxN ||
-    exerciseParts[2] <= 0 ||
     exerciseParts[2] > minTen + 10 ||
     exerciseParts[2] < minTen ||
-    (uniq && JSON.stringify(existingParts).includes(JSON.stringify(exerciseParts)))
+    isWrongPushArray(quant, maxN, existingParts, exerciseParts)
   ) {
     return makeExsParts(quant, maxN, exerciseParts);
   }
