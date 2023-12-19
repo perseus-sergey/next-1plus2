@@ -1,8 +1,9 @@
 import ExercisePage from '@/components/ExercisePage/ExercisePage';
-import { ELang, categoriesMap } from '@/libs/langMessages';
+import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
+import { ELang } from '@/libs/langMessages';
 
 export interface IExercisePageProps {
-  params: { lang: ELang; cat: string; maxNum: string };
+  params: { lang: ELang; cat: EExerciseCategories; maxNum: string };
 }
 
 export default ({ params }: IExercisePageProps) => {

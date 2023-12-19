@@ -2,14 +2,10 @@ import { ICatPageProps } from '@/app/[lang]/math/category/page';
 import TextButton from '../TextButton/TextButton';
 import SectionTitle from '../SectionTitle/SectionTitle';
 import styles from './MathCategories.module.scss';
-import {
-  ELang,
-  EMessageNames,
-  categoriesMap,
-  getCatFromMap,
-  getTitleFromMap,
-} from '@/libs/langMessages';
+import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';
+import { categoriesMap } from '@/libs/exercises/math.model';
+import { getCatFromMap } from '@/libs/exercises/math';
 
 const MathCategories = (props: ICatPageProps) => {
   const { lang = ELang.en } = props.params;

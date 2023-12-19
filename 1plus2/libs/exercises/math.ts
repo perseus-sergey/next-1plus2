@@ -1,7 +1,15 @@
+import { ELang } from '../langMessages';
 import { createArray } from '../utils';
+import { EExerciseCategories, TCatObject, categoriesMap } from './math.model';
 
 export const NUMBER_OF_EXERCISES = 10;
 const HARD_LEVELS_IN_ARRAY = 2;
+
+export const getCatFromMap = (
+  msg: EExerciseCategories,
+  lang: ELang = ELang.en,
+  mapTitleObj = categoriesMap.get(msg)
+): TCatObject => (mapTitleObj ? mapTitleObj[lang] : { title: '', description: '' });
 
 const makeRandForEqual = (maxN = 100): number[] => {
   const randN1 = (): number => {

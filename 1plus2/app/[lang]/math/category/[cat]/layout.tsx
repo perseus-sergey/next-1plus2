@@ -1,4 +1,5 @@
-import { ELang, categoriesMap } from '@/libs/langMessages';
+import { categoriesMap } from '@/libs/exercises/math.model';
+import { ELang } from '@/libs/langMessages';
 
 export const generateStaticParams = () =>
   Object.values(ELang).reduce(

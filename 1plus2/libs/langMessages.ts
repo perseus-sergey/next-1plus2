@@ -10,20 +10,6 @@ type TLang = {
 
 type TTitleMap = Map<string, TLang>;
 
-type TCatObject = {
-  title: string;
-  description: string;
-};
-
-export interface IExerciseParams {
-  [ELang.en]: TCatObject;
-  [ELang.ua]: TCatObject;
-  exercise: { start: number; max: number; step: number };
-  keyboardKeys: string[];
-}
-
-type TCatMap = Map<string, IExerciseParams>;
-
 export enum EMessageNames {
   'MISSION_CHOICE' = 'choiceMiss',
   'SHOW_END_LEVEL' = 'showEndLevel',
@@ -138,101 +124,8 @@ export const metaMap: TMetaMap = new Map([
   ],
 ]);
 
-const keyboardNumKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-const keyboardInEqualKeys = ['<', '=', '>'];
-
-export const categoriesMap: TCatMap = new Map([
-  [
-    'sequence',
-    {
-      [ELang.en]: { title: 'title', description: '1 2 ?' },
-      [ELang.ua]: { title: 'назва', description: '1 2 ?' },
-      exercise: { start: 10, max: 100, step: 10 },
-      keyboardKeys: keyboardNumKeys,
-    },
-  ],
-  [
-    'equality',
-    {
-      [ELang.en]: { title: 'title', description: '1 + 2' },
-      [ELang.ua]: { title: 'назва', description: '1 + 2' },
-      exercise: { start: 10, max: 100, step: 10 },
-      keyboardKeys: keyboardNumKeys,
-    },
-  ],
-  [
-    'pairs',
-    {
-      [ELang.en]: { title: 'title', description: '1 + 1' },
-      [ELang.ua]: { title: 'назва', description: '1 + 1' },
-      exercise: { start: 10, max: 100, step: 10 },
-      keyboardKeys: keyboardNumKeys,
-    },
-  ],
-  [
-    'link-equality',
-    {
-      [ELang.en]: { title: 'title', description: '1 + ?' },
-      [ELang.ua]: { title: 'назва', description: '1 + ?' },
-      exercise: { start: 10, max: 100, step: 10 },
-      keyboardKeys: keyboardNumKeys,
-    },
-  ],
-  [
-    'inequality',
-    {
-      [ELang.en]: { title: 'title', description: '< = >' },
-      [ELang.ua]: { title: 'назва', description: '< = >' },
-      exercise: { start: 10, max: 100, step: 10 },
-      keyboardKeys: keyboardInEqualKeys,
-    },
-  ],
-  [
-    'equal-ten',
-    {
-      [ELang.en]: { title: 'title', description: '1 + 10' },
-      [ELang.ua]: { title: 'назва', description: '1 + 10' },
-      exercise: { start: 10, max: 100, step: 10 },
-      keyboardKeys: keyboardNumKeys,
-    },
-  ],
-  [
-    'composition',
-    {
-      [ELang.en]: { title: 'title', description: 'Composition 11..19' },
-      [ELang.ua]: { title: 'назва', description: 'Склад 11..19' },
-      exercise: { start: 5, max: 20, step: 1 },
-      keyboardKeys: keyboardNumKeys,
-    },
-  ],
-  [
-    'equal-five',
-    {
-      [ELang.en]: { title: 'title', description: '10 + 5' },
-      [ELang.ua]: { title: 'назва', description: '10 + 5' },
-      exercise: { start: 10, max: 100, step: 10 },
-      keyboardKeys: keyboardNumKeys,
-    },
-  ],
-  [
-    'equal-over-ten',
-    {
-      [ELang.en]: { title: 'title', description: '7 + 8' },
-      [ELang.ua]: { title: 'назва', description: '7 + 8' },
-      exercise: { start: 10, max: 100, step: 10 },
-      keyboardKeys: keyboardNumKeys,
-    },
-  ],
-]);
-
 export const getTitleFromMap = (
   msg: EMessageNames,
   lang: ELang = ELang.en,
   mapTitleObj = titleMap.get(msg)
 ) => (mapTitleObj ? mapTitleObj[lang] : '');
-
-export const getCatFromMap = (
-  msg: string,
-  lang: ELang = ELang.en,
-  mapTitleObj = categoriesMap.get(msg)
-): TCatObject => (mapTitleObj ? mapTitleObj[lang] : { title: '', description: '' });

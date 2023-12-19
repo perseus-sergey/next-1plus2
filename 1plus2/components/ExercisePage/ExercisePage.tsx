@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ELang, IExerciseParams } from '@/libs/langMessages';
+import { ELang } from '@/libs/langMessages';
 import { makeExerciseArray } from '@/libs/exercises/math';
 // import KeyClickedProvider from '@/libs/context/KeyProvider';
 import Computer from '../Computer/Computer';
+import { IExerciseParams } from '@/libs/exercises/math.model';
 
 export interface IExerciseComponentProps {
   lang: ELang;
