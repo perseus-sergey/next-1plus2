@@ -6,11 +6,13 @@ import Monitor, { TMinusPlus } from '../Monitor/Monitor';
 import Keyboard from '../Keyboard/Keyboard';
 import SectionTitle from '../SectionTitle/SectionTitle';
 import { arrayShift, sleep } from '@/libs/utils';
-import { audioKey, audioRightAnsw, audioWrongAnsw } from '@/libs/sound';
+import { audioDel, audioKey, audioRightAnsw, audioWrongAnsw } from '@/libs/sound';
 
 export interface IComputerProps extends IExerciseComponentProps {
   exerciseArray: number[][];
 }
+
+export const QUESTION_MARK = '?';
 
 const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
   const [exercises, setExercises] = useState(exerciseArray);
@@ -21,7 +23,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
   const [badAnswers, setBadAnswers] = useState<number[][]>([]);
   const [mistakes, setMistakes] = useState<string[]>([]);
   const [compClassNames, setCompClassNames] = useState([styles.Computer]);
-  const [answerElementValue, setAnswerElementValue] = useState('?');
+  const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
 
   useEffect(() => {
     if (!exercises.length) return;
@@ -37,6 +39,12 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
     checkAnswer();
   };
 
+  const clearBtnHandler = () => {
+    if (answerElementValue === QUESTION_MARK) return;
+    setAnswerElementValue(QUESTION_MARK);
+    audioDel.play();
+  };
+
   const checkAnswer = async () => {
     const isRightAnswer = +answerElementValue === exercises[0][2];
     isRightAnswer ? rightAnswer() : badAnswer();
@@ -48,7 +56,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
       : setExercises([...exercises, exercises[0]]);
 
     setCompClassNames([styles.Computer]);
-    setAnswerElementValue('?');
+    setAnswerElementValue(QUESTION_MARK);
     setIsEnterDisabled(false);
   };
 
@@ -82,7 +90,9 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
 
   const keyboardBtnClickHandler = (value: string) => {
     audioKey.play();
-    setAnswerElementValue(answerElementValue === '?' ? value : `${answerElementValue}${value}`);
+    setAnswerElementValue(
+      answerElementValue === QUESTION_MARK ? value : `${answerElementValue}${value}`
+    );
 
     // function clickBtns4Eq () {
     //   if (dragged) {dragged = false; return false};
@@ -109,6 +119,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray }: IComputerProps) => {
           answer={answerElementValue}
           arrExsLength={exercises.length}
           isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
+          clearBtnHandler={clearBtnHandler}
         />
         <Keyboard
           keyboardBtnClickHandler={keyboardBtnClickHandler}

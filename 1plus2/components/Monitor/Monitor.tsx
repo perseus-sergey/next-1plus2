@@ -10,6 +10,7 @@ interface MonitorProps {
   n2: number;
   answer: string;
   arrExsLength: number;
+  clearBtnHandler?: () => void;
   isDelBtnActive?: boolean;
 }
 
@@ -18,6 +19,7 @@ const Monitor = ({
   n1,
   n2,
   answer,
+  clearBtnHandler,
   arrExsLength = 10,
   isDelBtnActive = true,
 }: MonitorProps) => (
@@ -66,7 +68,12 @@ const Monitor = ({
         </div>
       </div>
       {isDelBtnActive && (
-        <TextButton style={{ padding: '0 1rem', color: 'white' }}>{'<<<'}</TextButton>
+        <TextButton
+          onClick={clearBtnHandler && clearBtnHandler}
+          style={{ padding: '0 1rem', color: 'white' }}
+        >
+          {'<<<'}
+        </TextButton>
       )}
     </div>
   </section>
