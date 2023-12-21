@@ -30,23 +30,23 @@ export const makeExerciseArray = (
   numOfExs = NUMBER_OF_EXERCISES
 ): number[][] => {
   switch (category) {
-    case EExerciseCategories.EQUALITY:
+    case EExerciseCategories['equality']:
       return getEqualArray(maxNum, numOfExs);
-    case EExerciseCategories.SEQUENCE:
+    case EExerciseCategories['sequence']:
       return setArrSequence(maxNum, numOfExs);
-    case EExerciseCategories.PAIRS:
+    case EExerciseCategories['pairs']:
       return getEqualArray(maxNum, numOfExs);
-    case EExerciseCategories.LINK_EQUALITY:
+    case EExerciseCategories['link-equality']:
       return getEqualArray(maxNum, numOfExs);
-    case EExerciseCategories.INEQUALITY:
+    case EExerciseCategories['inequality']:
       return getEqualArray(maxNum, numOfExs);
-    case EExerciseCategories.EQUAL_TEN:
+    case EExerciseCategories['equal-ten']:
       return getEqualArray(maxNum, numOfExs);
-    case EExerciseCategories.COMPOSITION:
+    case EExerciseCategories['composition']:
       return getEqualArray(maxNum, numOfExs);
-    case EExerciseCategories.EQUAL_FIVE:
+    case EExerciseCategories['equal-five']:
       return setArrFive(numOfExs);
-    case EExerciseCategories.EQUAL_OVER_TEN:
+    case EExerciseCategories['equal-over-ten']:
       return getEqualArray(maxNum, numOfExs);
 
     default:
