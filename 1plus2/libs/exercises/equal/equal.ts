@@ -30,7 +30,7 @@ const makeExsParts = (quant: number, maxN: number, existingParts: number[]): num
   return exerciseParts;
 };
 
-const getEqualArray = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): number[][] => {
+const setArrEqual = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): number[][] => {
   const maxNumOfLevel = Math.floor(maxNum / HARD_LEVELS_IN_ARRAY);
   const quantExsPerLevel = Math.floor(numOfExs / HARD_LEVELS_IN_ARRAY);
 
@@ -47,4 +47,4 @@ const getEqualArray = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): number[][]
   return arrTest;
 };
 
-export default getEqualArray;
+export default setArrEqual;

@@ -1,7 +1,8 @@
 import { ELang } from '../langMessages';
-import getEqualArray from './equal/equal';
+import setArrEqual from './equal/equal';
 import setArrFive from './five/five';
 import { EExerciseCategories, TCatObject, categoriesMap } from './math.model';
+import setArrPair from './pairs/pairs';
 import setArrSequence from './sequence/sequence';
 
 export const NUMBER_OF_EXERCISES = 10;
@@ -31,25 +32,25 @@ export const makeExerciseArray = (
 ): number[][] => {
   switch (category) {
     case EExerciseCategories['equality']:
-      return getEqualArray(maxNum, numOfExs);
+      return setArrEqual(maxNum, numOfExs);
     case EExerciseCategories['sequence']:
       return setArrSequence(maxNum, numOfExs);
     case EExerciseCategories['pairs']:
-      return getEqualArray(maxNum, numOfExs);
+      return setArrPair(maxNum, numOfExs);
     case EExerciseCategories['link-equality']:
-      return getEqualArray(maxNum, numOfExs);
+      return setArrEqual(maxNum, numOfExs);
     case EExerciseCategories['inequality']:
-      return getEqualArray(maxNum, numOfExs);
+      return setArrEqual(maxNum, numOfExs);
     case EExerciseCategories['equal-ten']:
-      return getEqualArray(maxNum, numOfExs);
+      return setArrEqual(maxNum, numOfExs);
     case EExerciseCategories['composition']:
-      return getEqualArray(maxNum, numOfExs);
+      return setArrEqual(maxNum, numOfExs);
     case EExerciseCategories['equal-five']:
       return setArrFive(numOfExs);
     case EExerciseCategories['equal-over-ten']:
-      return getEqualArray(maxNum, numOfExs);
+      return setArrEqual(maxNum, numOfExs);
 
     default:
-      return getEqualArray(maxNum, numOfExs);
+      return setArrEqual(maxNum, numOfExs);
   }
 };

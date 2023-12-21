@@ -19,15 +19,15 @@ export interface IExerciseParams {
   keyboardKeys: string[];
 }
 
-export enum EMathExsElementNames {
-  'leftStr' = 'leftStr',
-  'centerStr' = 'centerStr',
-  'rightStr' = 'rightStr',
-  'upColumn' = 'upColumn',
-  'middleColumn' = 'middleColumn',
-  'downColumn' = 'downColumn',
-  'equalMark' = 'equalMark',
-}
+// export enum EMathExsElementNames {
+//   'leftStr' = 'leftStr',
+//   'centerStr' = 'centerStr',
+//   'rightStr' = 'rightStr',
+//   'upColumn' = 'upColumn',
+//   'middleColumn' = 'middleColumn',
+//   'downColumn' = 'downColumn',
+//   'equalMark' = 'equalMark',
+// }
 
 type TCatMap = Map<EExerciseCategories, IExerciseParams>;
 
@@ -69,7 +69,7 @@ export const categoriesMap: TCatMap = new Map([
     {
       [ELang.en]: { title: 'title', description: '1 + 1' },
       [ELang.ua]: { title: 'назва', description: '1 + 1' },
-      exercise: { start: 10, max: 100, step: 10 },
+      exercise: { start: 20, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
     },

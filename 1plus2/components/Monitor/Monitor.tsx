@@ -10,7 +10,7 @@ interface MonitorProps {
   rightAnswer: number;
   userAnswer: string;
   equalMark: '=' | '';
-  askElemNumber: number;
+  askElemNumbers: number[];
   arrExsLength: number;
   clearBtnHandler?: () => void;
   isDelBtnActive?: boolean;
@@ -23,7 +23,7 @@ const Monitor = ({
   rightAnswer,
   userAnswer,
   clearBtnHandler,
-  askElemNumber,
+  askElemNumbers,
   equalMark = '=',
   arrExsLength = 10,
   isDelBtnActive = true,
@@ -40,24 +40,26 @@ const Monitor = ({
                     <td className={styles.minusPlus} rowSpan={2}>
                       {minusPlus}
                     </td>
-                    <td>{askElemNumber === 0 ? userAnswer : n1}</td>
+                    <td>{askElemNumbers.includes(0) ? userAnswer : n1}</td>
                   </tr>
                   <tr>
-                    <td>{askElemNumber === 1 ? userAnswer : n2}</td>
+                    <td>{askElemNumbers.includes(1) ? userAnswer : n2}</td>
                   </tr>
                   <tr>
-                    <td colSpan={2}>{askElemNumber === 2 ? userAnswer : rightAnswer}</td>
+                    <td colSpan={2}>{askElemNumbers.includes(2) ? userAnswer : rightAnswer}</td>
                   </tr>
                 </tbody>
               </table>
 
               <div className={styles.displayExercise}>
-                <div className={styles.exsLeft}>{askElemNumber === 0 ? userAnswer : n1}</div>
+                <div className={styles.exsLeft}>{askElemNumbers.includes(0) ? userAnswer : n1}</div>
                 <div className={styles.exsMp}>{minusPlus}</div>
-                <div className={styles.exsCenter}>{askElemNumber === 1 ? userAnswer : n2}</div>
+                <div className={styles.exsCenter}>
+                  {askElemNumbers.includes(1) ? userAnswer : n2}
+                </div>
                 <div className={styles.exsEqual}>{equalMark}</div>
                 <div className={styles.exsRight}>
-                  {askElemNumber === 2 ? userAnswer : rightAnswer}
+                  {askElemNumbers.includes(2) ? userAnswer : rightAnswer}
                 </div>
               </div>
             </>

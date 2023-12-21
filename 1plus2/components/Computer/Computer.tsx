@@ -6,17 +6,13 @@ import Keyboard from '../Keyboard/Keyboard';
 import SectionTitle from '../SectionTitle/SectionTitle';
 import { arrayShift, sleep } from '@/libs/utils';
 import { ESoundPaths } from '@/libs/ESoundPaths';
-import {
-  EExerciseCategories,
-  EMathExsElementNames,
-  QUESTION_MARK,
-  TMinusPlus,
-} from '@/libs/exercises/math.model';
+import { EExerciseCategories, QUESTION_MARK, TMinusPlus } from '@/libs/exercises/math.model';
+import Monitor from '../Monitor/Monitor';
 
 type TMapCatParts = Map<
   EExerciseCategories,
   {
-    askPartNum: number;
+    askPartNum: number[];
     minusPlus: TMinusPlus;
   }
 >;
@@ -31,7 +27,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   const [n1, setN1] = useState(0);
   const [n2, setN2] = useState(0);
   const [minusPlus, setMinusPlus] = useState<TMinusPlus>('+');
-  const [askElemNumber, setAskElemNumber] = useState<number>(2);
+  const [askElemNumbers, setAskElemNumbers] = useState<number[]>([2]);
   const [badAnswers, setBadAnswers] = useState<number[][]>([]);
   const [mistakes, setMistakes] = useState<string[]>([]);
   const [compClassNames, setCompClassNames] = useState([styles.Computer]);
@@ -56,15 +52,21 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   const getMinusPlus = (): TMinusPlus => (exercises.length && exercises[0][1] > 0 ? '+' : '-');
 
   const mapCatParts: TMapCatParts = new Map([
-    [EExerciseCategories['equality'], { askPartNum: 2, minusPlus: getMinusPlus() }],
-    [EExerciseCategories['sequence'], { askPartNum: Math.floor(Math.random() * 3), minusPlus: '' }],
-    [EExerciseCategories['pairs'], { askPartNum: 2, minusPlus: getMinusPlus() }],
-    [EExerciseCategories['link-equality'], { askPartNum: 2, minusPlus: getMinusPlus() }],
-    [EExerciseCategories['inequality'], { askPartNum: 2, minusPlus: getMinusPlus() }],
-    [EExerciseCategories['equal-ten'], { askPartNum: 2, minusPlus: getMinusPlus() }],
-    [EExerciseCategories['composition'], { askPartNum: 2, minusPlus: getMinusPlus() }],
-    [EExerciseCategories['equal-five'], { askPartNum: 2, minusPlus: getMinusPlus() }],
-    [EExerciseCategories['equal-over-ten'], { askPartNum: 2, minusPlus: getMinusPlus() }],
+    [EExerciseCategories['equality'], { askPartNum: [2], minusPlus: getMinusPlus() }],
+    [
+      EExerciseCategories['sequence'],
+      { askPartNum: [Math.floor(Math.random() * 3)], minusPlus: '' },
+    ],
+    [
+      EExerciseCategories['pairs'],
+      { askPartNum: Math.floor(Math.random() * 2) ? [2] : [0, 1], minusPlus: '+' },
+    ],
+    [EExerciseCategories['link-equality'], { askPartNum: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['inequality'], { askPartNum: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['equal-ten'], { askPartNum: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['composition'], { askPartNum: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['equal-five'], { askPartNum: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['equal-over-ten'], { askPartNum: [2], minusPlus: getMinusPlus() }],
   ]);
 
   useEffect(() => {
@@ -75,7 +77,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
     const catPart = mapCatParts.get(EExerciseCategories[cat]);
     if (!catPart) return;
     setMinusPlus(catPart.minusPlus);
-    setAskElemNumber(catPart.askPartNum);
+    setAskElemNumbers(catPart.askPartNum);
   }, [exercises, cat]);
 
   const enterClickHandler = () => {
@@ -91,7 +93,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   };
 
   const checkAnswer = async () => {
-    const isRightAnswer = +answerElementValue === exercises[0][askElemNumber];
+    const isRightAnswer = +answerElementValue === exercises[0][askElemNumbers[0]];
     isRightAnswer ? rightAnswer() : badAnswer();
 
     await sleep();
@@ -138,8 +140,6 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   //     : `<div>${num}</div>`;
   // }
 
-  const preparePrint = (answElementNames: EMathExsElementNames[]) => {};
-
   // function preparPrint(objResp) {
   //   setBigColumnExs(false);
   //   if (!isHiddenColumn) {
@@ -153,9 +153,9 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   //   column_tbl.hidden = true;
   // }
 
-  const printExercise = () => {
-    preparePrint([EMathExsElementNames['rightStr'], EMathExsElementNames['downColumn']]);
-  };
+  // const printExercise = () => {
+  //   preparePrint([EMathExsElementNames['rightStr'], EMathExsElementNames['downColumn']]);
+  // };
 
   // function printExs1() {
   //   if (!preparePrint([spn_right, ans_td])) return;
@@ -202,7 +202,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
           minusPlus={minusPlus}
           userAnswer={answerElementValue}
           rightAnswer={exercises[0][2]}
-          askElemNumber={askElemNumber}
+          askElemNumbers={askElemNumbers}
           equalMark={exerciseParams.equalMark}
           arrExsLength={exercises.length}
           isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
