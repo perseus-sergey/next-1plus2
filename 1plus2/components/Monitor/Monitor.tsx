@@ -5,9 +5,9 @@ import { TMinusPlus } from '@/libs/exercises/math.model';
 
 interface MonitorProps {
   minusPlus: TMinusPlus;
-  n1: number;
-  n2: number;
-  rightAnswer: number;
+  n1: string | number | undefined;
+  n2: string | number | undefined;
+  rightAnswer: string | number | undefined;
   userAnswer: string;
   equalMark: '=' | '';
   askElemNumbers: number[];

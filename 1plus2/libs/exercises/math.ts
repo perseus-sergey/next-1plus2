@@ -1,6 +1,7 @@
 import { ELang } from '../langMessages';
 import setArrEqual from './equal/equal';
 import setArrFive from './five/five';
+import { setArrInequal } from './inequal/inequal';
 import { EExerciseCategories, TCatObject, categoriesMap } from './math.model';
 import setArrPair from './pairs/pairs';
 import setArrSequence from './sequence/sequence';
@@ -17,19 +18,23 @@ export const getCatFromMap = (
 export const isWrongPushArray = (
   quant: number,
   maxN: number,
-  existingParts: number[],
-  pushedParts: number[],
+  existingParts: (string | number)[][],
+  pushedParts: (string | number)[],
+  answerPositionInPart = 2,
   uniq = quant < maxN
-) =>
-  pushedParts[2] > maxN ||
-  pushedParts[2] <= 0 ||
-  (uniq && JSON.stringify(existingParts).includes(JSON.stringify(pushedParts)));
+) => {
+  return (
+    +pushedParts[answerPositionInPart] > maxN ||
+    +pushedParts[answerPositionInPart] <= 0 ||
+    (uniq && JSON.stringify(existingParts).includes(JSON.stringify(pushedParts)))
+  );
+};
 
 export const makeExerciseArray = (
   category: EExerciseCategories,
   maxNum = 100,
   numOfExs = NUMBER_OF_EXERCISES
-): number[][] => {
+): (string | number)[][] => {
   switch (category) {
     case EExerciseCategories['equality']:
       return setArrEqual(maxNum, numOfExs);
@@ -40,7 +45,7 @@ export const makeExerciseArray = (
     case EExerciseCategories['link-equality']:
       return setArrEqual(maxNum, numOfExs);
     case EExerciseCategories['inequality']:
-      return setArrEqual(maxNum, numOfExs);
+      return setArrInequal(maxNum, numOfExs);
     case EExerciseCategories['equal-ten']:
       return setArrEqual(maxNum, numOfExs);
     case EExerciseCategories['composition']:

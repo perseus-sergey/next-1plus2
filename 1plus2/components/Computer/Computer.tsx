@@ -12,23 +12,23 @@ import Monitor from '../Monitor/Monitor';
 type TMapCatParts = Map<
   EExerciseCategories,
   {
-    askPartNum: number[];
+    askPartPositions: number[];
     minusPlus: TMinusPlus;
   }
 >;
 
 export interface IComputerProps extends IExerciseComponentProps {
-  exerciseArray: number[][];
+  exerciseArray: (string | number)[][];
 }
 
 const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) => {
   const [exercises, setExercises] = useState(exerciseArray);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
-  const [n1, setN1] = useState(0);
-  const [n2, setN2] = useState(0);
+  const [n1, setN1] = useState<string | number>();
+  const [n2, setN2] = useState<string | number>();
   const [minusPlus, setMinusPlus] = useState<TMinusPlus>('+');
   const [askElemNumbers, setAskElemNumbers] = useState<number[]>([2]);
-  const [badAnswers, setBadAnswers] = useState<number[][]>([]);
+  const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
   const [mistakes, setMistakes] = useState<string[]>([]);
   const [compClassNames, setCompClassNames] = useState([styles.Computer]);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
@@ -49,35 +49,38 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
     typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_WRONG_ANSWER) : undefined
   );
 
-  const getMinusPlus = (): TMinusPlus => (exercises.length && exercises[0][1] > 0 ? '+' : '-');
+  const getMinusPlus = (): TMinusPlus => (exercises.length && +exercises[0][1] > 0 ? '+' : '-');
 
   const mapCatParts: TMapCatParts = new Map([
-    [EExerciseCategories['equality'], { askPartNum: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['equality'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
     [
       EExerciseCategories['sequence'],
-      { askPartNum: [Math.floor(Math.random() * 3)], minusPlus: '' },
+      { askPartPositions: [Math.floor(Math.random() * 3)], minusPlus: '' },
     ],
     [
       EExerciseCategories['pairs'],
-      { askPartNum: Math.floor(Math.random() * 2) ? [2] : [0, 1], minusPlus: '+' },
+      { askPartPositions: Math.floor(Math.random() * 2) ? [2] : [0, 1], minusPlus: '+' },
     ],
-    [EExerciseCategories['link-equality'], { askPartNum: [2], minusPlus: getMinusPlus() }],
-    [EExerciseCategories['inequality'], { askPartNum: [2], minusPlus: getMinusPlus() }],
-    [EExerciseCategories['equal-ten'], { askPartNum: [2], minusPlus: getMinusPlus() }],
-    [EExerciseCategories['composition'], { askPartNum: [2], minusPlus: getMinusPlus() }],
-    [EExerciseCategories['equal-five'], { askPartNum: [2], minusPlus: getMinusPlus() }],
-    [EExerciseCategories['equal-over-ten'], { askPartNum: [2], minusPlus: getMinusPlus() }],
+    [
+      EExerciseCategories['link-equality'],
+      { askPartPositions: Math.floor(Math.random() * 2) ? [1] : [0], minusPlus: getMinusPlus() },
+    ],
+    [EExerciseCategories['inequality'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['equal-ten'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['composition'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['equal-five'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
+    [EExerciseCategories['equal-over-ten'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
   ]);
 
   useEffect(() => {
     if (!exercises.length) return;
 
     setN1(exercises[0][0]);
-    setN2(Math.abs(exercises[0][1]));
+    setN2(Math.abs(+exercises[0][1]));
     const catPart = mapCatParts.get(EExerciseCategories[cat]);
     if (!catPart) return;
     setMinusPlus(catPart.minusPlus);
-    setAskElemNumbers(catPart.askPartNum);
+    setAskElemNumbers(catPart.askPartPositions);
   }, [exercises, cat]);
 
   const enterClickHandler = () => {

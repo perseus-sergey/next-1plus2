@@ -15,7 +15,7 @@ export interface IExerciseComponentProps {
 }
 
 const ExercisePage = (props: IExerciseComponentProps) => {
-  const [exerciseArray, setExerciseArray] = useState<number[][]>([[]]);
+  const [exerciseArray, setExerciseArray] = useState<(string | number)[][]>([[]]);
 
   useEffect(() => {
     setExerciseArray(makeExerciseArray(props.cat, props.chosenMaxNum));
