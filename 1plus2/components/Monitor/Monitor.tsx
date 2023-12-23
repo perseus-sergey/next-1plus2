@@ -1,7 +1,7 @@
 import { NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
 import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
-import { TMinusPlus } from '@/libs/exercises/math.model';
+import { TMinusPlus, TUnequalMark } from '@/libs/exercises/math.model';
 
 interface MonitorProps {
   minusPlus: TMinusPlus;
@@ -9,10 +9,11 @@ interface MonitorProps {
   n2: string | number | undefined;
   rightAnswer: string | number | undefined;
   userAnswer: string;
-  equalMark: '=' | '';
+  equalMark: TUnequalMark;
   askElemNumbers: number[];
   arrExsLength: number;
   clearBtnHandler?: () => void;
+  isInequalCat?: boolean;
   isDelBtnActive?: boolean;
 }
 
@@ -26,10 +27,12 @@ const Monitor = ({
   askElemNumbers,
   equalMark = '=',
   arrExsLength = 10,
+  isInequalCat = false,
   isDelBtnActive = true,
 }: MonitorProps) => {
   return (
     <section className={styles.Monitor} data-testid="Monitor">
+      {arrExsLength}
       <div className={styles.displayWrapper}>
         <div className={styles.display} id="display">
           {n1 !== undefined ? (
@@ -57,10 +60,16 @@ const Monitor = ({
                 <div className={styles.exsCenter}>
                   {askElemNumbers.includes(1) ? userAnswer : n2}
                 </div>
-                <div className={styles.exsEqual}>{equalMark}</div>
+                <div className={styles.exsEqual}>
+                  {isInequalCat && askElemNumbers.includes(2) ? userAnswer : equalMark}
+                </div>
+                <div className={styles.exsRight}>
+                  {!isInequalCat && askElemNumbers.includes(2) ? userAnswer : rightAnswer}
+                </div>
+                {/* <div className={styles.exsEqual}>{equalMark}</div>
                 <div className={styles.exsRight}>
                   {askElemNumbers.includes(2) ? userAnswer : rightAnswer}
-                </div>
+                </div> */}
               </div>
             </>
           ) : (

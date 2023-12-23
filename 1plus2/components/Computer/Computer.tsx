@@ -6,7 +6,12 @@ import Keyboard from '../Keyboard/Keyboard';
 import SectionTitle from '../SectionTitle/SectionTitle';
 import { arrayShift, sleep } from '@/libs/utils';
 import { ESoundPaths } from '@/libs/ESoundPaths';
-import { EExerciseCategories, QUESTION_MARK, TMinusPlus } from '@/libs/exercises/math.model';
+import {
+  EExerciseCategories,
+  QUESTION_MARK,
+  TMinusPlus,
+  keyboardInEqualKeys,
+} from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 
 type TMapCatParts = Map<
@@ -65,7 +70,13 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       EExerciseCategories['link-equality'],
       { askPartPositions: Math.floor(Math.random() * 2) ? [1] : [0], minusPlus: getMinusPlus() },
     ],
-    [EExerciseCategories['inequality'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
+    [
+      EExerciseCategories['inequality'],
+      {
+        askPartPositions: [2],
+        minusPlus: exercises[0][0] === '' ? '' : getMinusPlus(),
+      },
+    ],
     [EExerciseCategories['equal-ten'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
     [EExerciseCategories['composition'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
     [EExerciseCategories['equal-five'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
@@ -96,7 +107,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   };
 
   const checkAnswer = async () => {
-    const isRightAnswer = +answerElementValue === exercises[0][askElemNumbers[0]];
+    const isRightAnswer = answerElementValue === `${exercises[0][askElemNumbers[0]]}`;
     isRightAnswer ? rightAnswer() : badAnswer();
 
     await sleep();
@@ -186,7 +197,9 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   const keyboardBtnClickHandler = (value: string) => {
     audioKey.current?.play();
     setAnswerElementValue(
-      answerElementValue === QUESTION_MARK ? value : `${answerElementValue}${value}`
+      answerElementValue === QUESTION_MARK || keyboardInEqualKeys.includes(answerElementValue)
+        ? value
+        : `${answerElementValue}${value}`
     );
   };
 
@@ -204,11 +217,12 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
           n2={n2}
           minusPlus={minusPlus}
           userAnswer={answerElementValue}
-          rightAnswer={exercises[0][2]}
+          rightAnswer={exercises[0][exercises[0].length - 1]}
           askElemNumbers={askElemNumbers}
           equalMark={exerciseParams.equalMark}
           arrExsLength={exercises.length}
           isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
+          isInequalCat={cat === EExerciseCategories['inequality']}
           clearBtnHandler={clearBtnHandler}
         />
         <Keyboard

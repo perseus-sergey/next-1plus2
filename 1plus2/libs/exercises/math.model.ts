@@ -1,8 +1,9 @@
 import { ELang } from '../langMessages';
 
 const keyboardNumKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-const keyboardInEqualKeys = ['<', '=', '>'];
-export type TMinusPlus = '-' | '+' | '>' | '<' | '=' | '';
+export const keyboardInEqualKeys = ['<', '=', '>'];
+export type TUnequalMark = '>' | '<' | '=' | '';
+export type TMinusPlus = '-' | '+' | '';
 
 export const QUESTION_MARK = '?';
 
@@ -90,7 +91,7 @@ export const categoriesMap: TCatMap = new Map([
       [ELang.en]: { title: 'title', description: '< = >' },
       [ELang.ua]: { title: 'назва', description: '< = >' },
       exercise: { start: 10, max: 100, step: 10 },
-      equalMark: '=',
+      equalMark: '',
       keyboardKeys: keyboardInEqualKeys,
     },
   ],
