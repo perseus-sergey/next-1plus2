@@ -12,7 +12,7 @@ import {
   keyboardInEqualKeys,
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
-import { SectionTitle } from '../SectionTitle/SectionTitle';
+// import { SectionTitle } from '../SectionTitle/SectionTitle';
 
 type TMapCatParts = Map<
   EExerciseCategories,
@@ -211,9 +211,9 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
 
   return (
     <>
-      <SectionTitle
+      {/* <SectionTitle
         name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exercises.length}`}
-      />
+      /> */}
       <section className={compClassNames.join(' ')} data-testid="Computer">
         <Monitor
           n1={n1}
