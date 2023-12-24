@@ -24,7 +24,7 @@ const ExercisePage = (props: IExerciseComponentProps) => {
   if (!exerciseArray[0].length) return <h2>Loading...</h2>;
 
   return (
-    <section data-testid="ExercisePage">
+    <section data-testid="ExercisePage" style={{ width: '100%' }}>
       {/* <KeyClickedProvider> */}
       <Computer {...props} exerciseArray={exerciseArray} />
       {/* </KeyClickedProvider> */}

@@ -34,7 +34,7 @@ describe('setArrInequal', () => {
       it(`array parts should be unique.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexercisesInArray: ${exercisesInArray}`, () => {
         for (let index = 0; index < attempts; index++) {
           const arr = setArrInequal(maxN, exercisesInArray);
-          const uniqArr = Array.from(new Set(arr));
+          const uniqArr = [...new Set(arr)];
           expect(arr.length).toEqual(uniqArr.length);
         }
       });

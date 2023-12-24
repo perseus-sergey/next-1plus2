@@ -32,7 +32,6 @@ const Monitor = ({
 }: MonitorProps) => {
   return (
     <section className={styles.Monitor} data-testid="Monitor">
-      {arrExsLength}
       <div className={styles.displayWrapper}>
         <div className={styles.display} id="display">
           {n1 !== undefined ? (

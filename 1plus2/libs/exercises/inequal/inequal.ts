@@ -1,6 +1,6 @@
 import { createArray } from '@/libs/utils';
 import setArrEqual from '../equal/equal';
-import { isWrongPushArray } from '../math';
+import { isWrongPushedIntoArray } from '../math';
 
 const rightAnswIneq = (sideL: number, sideR: number, equal = sideL - sideR) =>
   equal > 0 ? '>' : !equal ? '=' : '<';
@@ -17,7 +17,7 @@ const makeLightArr = (
 
   if (n1 === n2) makeLightArr(maxNum, existArr, quant);
 
-  if (!isWrongPushArray(quant, maxNum, existArr, part1, 0)) {
+  if (!isWrongPushedIntoArray(quant, maxNum, existArr, part1, 0)) {
     return [...existArr, part1];
   } else if (!JSON.stringify(existArr).includes(JSON.stringify(reversePart1))) {
     return [...existArr, reversePart1];

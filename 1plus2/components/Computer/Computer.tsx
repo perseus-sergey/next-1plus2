@@ -74,7 +74,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       EExerciseCategories['inequality'],
       {
         askPartPositions: [2],
-        minusPlus: exercises[0][0] === '' ? '' : getMinusPlus(),
+        minusPlus: n1 === '' ? '' : getMinusPlus(),
       },
     ],
     [EExerciseCategories['equal-ten'], { askPartPositions: [2], minusPlus: getMinusPlus() }],

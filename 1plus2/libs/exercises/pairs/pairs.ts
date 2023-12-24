@@ -1,10 +1,10 @@
 import { createArray } from '@/libs/utils';
-import { NUMBER_OF_EXERCISES, isWrongPushArray } from '../math';
+import { NUMBER_OF_EXERCISES, isWrongPushedIntoArray } from '../math';
 
 const makeExsParts = (quant: number, maxNum: number, existingParts: number[]): number[] => {
   const n1 = Math.floor((Math.random() * maxNum) / 2) + 1;
   const exerciseParts = [n1, n1, n1 * 2];
-  if (isWrongPushArray(quant, maxNum, existingParts, exerciseParts))
+  if (isWrongPushedIntoArray(quant, maxNum, existingParts, exerciseParts))
     return makeExsParts(quant, maxNum, exerciseParts);
 
   return exerciseParts;

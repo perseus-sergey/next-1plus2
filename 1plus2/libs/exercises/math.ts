@@ -5,6 +5,7 @@ import { setArrInequal } from './inequal/inequal';
 import { EExerciseCategories, TCatObject, categoriesMap } from './math.model';
 import setArrPair from './pairs/pairs';
 import setArrSequence from './sequence/sequence';
+import { setArrTen } from './ten/ten';
 
 export const NUMBER_OF_EXERCISES = 10;
 export const HARD_LEVELS_IN_ARRAY = 2;
@@ -15,7 +16,7 @@ export const getCatFromMap = (
   mapTitleObj = categoriesMap.get(msg)
 ): TCatObject => (mapTitleObj ? mapTitleObj[lang] : { title: '', description: '' });
 
-export const isWrongPushArray = (
+export const isWrongPushedIntoArray = (
   quant: number,
   maxN: number,
   existingParts: (string | number)[][],
@@ -47,7 +48,7 @@ export const makeExerciseArray = (
     case EExerciseCategories['inequality']:
       return setArrInequal(maxNum, numOfExs);
     case EExerciseCategories['equal-ten']:
-      return setArrEqual(maxNum, numOfExs);
+      return setArrTen(maxNum, numOfExs);
     case EExerciseCategories['composition']:
       return setArrEqual(maxNum, numOfExs);
     case EExerciseCategories['equal-five']:
