@@ -1,53 +1,64 @@
-import { createArray } from '../utils';
+import { ELang } from '../langMessages';
+import { setArrCompos } from './composition/composition';
+import setArrEqual from './equal/equal';
+import setArrFive from './five/five';
+import { setArrInequal } from './inequal/inequal';
+import { EExerciseCategories, TCatObject, categoriesMap } from './math.model';
+import { setArrOverTen } from './overTen/overTen';
+import setArrPair from './pairs/pairs';
+import setArrSequence from './sequence/sequence';
+import { setArrTen } from './ten/ten';
 
 export const NUMBER_OF_EXERCISES = 10;
-const HARD_LEVELS_IN_ARRAY = 2;
+export const HARD_LEVELS_IN_ARRAY = 2;
 
-const makeRandForEqual = (maxN = 100): number[] => {
-  const randN1 = (): number => {
-    const a = Math.floor(Math.random() * maxN) + 1; //  1 to maxN   0,maxN => (Math.random() * (maxN+1))
-    return a % 10 ? a : randN1();
-  };
-  const randN2 = (): number => {
-    const a = Math.floor(Math.random() * (2 * maxN + 1)) - maxN; // -maxN,maxN
-    return a % 10 ? a : randN2();
-  };
+export const getCatFromMap = (
+  msg: EExerciseCategories,
+  lang: ELang = ELang.en,
+  mapTitleObj = categoriesMap.get(msg)
+): TCatObject => (mapTitleObj ? mapTitleObj[lang] : { title: '', description: '' });
 
-  const n1 = randN1();
-  const n2 = randN2();
-  return [n1, n2, n1 + n2];
+export const isWrongPushedIntoArray = (
+  quant: number,
+  maxN: number,
+  existingParts: (string | number)[][],
+  pushedParts: (string | number)[],
+  answerPositionInPart = 2,
+  uniq = quant < maxN
+) => {
+  return (
+    +pushedParts[answerPositionInPart] > maxN ||
+    +pushedParts[answerPositionInPart] <= 0 ||
+    (uniq && JSON.stringify(existingParts).includes(JSON.stringify(pushedParts)))
+  );
 };
 
-const makeExsParts = (quant: number, maxN: number, existingParts: number[]): number[] => {
-  const exerciseParts = makeRandForEqual(maxN);
-  const max_n = Math.max(exerciseParts[0], exerciseParts[1]);
-  const minTen = max_n - (max_n % 10);
-  const uniq = quant < maxN;
-  if (
-    exerciseParts[2] > maxN ||
-    exerciseParts[2] <= 0 ||
-    exerciseParts[2] > minTen + 10 ||
-    exerciseParts[2] < minTen ||
-    (uniq && JSON.stringify(existingParts).includes(JSON.stringify(exerciseParts)))
-  ) {
-    return makeExsParts(quant, maxN, exerciseParts);
+export const makeExerciseArray = (
+  category: EExerciseCategories,
+  maxNum = 100,
+  numOfExs = NUMBER_OF_EXERCISES
+): (string | number)[][] => {
+  switch (category) {
+    case EExerciseCategories['equality']:
+      return setArrEqual(maxNum, numOfExs);
+    case EExerciseCategories['sequence']:
+      return setArrSequence(maxNum, numOfExs);
+    case EExerciseCategories['pairs']:
+      return setArrPair(maxNum, numOfExs);
+    case EExerciseCategories['link-equality']:
+      return setArrEqual(maxNum, numOfExs);
+    case EExerciseCategories['inequality']:
+      return setArrInequal(maxNum, numOfExs);
+    case EExerciseCategories['equal-ten']:
+      return setArrTen(maxNum, numOfExs);
+    case EExerciseCategories['composition']:
+      return setArrCompos(maxNum, numOfExs);
+    case EExerciseCategories['equal-five']:
+      return setArrFive(numOfExs);
+    case EExerciseCategories['equal-over-ten']:
+      return setArrOverTen(maxNum, numOfExs);
+
+    default:
+      return setArrEqual(maxNum, numOfExs);
   }
-  return exerciseParts;
-};
-
-export const makeExerciseArray = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): number[][] => {
-  const maxNumOfLevel = Math.floor(maxNum / HARD_LEVELS_IN_ARRAY);
-  const quantExsPerLevel = Math.floor(numOfExs / HARD_LEVELS_IN_ARRAY);
-
-  const arrTest = createArray(HARD_LEVELS_IN_ARRAY).reduce((acc: number[][], _, n) => {
-    const quant = Math.floor(quantExsPerLevel * 0.7 * (n + 1));
-    return [
-      ...acc,
-      ...createArray(quant).reduce(
-        (acc) => [...acc, makeExsParts(quant, maxNumOfLevel * (n + 1), acc)],
-        []
-      ),
-    ];
-  }, []);
-  return arrTest;
 };

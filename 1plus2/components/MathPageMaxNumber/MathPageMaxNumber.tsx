@@ -1,11 +1,12 @@
 import { ICatNamePageProps } from '@/app/[lang]/math/category/[cat]/page';
 // import styles from './MathPageMaxNumber.module.scss';
-import { EMessageNames, categoriesMap, getTitleFromMap } from '@/libs/langMessages';
+import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import KeyboardButton from '../KeyboardButton/KeyboardButton';
 import { createMaxNumArray } from '@/libs/utils';
 import SectionTitle from '../SectionTitle/SectionTitle';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { categoriesMap } from '@/libs/exercises/math.model';
 
 const MathPageMaxNumber = ({ params }: ICatNamePageProps) => {
   const catObj = categoriesMap.get(params.cat);
