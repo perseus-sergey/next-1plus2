@@ -78,7 +78,10 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       },
     ],
     [EExerciseCategories['equal-ten'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
-    [EExerciseCategories['composition'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
+    [
+      EExerciseCategories['composition'],
+      { askPartPositions: Math.floor(Math.random() * 2) ? [1] : [0], minusPlus: getMinusPlus() },
+    ],
     [EExerciseCategories['equal-five'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
     [EExerciseCategories['equal-over-ten'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
   ]);

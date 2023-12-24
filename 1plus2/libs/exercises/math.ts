@@ -1,8 +1,10 @@
 import { ELang } from '../langMessages';
+import { setArrCompos } from './composition/composition';
 import setArrEqual from './equal/equal';
 import setArrFive from './five/five';
 import { setArrInequal } from './inequal/inequal';
 import { EExerciseCategories, TCatObject, categoriesMap } from './math.model';
+import { setArrOverTen } from './overTen/overTen';
 import setArrPair from './pairs/pairs';
 import setArrSequence from './sequence/sequence';
 import { setArrTen } from './ten/ten';
@@ -50,11 +52,11 @@ export const makeExerciseArray = (
     case EExerciseCategories['equal-ten']:
       return setArrTen(maxNum, numOfExs);
     case EExerciseCategories['composition']:
-      return setArrEqual(maxNum, numOfExs);
+      return setArrCompos(maxNum, numOfExs);
     case EExerciseCategories['equal-five']:
       return setArrFive(numOfExs);
     case EExerciseCategories['equal-over-ten']:
-      return setArrEqual(maxNum, numOfExs);
+      return setArrOverTen(maxNum, numOfExs);
 
     default:
       return setArrEqual(maxNum, numOfExs);
