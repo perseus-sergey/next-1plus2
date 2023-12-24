@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 // import styles from './MathPageComponent.module.scss';
-import { SectionTitle } from '../SectionTitle/SectionTitle';
+import { Title } from '../Title/Title';
 import Mission from '../Mission/Mission';
 // import MathCategories from '../MathCategories/MathCategories';
 // import Monitor from '../Monitor/Monitor';
@@ -26,7 +26,7 @@ const MathPageComponent = (props: IMathPageProps) => {
 
   return (
     <>
-      <SectionTitle name={titleH1} />
+      <Title name={titleH1} />
 
       {isMissionSection && <Mission levelButtonClicked={levelButtonClicked} lang={lang} />}
       {isEndLevelSection && <EndLevelScreen lang={lang} />}

@@ -1,6 +1,6 @@
 import { ICatPageProps } from '@/app/[lang]/math/category/page';
 import TextButton from '../TextButton/TextButton';
-import { SectionTitle } from '../SectionTitle/SectionTitle';
+import { Title } from '../Title/Title';
 import styles from './MathCategories.module.scss';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';
@@ -12,7 +12,7 @@ const MathCategories = (props: ICatPageProps) => {
 
   return (
     <section data-testid="MathCategories">
-      <SectionTitle name={getTitleFromMap(EMessageNames.CATEGORY_CHOICE, lang)} />
+      <Title name={getTitleFromMap(EMessageNames.CATEGORY_CHOICE, lang)} />
       <div className={styles.MathCategories}>
         {[...categoriesMap.keys()].map((catSlug) => (
           <Link href={`/${lang}/math/category/${catSlug}`} key={catSlug}>

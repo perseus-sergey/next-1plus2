@@ -3,6 +3,7 @@ import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { IExerciseComponentProps } from '../ExercisePage/ExercisePage';
 import Keyboard from '../Keyboard/Keyboard';
+import { Title } from '../Title/Title';
 import { arrayShift, sleep } from '@/libs/utils';
 import { ESoundPaths } from '@/libs/ESoundPaths';
 import {
@@ -12,7 +13,6 @@ import {
   keyboardInEqualKeys,
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
-// import { SectionTitle } from '../SectionTitle/SectionTitle';
 
 type TMapCatParts = Map<
   EExerciseCategories,
@@ -211,9 +211,9 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
 
   return (
     <>
-      {/* <SectionTitle
+      <Title
         name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exercises.length}`}
-      /> */}
+      />
       <section className={compClassNames.join(' ')} data-testid="Computer">
         <Monitor
           n1={n1}

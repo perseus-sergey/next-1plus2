@@ -3,7 +3,7 @@ import { ICatNamePageProps } from '@/app/[lang]/math/category/[cat]/page';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import KeyboardButton from '../KeyboardButton/KeyboardButton';
 import { createMaxNumArray } from '@/libs/utils';
-import { SectionTitle } from '../SectionTitle/SectionTitle';
+import { Title } from '../Title/Title';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { categoriesMap } from '@/libs/exercises/math.model';
@@ -15,7 +15,7 @@ const MathPageMaxNumber = ({ params }: ICatNamePageProps) => {
 
   return (
     <section className="keyboard" data-testid="MathPageMaxNumber">
-      <SectionTitle name={getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, params.lang)} />
+      <Title name={getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, params.lang)} />
 
       <div className="keyboard-line">
         {createMaxNumArray(catObj.exercise).map((value) => (
