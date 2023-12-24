@@ -3,7 +3,7 @@ import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { IExerciseComponentProps } from '../ExercisePage/ExercisePage';
 import Keyboard from '../Keyboard/Keyboard';
-import SectionTitle from '../SectionTitle/SectionTitle';
+import { SectionTitle } from '../SectionTitle/SectionTitle';
 import { arrayShift, sleep } from '@/libs/utils';
 import { ESoundPaths } from '@/libs/ESoundPaths';
 import {

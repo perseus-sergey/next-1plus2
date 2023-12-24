@@ -1,6 +1,6 @@
 import { ICatPageProps } from '@/app/[lang]/math/category/page';
 import TextButton from '../TextButton/TextButton';
-import SectionTitle from '../SectionTitle/SectionTitle';
+import { SectionTitle } from '../SectionTitle/SectionTitle';
 import styles from './MathCategories.module.scss';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';

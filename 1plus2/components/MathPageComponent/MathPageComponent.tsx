@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 // import styles from './MathPageComponent.module.scss';
-import SectionTitle from '../SectionTitle/SectionTitle';
+import { SectionTitle } from '../SectionTitle/SectionTitle';
 import Mission from '../Mission/Mission';
 // import MathCategories from '../MathCategories/MathCategories';
 // import Monitor from '../Monitor/Monitor';
