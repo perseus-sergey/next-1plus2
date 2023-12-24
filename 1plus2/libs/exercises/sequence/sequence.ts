@@ -1,13 +1,13 @@
 import { createArray } from '@/libs/utils';
 import { NUMBER_OF_EXERCISES, isWrongPushedIntoArray } from '../math';
 
-const makeExsParts = (quant: number, maxNum: number, existingParts: number[]): number[] => {
+const makeExsParts = (quant: number, maxNum: number, existingParts: number[][]): number[] => {
   const n = Math.floor(Math.random() * maxNum) + 1; //  1 to maxNum
-  const exerciseParts = [n - 1, n, n + 1];
-  if (isWrongPushedIntoArray(quant, maxNum, existingParts, exerciseParts))
-    return makeExsParts(quant, maxNum, exerciseParts);
+  const newArrItem = [n - 1, n, n + 1];
+  if (isWrongPushedIntoArray(quant, maxNum, existingParts, newArrItem))
+    return makeExsParts(quant, maxNum, existingParts);
 
-  return exerciseParts;
+  return newArrItem;
 };
 
 const makeArrUpTo10 = (numOfExs = NUMBER_OF_EXERCISES) => {

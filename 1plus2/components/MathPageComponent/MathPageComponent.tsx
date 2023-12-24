@@ -15,8 +15,10 @@ const MathPageComponent = (props: IMathPageProps) => {
   const { lang = ELang.en } = props.params;
 
   const [titleH1, setTitleH1] = useState(getTitleFromMap(EMessageNames.MISSION_CHOICE, lang));
-  const [isMissionSection, setIsMissionSection] = useState(true);
-  const [isEndLevelSection, setIsEndLevelSection] = useState(false);
+  const [isMissionSection] = useState(true);
+  const [isEndLevelSection] = useState(false);
+  // const [isMissionSection, setIsMissionSection] = useState(true);
+  // const [isEndLevelSection, setIsEndLevelSection] = useState(false);
 
   const levelButtonClicked = () => {
     setTitleH1(getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, lang));
