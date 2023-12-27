@@ -107,7 +107,6 @@ const Monitor = ({
           )}
         </div>
       </div>
-      {JSON.stringify(hint)}
       <div className={styles.infoBlock}>
         <div className={styles.progressBlock}>
           <div

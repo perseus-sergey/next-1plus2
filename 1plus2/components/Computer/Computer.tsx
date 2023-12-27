@@ -172,7 +172,6 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       <Title
         name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exercises.length}`}
       />
-      {JSON.stringify(exercises)}
       <section className={styles.Computer} data-testid="Computer">
         <Monitor
           n1={exercises[0][0]}
