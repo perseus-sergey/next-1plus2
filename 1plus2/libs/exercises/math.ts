@@ -54,7 +54,7 @@ export const makeExerciseArray = (
     case EExerciseCategories['composition']:
       return setArrCompos(maxNum, numOfExs);
     case EExerciseCategories['equal-five']:
-      return setArrFive(numOfExs);
+      return setArrFive(maxNum, numOfExs);
     case EExerciseCategories['equal-over-ten']:
       return setArrOverTen(maxNum, numOfExs);
 

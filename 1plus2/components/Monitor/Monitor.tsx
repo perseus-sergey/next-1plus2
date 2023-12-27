@@ -2,16 +2,21 @@ import { NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
 import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import { TMinusPlus, TUnequalMark } from '@/libs/exercises/math.model';
+import { TMathHint } from '@/libs/hooks/useExerciseParams';
+import ExercisePart from '../ExercisePart/ExercisePart';
+import { EIsRightAnswer } from '../Computer/Computer';
 
 interface MonitorProps {
   minusPlus: TMinusPlus;
   n1: string | number | undefined;
   n2: string | number | undefined;
+  hint: TMathHint;
   rightAnswer: string | number | undefined;
   userAnswer: string;
   equalMark: TUnequalMark;
   askElemNumbers: number[];
   arrExsLength: number;
+  isRightAnswer: EIsRightAnswer;
   clearBtnHandler?: () => void;
   isInequalCat?: boolean;
   isDelBtnActive?: boolean;
@@ -21,8 +26,10 @@ const Monitor = ({
   minusPlus,
   n1,
   n2,
+  hint,
   rightAnswer,
   userAnswer,
+  isRightAnswer,
   clearBtnHandler,
   askElemNumbers,
   equalMark = '=',
@@ -30,6 +37,7 @@ const Monitor = ({
   isInequalCat = false,
   isDelBtnActive = true,
 }: MonitorProps) => {
+  const { hintN1, hintMinusPlus, hintN2, hintEqual, hintResponse } = hint;
   return (
     <section className={styles.Monitor} data-testid="Monitor">
       <div className={styles.displayWrapper}>
@@ -53,22 +61,45 @@ const Monitor = ({
                 </tbody>
               </table>
 
-              <div className={styles.displayExercise}>
-                <div className={styles.exsLeft}>{askElemNumbers.includes(0) ? userAnswer : n1}</div>
-                <div className={styles.exsMp}>{minusPlus}</div>
-                <div className={styles.exsCenter}>
-                  {askElemNumbers.includes(1) ? userAnswer : n2}
-                </div>
-                <div className={styles.exsEqual}>
-                  {isInequalCat && askElemNumbers.includes(2) ? userAnswer : equalMark}
-                </div>
-                <div className={styles.exsRight}>
-                  {!isInequalCat && askElemNumbers.includes(2) ? userAnswer : rightAnswer}
-                </div>
-                {/* <div className={styles.exsEqual}>{equalMark}</div>
-                <div className={styles.exsRight}>
-                  {askElemNumbers.includes(2) ? userAnswer : rightAnswer}
-                </div> */}
+              <div
+                className={
+                  isRightAnswer === EIsRightAnswer.BAD
+                    ? `${styles.displayExercise} ${styles.badAnswer}`
+                    : isRightAnswer === EIsRightAnswer.RIGHT
+                      ? `${styles.displayExercise} ${styles.properAnswer}`
+                      : `${styles.displayExercise}`
+                }
+              >
+                <ExercisePart
+                  rightValue={n1}
+                  hint={hintN1}
+                  userAnswer={userAnswer}
+                  isQuestionPart={askElemNumbers.includes(0)}
+                />
+                <ExercisePart
+                  rightValue={minusPlus}
+                  hint={hintMinusPlus}
+                  userAnswer={userAnswer}
+                  isQuestionPart={false}
+                />
+                <ExercisePart
+                  rightValue={n2}
+                  hint={hintN2}
+                  userAnswer={userAnswer}
+                  isQuestionPart={askElemNumbers.includes(1)}
+                />
+                <ExercisePart
+                  rightValue={equalMark}
+                  hint={hintEqual}
+                  userAnswer={userAnswer}
+                  isQuestionPart={isInequalCat && askElemNumbers.includes(2)}
+                />
+                <ExercisePart
+                  rightValue={rightAnswer}
+                  hint={hintResponse}
+                  userAnswer={userAnswer}
+                  isQuestionPart={!isInequalCat && askElemNumbers.includes(2)}
+                />
               </div>
             </>
           ) : (

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { IExerciseComponentProps } from '../ExercisePage/ExercisePage';
@@ -9,34 +9,30 @@ import { ESoundPaths } from '@/libs/ESoundPaths';
 import {
   EExerciseCategories,
   QUESTION_MARK,
-  TMinusPlus,
   keyboardInEqualKeys,
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
-
-type TMapCatParts = Map<
-  EExerciseCategories,
-  {
-    askPartPositions: number[];
-    minusPlus: TMinusPlus;
-  }
->;
+import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
 
 export interface IComputerProps extends IExerciseComponentProps {
   exerciseArray: (string | number)[][];
 }
 
+export enum EIsRightAnswer {
+  'NOT',
+  'RIGHT',
+  'BAD',
+}
+
 const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) => {
   const [exercises, setExercises] = useState(exerciseArray);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
-  const [n1, setN1] = useState<string | number>();
-  const [n2, setN2] = useState<string | number>();
-  const [minusPlus, setMinusPlus] = useState<TMinusPlus>('+');
-  const [askElemNumbers, setAskElemNumbers] = useState<number[]>([2]);
   const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
   const [mistakes, setMistakes] = useState<string[]>([]);
-  const [compClassNames, setCompClassNames] = useState([styles.Computer]);
+  const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
+
+  const [minusPlus, askElemNumbers, hint] = useExerciseParams(cat, exercises);
 
   const audioDel = useRef<HTMLAudioElement | undefined>(
     typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_DEL) : undefined
@@ -54,49 +50,6 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
     typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_WRONG_ANSWER) : undefined
   );
 
-  const getMinusPlus = (): TMinusPlus => (exercises.length && +exercises[0][1] > 0 ? '+' : '-');
-
-  const mapCatParts: TMapCatParts = new Map([
-    [EExerciseCategories['equality'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
-    [
-      EExerciseCategories['sequence'],
-      { askPartPositions: [Math.floor(Math.random() * 3)], minusPlus: '' },
-    ],
-    [
-      EExerciseCategories['pairs'],
-      { askPartPositions: Math.floor(Math.random() * 2) ? [2] : [0, 1], minusPlus: '+' },
-    ],
-    [
-      EExerciseCategories['link-equality'],
-      { askPartPositions: Math.floor(Math.random() * 2) ? [1] : [0], minusPlus: getMinusPlus() },
-    ],
-    [
-      EExerciseCategories['inequality'],
-      {
-        askPartPositions: [2],
-        minusPlus: n1 === '' ? '' : getMinusPlus(),
-      },
-    ],
-    [EExerciseCategories['equal-ten'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
-    [
-      EExerciseCategories['composition'],
-      { askPartPositions: Math.floor(Math.random() * 2) ? [1] : [0], minusPlus: getMinusPlus() },
-    ],
-    [EExerciseCategories['equal-five'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
-    [EExerciseCategories['equal-over-ten'], { askPartPositions: [2], minusPlus: getMinusPlus() }],
-  ]);
-
-  useEffect(() => {
-    if (!exercises.length) return;
-
-    setN1(exercises[0][0]);
-    setN2(Math.abs(+exercises[0][1]));
-    const catPart = mapCatParts.get(EExerciseCategories[cat]);
-    if (!catPart) return;
-    setMinusPlus(catPart.minusPlus);
-    setAskElemNumbers(catPart.askPartPositions);
-  }, [exercises, cat]);
-
   const enterClickHandler = () => {
     if (!exercises.length || answerElementValue === QUESTION_MARK) return;
     setIsEnterDisabled(true);
@@ -110,7 +63,10 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   };
 
   const checkAnswer = async () => {
-    const isRightAnswer = answerElementValue === `${exercises[0][askElemNumbers[0]]}`;
+    const properAnswer = isNaN(+exercises[0][askElemNumbers[0]])
+      ? exercises[0][askElemNumbers[0]]
+      : Math.abs(+exercises[0][askElemNumbers[0]]);
+    const isRightAnswer = answerElementValue === `${properAnswer}`;
     isRightAnswer ? rightAnswer() : badAnswer();
 
     await sleep();
@@ -119,21 +75,23 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       ? setExercises(arrayShift(exercises))
       : setExercises([...exercises, exercises[0]]);
 
-    setCompClassNames([styles.Computer]);
+    setIsRightAnswer(EIsRightAnswer.NOT);
     setAnswerElementValue(QUESTION_MARK);
     setIsEnterDisabled(false);
   };
 
   const rightAnswer = () => {
     audioRightAnsw.current?.play();
-    setCompClassNames([...compClassNames, styles.properAnswer]);
+    setIsRightAnswer(EIsRightAnswer.RIGHT);
   };
 
   const badAnswer = () => {
+    const [n1, n2] = exercises[0];
     audioWrongAnsw.current?.play();
     setBadAnswers([...badAnswers, exercises[0]]);
+    // TODO: change for each cat
     setMistakes([...mistakes, `${n1} ${minusPlus} ${n2} ${'='} ${answerElementValue}`]);
-    setCompClassNames([...compClassNames, styles.badAnswer]);
+    setIsRightAnswer(EIsRightAnswer.BAD);
   };
 
   // function makeShow(n1, n2) {
@@ -214,16 +172,18 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       <Title
         name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exercises.length}`}
       />
-      <section className={compClassNames.join(' ')} data-testid="Computer">
+      <section className={styles.Computer} data-testid="Computer">
         <Monitor
-          n1={n1}
-          n2={n2}
+          n1={exercises[0][0]}
+          n2={Math.abs(+exercises[0][1])}
+          hint={hint}
           minusPlus={minusPlus}
           userAnswer={answerElementValue}
           rightAnswer={exercises[0][exercises[0].length - 1]}
           askElemNumbers={askElemNumbers}
           equalMark={exerciseParams.equalMark}
           arrExsLength={exercises.length}
+          isRightAnswer={isRightAnswer}
           isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
           isInequalCat={cat === EExerciseCategories['inequality']}
           clearBtnHandler={clearBtnHandler}
