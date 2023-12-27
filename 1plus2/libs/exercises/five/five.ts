@@ -2,8 +2,8 @@ import { createMaxNumArray } from '@/libs/utils';
 import { NUMBER_OF_EXERCISES } from '../math';
 
 //  => [n1, n2, res]
-const setArrFive = (numOfExs = NUMBER_OF_EXERCISES): number[][] => {
-  const arr = createMaxNumArray({ start: 0, max: 50, step: 5 }).reduce(
+const setArrFive = (maxNum: number, numOfExs = NUMBER_OF_EXERCISES): number[][] => {
+  const arr = createMaxNumArray({ start: 0, max: maxNum - 5, step: 5 }).reduce(
     (acc: number[][], current) => {
       const r = Math.floor(Math.random() * 2); //  1 or 0
       const parts = r ? [current + 5, -5, current] : [5, current, current + 5]; // (5..50)-5 or 5+(5..55)
