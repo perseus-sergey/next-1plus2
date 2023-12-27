@@ -40,6 +40,14 @@
   display: block;
 }
 
+.properAnswer * {
+  color: aquamarine !important;
+}
+
+.badAnswer * {
+  color: #f06d70 !important;
+}
+
 /*----------------------- Animate Exercises (start) --------------------			*/
 .exsPart {
   animation: anim_div 0.6s linear;

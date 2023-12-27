@@ -18,12 +18,18 @@ export interface IComputerProps extends IExerciseComponentProps {
   exerciseArray: (string | number)[][];
 }
 
+export enum EIsRightAnswer {
+  'NOT',
+  'RIGHT',
+  'BAD',
+}
+
 const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) => {
   const [exercises, setExercises] = useState(exerciseArray);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
   const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
   const [mistakes, setMistakes] = useState<string[]>([]);
-  const [compClassNames, setCompClassNames] = useState([styles.Computer]);
+  const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
 
   const [minusPlus, askElemNumbers, hint] = useExerciseParams(cat, exercises);
@@ -66,14 +72,14 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       ? setExercises(arrayShift(exercises))
       : setExercises([...exercises, exercises[0]]);
 
-    setCompClassNames([styles.Computer]);
+    setIsRightAnswer(EIsRightAnswer.NOT);
     setAnswerElementValue(QUESTION_MARK);
     setIsEnterDisabled(false);
   };
 
   const rightAnswer = () => {
     audioRightAnsw.current?.play();
-    setCompClassNames([...compClassNames, styles.properAnswer]);
+    setIsRightAnswer(EIsRightAnswer.RIGHT);
   };
 
   const badAnswer = () => {
@@ -82,7 +88,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
     setBadAnswers([...badAnswers, exercises[0]]);
     // TODO: change for each cat
     setMistakes([...mistakes, `${n1} ${minusPlus} ${n2} ${'='} ${answerElementValue}`]);
-    setCompClassNames([...compClassNames, styles.badAnswer]);
+    setIsRightAnswer(EIsRightAnswer.BAD);
   };
 
   // function makeShow(n1, n2) {
@@ -164,7 +170,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
         name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exercises.length}`}
       />
       {JSON.stringify(exercises)}
-      <section className={compClassNames.join(' ')} data-testid="Computer">
+      <section className={styles.Computer} data-testid="Computer">
         <Monitor
           n1={exercises[0][0]}
           n2={Math.abs(+exercises[0][1])}
@@ -175,6 +181,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
           askElemNumbers={askElemNumbers}
           equalMark={exerciseParams.equalMark}
           arrExsLength={exercises.length}
+          isRightAnswer={isRightAnswer}
           isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
           isInequalCat={cat === EExerciseCategories['inequality']}
           clearBtnHandler={clearBtnHandler}

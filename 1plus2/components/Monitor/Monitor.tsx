@@ -4,6 +4,7 @@ import styles from './Monitor.module.scss';
 import { TMinusPlus, TUnequalMark } from '@/libs/exercises/math.model';
 import { TMathHint } from '@/libs/hooks/useExerciseParams';
 import ExercisePart from '../ExercisePart/ExercisePart';
+import { EIsRightAnswer } from '../Computer/Computer';
 
 interface MonitorProps {
   minusPlus: TMinusPlus;
@@ -15,6 +16,7 @@ interface MonitorProps {
   equalMark: TUnequalMark;
   askElemNumbers: number[];
   arrExsLength: number;
+  isRightAnswer: EIsRightAnswer;
   clearBtnHandler?: () => void;
   isInequalCat?: boolean;
   isDelBtnActive?: boolean;
@@ -27,6 +29,7 @@ const Monitor = ({
   hint,
   rightAnswer,
   userAnswer,
+  isRightAnswer,
   clearBtnHandler,
   askElemNumbers,
   equalMark = '=',
@@ -58,41 +61,45 @@ const Monitor = ({
                 </tbody>
               </table>
 
-              <div className={styles.displayExercise}>
-                {askElemNumbers.includes(0) ? (
-                  <ExercisePart hint={null} value={userAnswer} />
-                ) : (
-                  <ExercisePart hint={hintN1} value={n1} />
-                )}
-                {/* <ExercisePart hint={hintN1} value={askElemNumbers.includes(0) ? userAnswer : n1} /> */}
-                {/* <div className={styles.exsLeft}>
-                  <div className={styles.exsPart}>
-                    {askElemNumbers.includes(0) ? userAnswer : n1}
-                  </div>
-                  {hintN1 && <div className={styles.exsHint}>{hintN1}</div>}
-                </div> */}
-                <div className={styles.exsMp}>
-                  <div className={styles.exsPart}>{minusPlus}</div>
-                  {hintMinusPlus && <div className={styles.exsHint}>{hintMinusPlus}</div>}
-                </div>
-                <div className={styles.exsCenter}>
-                  <div className={styles.exsPart}>
-                    {askElemNumbers.includes(1) ? userAnswer : n2}
-                  </div>
-                  {hintN2 && <div className={styles.exsHint}>{hintN2}</div>}
-                </div>
-                <div className={styles.exsEqual}>
-                  <div className={styles.exsPart}>
-                    {isInequalCat && askElemNumbers.includes(2) ? userAnswer : equalMark}
-                  </div>
-                  {hintEqual && <div className={styles.exsHint}>{hintEqual}</div>}
-                </div>
-                <div className={styles.exsRight}>
-                  <div className={styles.exsPart}>
-                    {!isInequalCat && askElemNumbers.includes(2) ? userAnswer : rightAnswer}
-                  </div>
-                  {hintResponse && <div className={styles.exsHint}>{hintResponse}</div>}
-                </div>
+              <div
+                className={
+                  isRightAnswer === EIsRightAnswer.BAD
+                    ? `${styles.displayExercise} ${styles.badAnswer}`
+                    : isRightAnswer === EIsRightAnswer.RIGHT
+                      ? `${styles.displayExercise} ${styles.properAnswer}`
+                      : `${styles.displayExercise}`
+                }
+              >
+                <ExercisePart
+                  rightValue={n1}
+                  hint={hintN1}
+                  userAnswer={userAnswer}
+                  isQuestionPart={askElemNumbers.includes(0)}
+                />
+                <ExercisePart
+                  rightValue={minusPlus}
+                  hint={hintMinusPlus}
+                  userAnswer={userAnswer}
+                  isQuestionPart={!!hintMinusPlus}
+                />
+                <ExercisePart
+                  rightValue={n2}
+                  hint={hintN2}
+                  userAnswer={userAnswer}
+                  isQuestionPart={askElemNumbers.includes(1)}
+                />
+                <ExercisePart
+                  rightValue={equalMark}
+                  hint={hintEqual}
+                  userAnswer={userAnswer}
+                  isQuestionPart={isInequalCat && askElemNumbers.includes(2)}
+                />
+                <ExercisePart
+                  rightValue={rightAnswer}
+                  hint={hintResponse}
+                  userAnswer={userAnswer}
+                  isQuestionPart={!isInequalCat && askElemNumbers.includes(2)}
+                />
               </div>
             </>
           ) : (

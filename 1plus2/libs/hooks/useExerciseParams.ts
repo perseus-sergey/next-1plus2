@@ -22,6 +22,7 @@ const getHintDefault = (exercise: (string | number)[]): TMathHint => ({
   ...mathHintEmpty,
   hintN1: makeHintPart(+exercise[0]),
   hintN2: makeHintPart(Math.abs(+exercise[1])),
+  hintResponse: makeHintPart(+exercise[2]),
 });
 
 const getHintOverTen = (n1: number, n2: number): TMathHint => {
