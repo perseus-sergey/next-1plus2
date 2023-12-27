@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: {
-      'en-US': '/en-US',
-      'ua-UA': '/ua-UA',
+      'en-US': '/en',
+      'ua-UA': '/ua',
     },
   },
 };
