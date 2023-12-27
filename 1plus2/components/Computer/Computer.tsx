@@ -21,12 +21,12 @@ export interface IComputerProps extends IExerciseComponentProps {
 const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) => {
   const [exercises, setExercises] = useState(exerciseArray);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
-  const [minusPlus, askElemNumbers] = useExerciseParams(cat, exercises);
-
   const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
   const [mistakes, setMistakes] = useState<string[]>([]);
   const [compClassNames, setCompClassNames] = useState([styles.Computer]);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
+
+  const [minusPlus, askElemNumbers, hint] = useExerciseParams(cat, exercises);
 
   const audioDel = useRef<HTMLAudioElement | undefined>(
     typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_DEL) : undefined
@@ -168,6 +168,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
         <Monitor
           n1={exercises[0][0]}
           n2={Math.abs(+exercises[0][1])}
+          hint={hint}
           minusPlus={minusPlus}
           userAnswer={answerElementValue}
           rightAnswer={exercises[0][exercises[0].length - 1]}

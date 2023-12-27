@@ -2,11 +2,14 @@ import { NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
 import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import { TMinusPlus, TUnequalMark } from '@/libs/exercises/math.model';
+import { TMathHint } from '@/libs/hooks/useExerciseParams';
+import ExercisePart from '../ExercisePart/ExercisePart';
 
 interface MonitorProps {
   minusPlus: TMinusPlus;
   n1: string | number | undefined;
   n2: string | number | undefined;
+  hint: TMathHint;
   rightAnswer: string | number | undefined;
   userAnswer: string;
   equalMark: TUnequalMark;
@@ -21,6 +24,7 @@ const Monitor = ({
   minusPlus,
   n1,
   n2,
+  hint,
   rightAnswer,
   userAnswer,
   clearBtnHandler,
@@ -30,6 +34,7 @@ const Monitor = ({
   isInequalCat = false,
   isDelBtnActive = true,
 }: MonitorProps) => {
+  const { hintN1, hintMinusPlus, hintN2, hintEqual, hintResponse } = hint;
   return (
     <section className={styles.Monitor} data-testid="Monitor">
       <div className={styles.displayWrapper}>
@@ -54,21 +59,40 @@ const Monitor = ({
               </table>
 
               <div className={styles.displayExercise}>
-                <div className={styles.exsLeft}>{askElemNumbers.includes(0) ? userAnswer : n1}</div>
-                <div className={styles.exsMp}>{minusPlus}</div>
+                {askElemNumbers.includes(0) ? (
+                  <ExercisePart hint={null} value={userAnswer} />
+                ) : (
+                  <ExercisePart hint={hintN1} value={n1} />
+                )}
+                {/* <ExercisePart hint={hintN1} value={askElemNumbers.includes(0) ? userAnswer : n1} /> */}
+                {/* <div className={styles.exsLeft}>
+                  <div className={styles.exsPart}>
+                    {askElemNumbers.includes(0) ? userAnswer : n1}
+                  </div>
+                  {hintN1 && <div className={styles.exsHint}>{hintN1}</div>}
+                </div> */}
+                <div className={styles.exsMp}>
+                  <div className={styles.exsPart}>{minusPlus}</div>
+                  {hintMinusPlus && <div className={styles.exsHint}>{hintMinusPlus}</div>}
+                </div>
                 <div className={styles.exsCenter}>
-                  {askElemNumbers.includes(1) ? userAnswer : n2}
+                  <div className={styles.exsPart}>
+                    {askElemNumbers.includes(1) ? userAnswer : n2}
+                  </div>
+                  {hintN2 && <div className={styles.exsHint}>{hintN2}</div>}
                 </div>
                 <div className={styles.exsEqual}>
-                  {isInequalCat && askElemNumbers.includes(2) ? userAnswer : equalMark}
+                  <div className={styles.exsPart}>
+                    {isInequalCat && askElemNumbers.includes(2) ? userAnswer : equalMark}
+                  </div>
+                  {hintEqual && <div className={styles.exsHint}>{hintEqual}</div>}
                 </div>
                 <div className={styles.exsRight}>
-                  {!isInequalCat && askElemNumbers.includes(2) ? userAnswer : rightAnswer}
+                  <div className={styles.exsPart}>
+                    {!isInequalCat && askElemNumbers.includes(2) ? userAnswer : rightAnswer}
+                  </div>
+                  {hintResponse && <div className={styles.exsHint}>{hintResponse}</div>}
                 </div>
-                {/* <div className={styles.exsEqual}>{equalMark}</div>
-                <div className={styles.exsRight}>
-                  {askElemNumbers.includes(2) ? userAnswer : rightAnswer}
-                </div> */}
               </div>
             </>
           ) : (
@@ -76,6 +100,7 @@ const Monitor = ({
           )}
         </div>
       </div>
+      {JSON.stringify(hint)}
       <div className={styles.infoBlock}>
         <div className={styles.progressBlock}>
           <div
