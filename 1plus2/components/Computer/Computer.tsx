@@ -63,7 +63,10 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   };
 
   const checkAnswer = async () => {
-    const isRightAnswer = answerElementValue === `${exercises[0][askElemNumbers[0]]}`;
+    const properAnswer = isNaN(+exercises[0][askElemNumbers[0]])
+      ? exercises[0][askElemNumbers[0]]
+      : Math.abs(+exercises[0][askElemNumbers[0]]);
+    const isRightAnswer = answerElementValue === `${properAnswer}`;
     isRightAnswer ? rightAnswer() : badAnswer();
 
     await sleep();
