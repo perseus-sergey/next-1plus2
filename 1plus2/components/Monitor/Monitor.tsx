@@ -80,7 +80,7 @@ const Monitor = ({
                   rightValue={minusPlus}
                   hint={hintMinusPlus}
                   userAnswer={userAnswer}
-                  isQuestionPart={!!hintMinusPlus}
+                  isQuestionPart={false}
                 />
                 <ExercisePart
                   rightValue={n2}
