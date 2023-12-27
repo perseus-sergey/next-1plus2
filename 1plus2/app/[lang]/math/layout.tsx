@@ -6,6 +6,9 @@ export const generateMetadata = ({ params }: IMathPageProps): Metadata => ({
   title: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.TITLE][params.lang],
   description: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.DESCRIPTION][params.lang],
   keywords: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.KEYWORDS][params.lang],
+  alternates: {
+    canonical: `${params.lang}/math`,
+  },
 });
 
 export function generateStaticParams(): {

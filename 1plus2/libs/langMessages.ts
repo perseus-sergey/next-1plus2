@@ -1,3 +1,4 @@
+export const SITE_BASE_URL = 'https://www.1plus2.fun';
 export enum ELang {
   en = 'en',
   ua = 'ua',
