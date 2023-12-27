@@ -20,9 +20,17 @@ const makeHintPart = (val: number | string) => {
 
 const getHintDefault = (exercise: (string | number)[]): TMathHint => ({
   ...mathHintEmpty,
-  hintN1: makeHintPart(+exercise[0]),
-  hintN2: makeHintPart(Math.abs(+exercise[1])),
-  hintResponse: makeHintPart(+exercise[2]),
+  hintN1: +exercise[0] ? makeHintPart(+exercise[0]) : '',
+  hintN2: +exercise[1] ? makeHintPart(Math.abs(+exercise[1])) : '',
+  hintResponse: +exercise[2] ? makeHintPart(+exercise[2]) : '',
+});
+
+const getHintInequal = (exercise: (string | number)[]): TMathHint => ({
+  ...mathHintEmpty,
+  hintN1: +exercise[0] ? makeHintPart(+exercise[0]) : '',
+  hintN2: +exercise[1] ? makeHintPart(Math.abs(+exercise[1])) : '',
+  hintEqual: +exercise[2] ? makeHintPart(+exercise[2]) : '',
+  hintResponse: +exercise[3] ? makeHintPart(+exercise[3]) : '',
 });
 
 const getHintOverTen = (n1: number, n2: number): TMathHint => {
@@ -121,6 +129,7 @@ export const useExerciseParams = (
       setMinusPlus(getMinusPlus(part1));
     } else if (cat === EExerciseCategories['inequality']) {
       setMinusPlus(part0 === '' ? '' : getMinusPlus(part1));
+      setHint(getHintInequal(exercises[0]));
     } else if (cat === EExerciseCategories['composition']) {
       setMinusPlus(getMinusPlus(part1));
       setAskElemNumbers(Math.floor(Math.random() * 2) ? [1] : [0]);
