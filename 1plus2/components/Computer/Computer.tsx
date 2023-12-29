@@ -174,12 +174,10 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       />
       <section className={styles.Computer} data-testid="Computer">
         <Monitor
-          n1={exercises[0][0]}
-          n2={Math.abs(+exercises[0][1])}
+          exercise={exercises[0]}
           hint={hint}
           minusPlus={minusPlus}
           userAnswer={answerElementValue}
-          rightAnswer={exercises[0][exercises[0].length - 1]}
           askElemNumbers={askElemNumbers}
           equalMark={exerciseParams.equalMark}
           arrExsLength={exercises.length}

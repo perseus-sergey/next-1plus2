@@ -1,0 +1,34 @@
+.ColumnExsBtn {
+  border: none;
+  outline: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  padding: 0 5%;
+  max-width: 30%;
+  margin-right: 10%;
+}
+
+.columnExs {
+  font-size: 1rem;
+  text-align: right;
+  border-collapse: collapse;
+  transition:
+    font-size 0.5s ease-in-out,
+    margin 0.5s ease-in-out;
+}
+.columnExs tr:last-child {
+  border-top: 1px solid white;
+}
+
+.columnExs.big_column {
+  font-size: 1em;
+  margin: 0 20%;
+  transition:
+    font-size 0.5s ease-in-out,
+    margin 0.5s ease-in-out;
+}
+
+.exsAskPart {
+  color: #3EAEF2;
+}

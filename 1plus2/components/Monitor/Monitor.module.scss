@@ -70,19 +70,6 @@
 }
 /*----------------------- Animate Exercises (end) --------------------			*/
 
-.columnExs {
-  font-size: 0.4em;
-  text-align: right;
-  max-width: 30%;
-  margin: 0 15% 0 5%;
-  border-collapse: collapse;
-  transition:
-    font-size 0.5s ease-in-out,
-    margin 0.5s ease-in-out;
-}
-.columnExs tr:last-child {
-  border-top: 1px solid white;
-}
 .minusPlus {
   padding-right: 5px;
 }
@@ -159,13 +146,6 @@
 .small_flat_exs {
   font-size: 0.5em;
   transition: font-size 0.5s ease-in-out;
-}
-.columnExs.big_column {
-  font-size: 1em;
-  margin: 0 20%;
-  transition:
-    font-size 0.5s ease-in-out,
-    margin 0.5s ease-in-out;
 }
 
 @media screen and (max-width: var(--media-width-medium)) {

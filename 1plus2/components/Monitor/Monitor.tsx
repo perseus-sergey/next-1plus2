@@ -5,13 +5,12 @@ import { TMinusPlus, TUnequalMark } from '@/libs/exercises/math.model';
 import { TMathHint } from '@/libs/hooks/useExerciseParams';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import { EIsRightAnswer } from '../Computer/Computer';
+import ColumnExercise from '../ColumnExercise/ColumnExercise';
 
 interface MonitorProps {
+  exercise: (string | number)[];
   minusPlus: TMinusPlus;
-  n1: string | number | undefined;
-  n2: string | number | undefined;
   hint: TMathHint;
-  rightAnswer: string | number | undefined;
   userAnswer: string;
   equalMark: TUnequalMark;
   askElemNumbers: number[];
@@ -23,11 +22,9 @@ interface MonitorProps {
 }
 
 const Monitor = ({
+  exercise,
   minusPlus,
-  n1,
-  n2,
   hint,
-  rightAnswer,
   userAnswer,
   isRightAnswer,
   clearBtnHandler,
@@ -38,28 +35,24 @@ const Monitor = ({
   isDelBtnActive = true,
 }: MonitorProps) => {
   const { hintN1, hintMinusPlus, hintN2, hintEqual, hintResponse } = hint;
+  const n1 = exercise[0];
+  const n2 = Math.abs(+exercise[1]);
+  const nLast = exercise[exercise.length - 1];
+
   return (
     <section className={styles.Monitor} data-testid="Monitor">
       <div className={styles.displayWrapper}>
         <div className={styles.display} id="display">
           {n1 !== undefined ? (
             <>
-              <table className={styles.columnExs} hidden={false}>
-                <tbody>
-                  <tr>
-                    <td className={styles.minusPlus} rowSpan={2}>
-                      {minusPlus}
-                    </td>
-                    <td>{askElemNumbers.includes(0) ? userAnswer : n1}</td>
-                  </tr>
-                  <tr>
-                    <td>{askElemNumbers.includes(1) ? userAnswer : n2}</td>
-                  </tr>
-                  <tr>
-                    <td colSpan={2}>{askElemNumbers.includes(2) ? userAnswer : rightAnswer}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <ColumnExercise
+                n1={n1}
+                n2={n2}
+                nLast={nLast}
+                minusPlus={minusPlus}
+                userAnswer={userAnswer}
+                askElemNumbers={askElemNumbers}
+              />
 
               <div
                 className={
@@ -95,7 +88,7 @@ const Monitor = ({
                   isQuestionPart={isInequalCat && askElemNumbers.includes(2)}
                 />
                 <ExercisePart
-                  rightValue={rightAnswer}
+                  rightValue={nLast}
                   hint={hintResponse}
                   userAnswer={userAnswer}
                   isQuestionPart={!isInequalCat && askElemNumbers.includes(2)}
