@@ -94,59 +94,6 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
     setIsRightAnswer(EIsRightAnswer.BAD);
   };
 
-  // function makeShow(n1, n2) {
-  //   // spn_mp.innerHTML = mp_td.innerHTML = n2 < 0 ? "<div>-</div>" : "<div>+</div>";
-
-  //   if (cat == equalOverTen_btn.id) {
-  //     showHintOverTen(n1, n2);
-  //   } else {
-  //     spn_left.innerHTML = showHint(n1);
-  //     spn_centr.innerHTML = showHint(Math.abs(n2));
-  //   }
-  //   //	show = `${showHint(n1)}${mp}${showHint(Math.abs(n2))}`;
-  //   // return n1 + n2;
-  // }
-
-  // function showHint(num) {
-  //   const wholeN = num - (num % 10);
-  //   const restN = num % 10;
-  //   return num > 10 && restN
-  //     ? `<div>${num}<span class="hint">(${wholeN} + ${restN})</span></div>`
-  //     : `<div>${num}</div>`;
-  // }
-
-  // function preparPrint(objResp) {
-  //   setBigColumnExs(false);
-  //   if (!isHiddenColumn) {
-  //     div_exs.addEventListener('click', clickDivExs);
-  //     column_tbl.addEventListener('click', clickColTbl);
-  //   }
-  //   return true;
-  // }
-
-  // function printExsSeqns() {
-  //   column_tbl.hidden = true;
-  // }
-
-  // const printExercise = () => {
-  //   preparePrint([EMathExsElementNames['rightStr'], EMathExsElementNames['downColumn']]);
-  // };
-
-  // function printExs1() {
-  //   if (!preparePrint([spn_right, ans_td])) return;
-  //   column_tbl.hidden =
-  //     !isHiddenColumn && (arrTest[0][0] > 9 || Math.abs(arrTest[0][1]) > 9) ? false : true;
-  //   equal = arrTest[0][2];
-  // }
-
-  // async function checkExs (printFun = printExs1) {
-  //   let response = ArrObjResponse[0].textContent;
-  //   for (let objR of ArrObjResponse){
-  //     objR.className = "";
-  //   }
-  //   printFun();
-  // }
-
   // function addError (){
   //   error++;
   //   error_spn.textContent = `${msg.mistks}: ${error}`;
@@ -174,12 +121,10 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
       />
       <section className={styles.Computer} data-testid="Computer">
         <Monitor
-          n1={exercises[0][0]}
-          n2={Math.abs(+exercises[0][1])}
+          exercise={exercises[0]}
           hint={hint}
           minusPlus={minusPlus}
           userAnswer={answerElementValue}
-          rightAnswer={exercises[0][exercises[0].length - 1]}
           askElemNumbers={askElemNumbers}
           equalMark={exerciseParams.equalMark}
           arrExsLength={exercises.length}
@@ -187,6 +132,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
           isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
           isInequalCat={cat === EExerciseCategories['inequality']}
           clearBtnHandler={clearBtnHandler}
+          isColumn={exerciseParams.isColumn}
         />
         <Keyboard
           keyboardBtnClickHandler={keyboardBtnClickHandler}

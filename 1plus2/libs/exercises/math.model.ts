@@ -18,6 +18,7 @@ export interface IExerciseParams {
   exercise: { start: number; max: number; step: number };
   equalMark: '=' | '';
   keyboardKeys: string[];
+  isColumn?: boolean;
 }
 
 type TCatMap = Map<EExerciseCategories, IExerciseParams>;
@@ -53,6 +54,7 @@ export const categoriesMap: TCatMap = new Map([
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
+      isColumn: true,
     },
   ],
   [
@@ -63,6 +65,7 @@ export const categoriesMap: TCatMap = new Map([
       exercise: { start: 20, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
+      isColumn: true,
     },
   ],
   [
@@ -73,6 +76,7 @@ export const categoriesMap: TCatMap = new Map([
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
+      isColumn: true,
     },
   ],
   [
@@ -93,6 +97,7 @@ export const categoriesMap: TCatMap = new Map([
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
+      isColumn: true,
     },
   ],
   [
@@ -103,6 +108,7 @@ export const categoriesMap: TCatMap = new Map([
       exercise: { start: 5, max: 20, step: 1 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
+      isColumn: true,
     },
   ],
   [
@@ -113,6 +119,7 @@ export const categoriesMap: TCatMap = new Map([
       exercise: { start: 50, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
+      isColumn: true,
     },
   ],
   [
@@ -123,6 +130,7 @@ export const categoriesMap: TCatMap = new Map([
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
+      isColumn: true,
     },
   ],
 ]);

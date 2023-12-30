@@ -9,7 +9,7 @@
     transform: rotate(180deg) scale(0);
     opacity: 0;
   }
-
+  
   50% {
     transform: rotate(0) scale(1.5);
     opacity: 1;
@@ -20,11 +20,21 @@
   }
 }
 
+.exsMain {
+  font-size: 3em;
+}
+
 .exsHint {
-  font-size: 0.4em;
+  font-size: 1.5em;
   color: #38d6f3;
   display: block;
+  white-space: nowrap;
+
+  @media screen and (orientation: portrait) {
+    font-size: 2em;
+  }
 }
+
 
 .exsAskPart {
   color: #3EAEF2;

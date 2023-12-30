@@ -1,0 +1,32 @@
+.ColumnExsBtn {
+  border: none;
+  outline: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  padding: 0 5%;
+  font-weight: normal;
+  transition: all 0.3s ease-in-out;
+
+  @media screen and (orientation: portrait) {
+    margin-right: 5%;
+  }
+}
+
+.columnTable {
+  font-size: 1em;
+  text-align: right;
+  border-collapse: collapse;
+}
+
+.minusPlus {
+  padding-right: 5px;
+}
+
+.columnTable tr:last-child {
+  border-top: 1px solid white;
+}
+
+.exsAskPart {
+  color: #3eaef2;
+}
