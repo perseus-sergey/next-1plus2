@@ -1,7 +1,8 @@
 import { TMinusPlus } from '@/libs/exercises/math.model';
 import styles from './ColumnExercise.module.scss';
 
-interface IColumnExerciseProps {
+interface IColumnExerciseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  clickHandler: () => void;
   n1: string | number;
   n2: number;
   nLast: string | number;
@@ -11,15 +12,22 @@ interface IColumnExerciseProps {
 }
 
 const ColumnExercise = ({
+  clickHandler,
   n1,
   n2,
   nLast,
   userAnswer,
   minusPlus,
   askElemNumbers,
+  className,
 }: IColumnExerciseProps) => (
-  <button type="button" className={styles.ColumnExsBtn} data-testid="ColumnExercise">
-    <table className={styles.columnExs}>
+  <button
+    type="button"
+    onClick={clickHandler}
+    className={className ? `${styles.ColumnExsBtn} ${className}` : styles.ColumnExsBtn}
+    data-testid="ColumnExercise"
+  >
+    <table className={styles.columnTable}>
       <tbody>
         <tr>
           <td className={styles.minusPlus} rowSpan={2}>

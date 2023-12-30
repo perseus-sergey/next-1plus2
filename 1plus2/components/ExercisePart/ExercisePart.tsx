@@ -14,7 +14,7 @@ const ExercisePart = ({
   isQuestionPart = false,
 }: IExercisePartProps) => (
   <div className={styles.exercisePart} data-testid="ExercisePart">
-    <div className={isQuestionPart ? styles.exsAskPart : styles.exsMain}>
+    <div className={isQuestionPart ? `${styles.exsAskPart} ${styles.exsMain}` : styles.exsMain}>
       {isQuestionPart ? userAnswer : rightValue}
     </div>
     {!isQuestionPart && hint ? <div className={styles.exsHint}>{hint}</div> : null}

@@ -5,30 +5,28 @@
   font: inherit;
   color: inherit;
   padding: 0 5%;
-  max-width: 30%;
-  margin-right: 10%;
+  font-weight: normal;
+  transition: all 0.3s ease-in-out;
+
+  @media screen and (orientation: portrait) {
+    margin-right: 5%;
+  }
 }
 
-.columnExs {
-  font-size: 1rem;
+.columnTable {
+  font-size: 1em;
   text-align: right;
   border-collapse: collapse;
-  transition:
-    font-size 0.5s ease-in-out,
-    margin 0.5s ease-in-out;
 }
-.columnExs tr:last-child {
+
+.minusPlus {
+  padding-right: 5px;
+}
+
+.columnTable tr:last-child {
   border-top: 1px solid white;
 }
 
-.columnExs.big_column {
-  font-size: 1em;
-  margin: 0 20%;
-  transition:
-    font-size 0.5s ease-in-out,
-    margin 0.5s ease-in-out;
-}
-
 .exsAskPart {
-  color: #3EAEF2;
+  color: #3eaef2;
 }
