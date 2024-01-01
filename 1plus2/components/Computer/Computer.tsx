@@ -8,13 +8,17 @@ import { arrayShift, sleep } from '@/libs/utils';
 import { ESoundPaths } from '@/libs/ESoundPaths';
 import {
   EExerciseCategories,
+  IExerciseParams,
   QUESTION_MARK,
   keyboardInEqualKeys,
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
+import { useRouter } from 'next/navigation';
+import { useLevelsArray } from '@/libs/context/MathLevelProvider';
 
 export interface IComputerProps extends IExerciseComponentProps {
+  exerciseParams: IExerciseParams | undefined;
   exerciseArray: (string | number)[][];
 }
 
@@ -24,13 +28,17 @@ export enum EIsRightAnswer {
   'BAD',
 }
 
-const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) => {
+const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IComputerProps) => {
   const [exercises, setExercises] = useState(exerciseArray);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
   const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
   const [mistakes, setMistakes] = useState<string[]>([]);
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
+
+  const router = useRouter();
+
+  const { levelsArray, setLevelsArray } = useLevelsArray();
 
   const [minusPlus, askElemNumbers, hint] = useExerciseParams(cat, exercises);
 
@@ -62,6 +70,15 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
     audioDel.current?.play();
   };
 
+  const finishLevel = () => {
+    console.log('finish');
+    const [, ...rest] = levelsArray;
+    setLevelsArray(rest);
+    if (!exerciseParams) return router.push(`/${lang}/math/level`);
+    // const redirect = new URL(`/${lang}/math/level/${chosenMaxNum}/${rest[0]}`, SITE_BASE_URL);
+    router.push(`/${lang}/math/level/${chosenMaxNum}/${rest[0]}`);
+  };
+
   const checkAnswer = async () => {
     const properAnswer = isNaN(+exercises[0][askElemNumbers[0]])
       ? exercises[0][askElemNumbers[0]]
@@ -71,9 +88,11 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
 
     await sleep();
 
-    isRightAnswer
-      ? setExercises(arrayShift(exercises))
-      : setExercises([...exercises, exercises[0]]);
+    !isRightAnswer
+      ? setExercises([...exercises, exercises[0]])
+      : exercises.length < 2
+        ? finishLevel()
+        : setExercises(arrayShift(exercises));
 
     setIsRightAnswer(EIsRightAnswer.NOT);
     setAnswerElementValue(QUESTION_MARK);
@@ -116,8 +135,11 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
 
   return (
     <>
+      {JSON.stringify(levelsArray)}
       <Title
-        name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exercises.length}`}
+        name={`${cat.toUpperCase()} - ${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${
+          exercises.length
+        }`}
       />
       <section className={styles.Computer} data-testid="Computer">
         <Monitor

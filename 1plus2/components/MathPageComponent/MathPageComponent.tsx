@@ -4,9 +4,6 @@ import { useState } from 'react';
 // import styles from './MathPageComponent.module.scss';
 import { Title } from '../Title/Title';
 import Mission from '../Mission/Mission';
-// import MathCategories from '../MathCategories/MathCategories';
-// import Monitor from '../Monitor/Monitor';
-// import Keyboard from '../Keyboard/Keyboard';
 import EndLevelScreen from '../EndLevelScreen/EndLevelScreen';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { IMathPageProps } from '@/app/[lang]/layout';
@@ -14,21 +11,15 @@ import { IMathPageProps } from '@/app/[lang]/layout';
 const MathPageComponent = (props: IMathPageProps) => {
   const { lang = ELang.en } = props.params;
 
-  const [titleH1, setTitleH1] = useState(getTitleFromMap(EMessageNames.MISSION_CHOICE, lang));
+  const [titleH1] = useState(getTitleFromMap(EMessageNames.MISSION_CHOICE, lang));
   const [isMissionSection] = useState(true);
   const [isEndLevelSection] = useState(false);
-  // const [isMissionSection, setIsMissionSection] = useState(true);
-  // const [isEndLevelSection, setIsEndLevelSection] = useState(false);
-
-  const levelButtonClicked = () => {
-    setTitleH1(getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, lang));
-  };
 
   return (
     <>
       <Title name={titleH1} />
 
-      {isMissionSection && <Mission levelButtonClicked={levelButtonClicked} lang={lang} />}
+      {isMissionSection && <Mission lang={lang} />}
       {isEndLevelSection && <EndLevelScreen lang={lang} />}
     </>
   );
