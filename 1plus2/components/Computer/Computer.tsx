@@ -14,8 +14,9 @@ import {
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { useLevelsArray } from '@/libs/context/MathLevelProvider';
+import CatComplete from '../CatComplete/CatComplete';
 
 export interface IComputerProps extends IExerciseComponentProps {
   exerciseParams: IExerciseParams | undefined;
@@ -31,12 +32,13 @@ export enum EIsRightAnswer {
 const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IComputerProps) => {
   const [exercises, setExercises] = useState(exerciseArray);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
+  const [isFinish, setIsFinish] = useState(false);
   const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
   const [mistakes, setMistakes] = useState<string[]>([]);
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const { levelsArray, setLevelsArray } = useLevelsArray();
 
@@ -71,12 +73,11 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
   };
 
   const finishLevel = () => {
-    console.log('finish');
+    setExercises(arrayShift(exercises));
     const [, ...rest] = levelsArray;
     setLevelsArray(rest);
-    if (!exerciseParams) return router.push(`/${lang}/math/level`);
-    // const redirect = new URL(`/${lang}/math/level/${chosenMaxNum}/${rest[0]}`, SITE_BASE_URL);
-    router.push(`/${lang}/math/level/${chosenMaxNum}/${rest[0]}`);
+    setIsFinish(true);
+    // return router.push(`/${lang}/math/level/${chosenMaxNum}/${rest[0]}`);
   };
 
   const checkAnswer = async () => {
@@ -131,7 +132,18 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
   };
 
   if (!lang || !exerciseParams) return <h2>Loading...</h2>;
-  if (!exercises.length) return <h2>{JSON.stringify(mistakes)}</h2>;
+  if (isFinish) {
+    if (badAnswer.length) setIsFinish(false);
+    return (
+      <CatComplete
+        mistakeArray={badAnswers}
+        currentCat={cat}
+        nextCat={levelsArray[0]}
+        lang={lang}
+        chosenMaxNum={chosenMaxNum}
+      />
+    );
+  }
 
   return (
     <>

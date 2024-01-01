@@ -26,7 +26,6 @@ const ExercisePage = (props: IExerciseComponentProps) => {
     const ar = [...categoriesMap.keys()];
     const startInd = ar.findIndex((c) => c === urlCurrentCat);
     const levels = ar.slice(Math.max(startInd, 0));
-    console.log('🚀 ~ file: ExercisePage.tsx:29 ~ useEffect ~ levels:', levels);
     const currCat = cat === EExerciseCategories['level'] ? levels[0] : cat;
 
     setExerciseParams(categoriesMap.get(EExerciseCategories[currCat]));
