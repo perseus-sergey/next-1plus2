@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { IExerciseComponentProps } from '../ExercisePage/ExercisePage';
@@ -17,6 +17,7 @@ import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
 // import { useRouter } from 'next/navigation';
 import { useLevelsArray } from '@/libs/context/MathLevelProvider';
 import CatComplete from '../CatComplete/CatComplete';
+import { IExsPart, makeExerciseParts } from '@/libs/exercises/math';
 
 export interface IComputerProps extends IExerciseComponentProps {
   exerciseParams: IExerciseParams | undefined;
@@ -31,10 +32,11 @@ export enum EIsRightAnswer {
 
 const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IComputerProps) => {
   const [exercises, setExercises] = useState(exerciseArray);
+  const [exerciseParts, setExerciseParts] = useState<IExsPart[]>([]);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
   const [isFinish, setIsFinish] = useState(false);
   const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
-  const [mistakes, setMistakes] = useState<string[]>([]);
+  const [mistakesStr, setMistakesStr] = useState<string[]>([]);
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
 
@@ -43,6 +45,21 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
   const { levelsArray, setLevelsArray } = useLevelsArray();
 
   const [minusPlus, askElemNumbers, hint] = useExerciseParams(cat, exercises);
+
+  useEffect(() => {
+    if (!exercises.length) return;
+
+    setExerciseParts(
+      makeExerciseParts(
+        askElemNumbers,
+        exercises[0],
+        minusPlus,
+        exerciseParams?.equalMark,
+        cat === EExerciseCategories['inequality'],
+        hint
+      )
+    );
+  }, [cat, exercises, minusPlus, askElemNumbers, hint, exerciseParams?.equalMark]);
 
   const audioDel = useRef<HTMLAudioElement | undefined>(
     typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_DEL) : undefined
@@ -60,6 +77,14 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
     typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_WRONG_ANSWER) : undefined
   );
 
+  const audioCatFinish = useRef<HTMLAudioElement | undefined>(
+    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_END) : undefined
+  );
+
+  // const audioLevelFinish = useRef<HTMLAudioElement | undefined>(
+  //   typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_END_LEVEL) : undefined
+  // );
+
   const enterClickHandler = () => {
     if (!exercises.length || answerElementValue === QUESTION_MARK) return;
     setIsEnterDisabled(true);
@@ -73,6 +98,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
   };
 
   const finishLevel = () => {
+    audioCatFinish.current?.play();
     setExercises(arrayShift(exercises));
     const [, ...rest] = levelsArray;
     setLevelsArray(rest);
@@ -106,11 +132,15 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
   };
 
   const badAnswer = () => {
-    const [n1, n2] = exercises[0];
     audioWrongAnsw.current?.play();
     setBadAnswers([...badAnswers, exercises[0]]);
-    // TODO: change for each cat
-    setMistakes([...mistakes, `${n1} ${minusPlus} ${n2} ${'='} ${answerElementValue}`]);
+
+    setMistakesStr([
+      ...mistakesStr,
+      exerciseParts
+        .map(({ value, isQuestionPart }) => (isQuestionPart ? answerElementValue : value))
+        .join(' '),
+    ]);
     setIsRightAnswer(EIsRightAnswer.BAD);
   };
 
@@ -137,6 +167,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
     return (
       <CatComplete
         mistakeArray={badAnswers}
+        mistakesStr={mistakesStr}
         currentCat={cat}
         nextCat={levelsArray[0]}
         lang={lang}
@@ -147,24 +178,20 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
 
   return (
     <>
-      {JSON.stringify(levelsArray)}
+      {/* {JSON.stringify(levelsArray)} */}
+      mistStr: {JSON.stringify(mistakesStr)}
       <Title
         name={`${cat.toUpperCase()} - ${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${
           exercises.length
-        }`}
+        } Mistakes: ${badAnswers.length}`}
       />
       <section className={styles.Computer} data-testid="Computer">
         <Monitor
-          exercise={exercises[0]}
-          hint={hint}
-          minusPlus={minusPlus}
+          exerciseParts={exerciseParts}
           userAnswer={answerElementValue}
-          askElemNumbers={askElemNumbers}
-          equalMark={exerciseParams.equalMark}
           arrExsLength={exercises.length}
           isRightAnswer={isRightAnswer}
           isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
-          isInequalCat={cat === EExerciseCategories['inequality']}
           clearBtnHandler={clearBtnHandler}
           isColumn={exerciseParams.isColumn}
         />
