@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, createContext, useContext, useState } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext, useMemo, useState } from 'react';
 import { EExerciseCategories } from '../exercises/math.model';
 
 interface IProps {
@@ -13,14 +13,16 @@ type TMathLevelContext = {
 
 const MathLevelContext = createContext<TMathLevelContext>({} as TMathLevelContext);
 
-export const useLevelsArray = () => {
+export const useLevelsProvider = () => {
   const context = useContext(MathLevelContext);
   if (!context) throw new Error('Use app context within provider');
   return context;
 };
 
 const MathLevelProvider = ({ children, levels = [] }: IProps) => {
-  const [levelsArray, setLevelsArray] = useState<EExerciseCategories[]>(levels);
+  const [_levelsArray, setLevelsArray] = useState<EExerciseCategories[]>(levels);
+
+  const levelsArray = useMemo(() => _levelsArray, [_levelsArray]);
 
   return (
     <MathLevelContext.Provider value={{ levelsArray, setLevelsArray }}>

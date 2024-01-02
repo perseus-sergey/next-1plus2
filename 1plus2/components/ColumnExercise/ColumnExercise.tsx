@@ -1,5 +1,5 @@
+import { IExsPart } from '@/libs/exercises/math';
 import styles from './ColumnExercise.module.scss';
-import { IExsPart } from '../Computer/Computer';
 
 interface IColumnExerciseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   clickHandler: () => void;

@@ -1,28 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
-import { IExerciseComponentProps } from '../ExercisePage/ExercisePage';
 import Keyboard from '../Keyboard/Keyboard';
 import { Title } from '../Title/Title';
-import { arrayShift, sleep } from '@/libs/utils';
+import { arrayShift, capitalizedFirstChar, sleep } from '@/libs/utils';
 import { ESoundPaths } from '@/libs/ESoundPaths';
 import {
   EExerciseCategories,
-  IExerciseParams,
   QUESTION_MARK,
   keyboardInEqualKeys,
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
 // import { useRouter } from 'next/navigation';
-import { useLevelsArray } from '@/libs/context/MathLevelProvider';
+import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
 import CatComplete from '../CatComplete/CatComplete';
 import { IExsPart, makeExerciseParts } from '@/libs/exercises/math';
-
-export interface IComputerProps extends IExerciseComponentProps {
-  exerciseParams: IExerciseParams | undefined;
-  exerciseArray: (string | number)[][];
-}
+import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
+import { useLangProvider } from '@/libs/context/LangProvider';
 
 export enum EIsRightAnswer {
   'NOT',
@@ -30,19 +25,27 @@ export enum EIsRightAnswer {
   'BAD',
 }
 
-const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IComputerProps) => {
-  const [exercises, setExercises] = useState(exerciseArray);
+const Computer = () => {
   const [exerciseParts, setExerciseParts] = useState<IExsPart[]>([]);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
   const [isFinish, setIsFinish] = useState(false);
-  const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
-  const [mistakesStr, setMistakesStr] = useState<string[]>([]);
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
-
   // const router = useRouter();
 
-  const { levelsArray, setLevelsArray } = useLevelsArray();
+  const {
+    cat,
+    exerciseParams,
+    exercises,
+    setExercises,
+    mistakes,
+    setMistakes,
+    mistakesStr,
+    setMistakesStr,
+  } = useExercisesProvider();
+
+  const { levelsArray, setLevelsArray } = useLevelsProvider();
+  const { language } = useLangProvider();
 
   const [minusPlus, askElemNumbers, hint] = useExerciseParams(cat, exercises);
 
@@ -103,7 +106,7 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
     const [, ...rest] = levelsArray;
     setLevelsArray(rest);
     setIsFinish(true);
-    // return router.push(`/${lang}/math/level/${chosenMaxNum}/${rest[0]}`);
+    // return router.push(`/${language}/math/level/${chosenMaxNum}/${rest[0]}`);
   };
 
   const checkAnswer = async () => {
@@ -133,12 +136,12 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
 
   const badAnswer = () => {
     audioWrongAnsw.current?.play();
-    setBadAnswers([...badAnswers, exercises[0]]);
+    setMistakes([...mistakes, exercises[0]]);
 
     setMistakesStr([
       ...mistakesStr,
       exerciseParts
-        .map(({ value, isQuestionPart }) => (isQuestionPart ? answerElementValue : value))
+        .map(({ value, isQuestionPart }) => (isQuestionPart ? `[${answerElementValue}]` : value))
         .join(' '),
     ]);
     setIsRightAnswer(EIsRightAnswer.BAD);
@@ -161,29 +164,19 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
     );
   };
 
-  if (!lang || !exerciseParams) return <h2>Loading...</h2>;
+  if (!language || !exerciseParams) return <h2>Loading...</h2>;
   if (isFinish) {
     if (badAnswer.length) setIsFinish(false);
-    return (
-      <CatComplete
-        mistakeArray={badAnswers}
-        mistakesStr={mistakesStr}
-        currentCat={cat}
-        nextCat={levelsArray[0]}
-        lang={lang}
-        chosenMaxNum={chosenMaxNum}
-      />
-    );
+    return <CatComplete />;
   }
 
   return (
     <>
-      {/* {JSON.stringify(levelsArray)} */}
-      mistStr: {JSON.stringify(mistakesStr)}
       <Title
-        name={`${cat.toUpperCase()} - ${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${
-          exercises.length
-        } Mistakes: ${badAnswers.length}`}
+        name={`${capitalizedFirstChar(cat)} - ${getTitleFromMap(
+          EMessageNames.LEFT_EXS_NUM_MSG,
+          language
+        )}: ${exercises.length} Mistakes: ${mistakes.length}`}
       />
       <section className={styles.Computer} data-testid="Computer">
         <Monitor
@@ -193,12 +186,11 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat, chosenMaxNum }: IC
           isRightAnswer={isRightAnswer}
           isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
           clearBtnHandler={clearBtnHandler}
-          isColumn={exerciseParams.isColumn}
         />
         <Keyboard
           keyboardBtnClickHandler={keyboardBtnClickHandler}
           keyboardKeys={exerciseParams.keyboardKeys}
-          enterBtnTitle={getTitleFromMap(EMessageNames.BTN_ENTER, lang)}
+          enterBtnTitle={getTitleFromMap(EMessageNames.BTN_ENTER, language)}
           enterClickHandler={enterClickHandler}
           isEnterDisabled={isEnterDisabled}
         />

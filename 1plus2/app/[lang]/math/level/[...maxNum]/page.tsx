@@ -40,9 +40,9 @@ export default ({ params }: IExercisePageProps) => {
       />
     );
 
-  const urlCurrentCat: EExerciseCategories | undefined =
+  const urlCurrentLevelCat: EExerciseCategories | undefined =
     EExerciseCategories[maxNum[1] as EExerciseCategories];
-  if (maxNum[1] && !urlCurrentCat)
+  if (maxNum[1] && !urlCurrentLevelCat)
     return (
       <WrongSegment
         wrongMessage={`Wrong category: ${maxNum[1]}`}
@@ -56,7 +56,7 @@ export default ({ params }: IExercisePageProps) => {
       lang={lang}
       chosenMaxNum={chosenMaxNum}
       cat={EExerciseCategories['level']}
-      urlCurrentCat={urlCurrentCat}
+      urlCurrentLevelCat={urlCurrentLevelCat}
     />
   );
 };

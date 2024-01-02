@@ -5,6 +5,7 @@ import ExercisePart from '../ExercisePart/ExercisePart';
 import { EIsRightAnswer } from '../Computer/Computer';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
 import { useState } from 'react';
+import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
@@ -12,7 +13,7 @@ interface MonitorProps {
   arrExsLength: number;
   isRightAnswer: EIsRightAnswer;
   clearBtnHandler?: () => void;
-  isColumn: boolean | undefined;
+  // isColumn: boolean | undefined;
   isDelBtnActive?: boolean;
 }
 
@@ -21,12 +22,12 @@ const Monitor = ({
   userAnswer,
   isRightAnswer,
   clearBtnHandler,
-  isColumn,
   arrExsLength = 10,
   isDelBtnActive = true,
 }: MonitorProps) => {
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
+  const { exerciseParams } = useExercisesProvider();
 
   const exerciseClick = () => {
     if (columnClassName === styles.bigColumn) {
@@ -48,7 +49,7 @@ const Monitor = ({
         <div className={styles.display} id="display">
           {exerciseParts[0] !== undefined ? (
             <>
-              {isColumn && (
+              {exerciseParams?.isColumn && (
                 <ColumnExercise
                   clickHandler={columnClick}
                   exerciseParts={exerciseParts}

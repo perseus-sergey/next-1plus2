@@ -1,47 +1,58 @@
 import styles from './CatComplete.module.scss';
-import { EExerciseCategories } from '@/libs/exercises/math.model';
-import { ELang } from '@/libs/langMessages';
 import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
 import { capitalizedFirstChar } from '@/libs/utils';
+import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
+import Computer from '../Computer/Computer';
+import { useLangProvider } from '@/libs/context/LangProvider';
+import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
 
-interface ICatCompleteProps {
-  mistakeArray: (string | number)[][];
-  mistakesStr: string[];
-  currentCat: EExerciseCategories;
-  nextCat: EExerciseCategories;
-  lang: ELang;
-  chosenMaxNum: number;
-}
+const CatComplete = () => {
+  const {
+    cat,
+    exercises,
+    setExercises,
+    mistakes,
+    setMistakes,
+    mistakesStr,
+    setMistakesStr,
+    chosenMaxNum,
+  } = useExercisesProvider();
 
-const CatComplete = ({
-  mistakeArray,
-  mistakesStr,
-  currentCat,
-  nextCat,
-  lang,
-  chosenMaxNum,
-}: ICatCompleteProps) => {
-  const mistakesLength = mistakeArray.length;
+  const { levelsArray } = useLevelsProvider();
+
+  const { language } = useLangProvider();
+
+  const mistakesLength = mistakes.length;
+  // TODO: Add correct links if it is category mission
   const href = mistakesLength
-    ? `/${lang}/math/level/${chosenMaxNum}/${currentCat}`
-    : `/${lang}/math/level/${chosenMaxNum}/${nextCat}`;
+    ? `/${language}/math/level/${chosenMaxNum}/${cat}`
+    : `/${language}/math/level/${chosenMaxNum}/${levelsArray[0]}`;
 
   // TODO: Add mistake coefficient
   const title = !mistakesLength ? 'BRAVO' : mistakesLength < 3 ? 'GOOD' : 'BAD';
   const btnTitle = !mistakesLength ? 'Continue' : 'Correct mistakes';
 
+  const onBtnClicked = () => {
+    setExercises(mistakes);
+    setMistakes([]);
+    setMistakesStr([]);
+  };
+
+  if (exercises.length) return <Computer />;
+
   return (
     <section className={styles.CatComplete} data-testid="CatComplete">
+      mistARR: {JSON.stringify(mistakes)}
       <Title name={title} />
-      <p>Category: {capitalizedFirstChar(currentCat)}</p>
-      <p>Mistakes: {mistakeArray.length}</p>
+      <p>Category: {capitalizedFirstChar(cat)}</p>
+      <p>Mistakes: {mistakes.length}</p>
       {mistakesStr.map((mist, i) => (
         <p key={i}>{mist}</p>
       ))}
       <Link href={href}>
-        <TextButton>{btnTitle}</TextButton>
+        <TextButton onClick={onBtnClicked}>{btnTitle}</TextButton>
       </Link>
     </section>
   );
