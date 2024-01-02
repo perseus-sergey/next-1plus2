@@ -1,5 +1,4 @@
 import styles from './CatComplete.module.scss';
-import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
 import { capitalizedFirstChar } from '@/libs/utils';
@@ -7,10 +6,13 @@ import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import Computer from '../Computer/Computer';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
+import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
+import { makeExerciseArray } from '@/libs/exercises/math';
 
 const CatComplete = () => {
   const {
-    cat,
+    category,
+    setCategory,
     exercises,
     setExercises,
     mistakes,
@@ -18,24 +20,32 @@ const CatComplete = () => {
     mistakesStr,
     setMistakesStr,
     chosenMaxNum,
+    setExsParams,
   } = useExercisesProvider();
 
-  const { levelsArray } = useLevelsProvider();
+  const { levelsArray, shiftLevelsArray } = useLevelsProvider();
 
   const { language } = useLangProvider();
 
   const mistakesLength = mistakes.length;
   // TODO: Add correct links if it is category mission
-  const href = mistakesLength
-    ? `/${language}/math/level/${chosenMaxNum}/${cat}`
-    : `/${language}/math/level/${chosenMaxNum}/${levelsArray[0]}`;
+  // const href = mistakesLength
+  //   ? `/${language}/math/level/${chosenMaxNum}/${category}`
+  //   : `/${language}/math/level/${chosenMaxNum}/${levelsArray[0]}`;
 
   // TODO: Add mistake coefficient
   const title = !mistakesLength ? 'BRAVO' : mistakesLength < 3 ? 'GOOD' : 'BAD';
   const btnTitle = !mistakesLength ? 'Continue' : 'Correct mistakes';
 
   const onBtnClicked = () => {
-    setExercises(mistakes);
+    if (mistakes.length) {
+      setExercises(mistakes);
+    } else {
+      shiftLevelsArray();
+      setCategory(levelsArray[0]);
+      setExsParams(categoriesMap.get(EExerciseCategories[levelsArray[0]]));
+      setExercises(makeExerciseArray(levelsArray[0], chosenMaxNum));
+    }
     setMistakes([]);
     setMistakesStr([]);
   };
@@ -46,19 +56,20 @@ const CatComplete = () => {
     <section className={styles.CatComplete} data-testid="CatComplete">
       mistARR: {JSON.stringify(mistakes)}
       <Title name={title} />
-      <p>Category: {capitalizedFirstChar(cat)}</p>
+      <p>Category: {capitalizedFirstChar(category)}</p>
       <p>Mistakes: {mistakes.length}</p>
       {mistakesStr.map((mist, i) => (
         <p key={i}>{mist}</p>
       ))}
-      <Link href={href}>
-        <TextButton onClick={onBtnClicked}>{btnTitle}</TextButton>
-      </Link>
+      {/* <Link href={href}> */}
+      <TextButton onClick={onBtnClicked}>{btnTitle}</TextButton>
+      {/* </Link> */}
     </section>
   );
 };
 
 export default CatComplete;
+
 // function showResult (){
 
 // 	var time 	= msToTime(new Date() - dateStartTest);

@@ -27,7 +27,7 @@ const Monitor = ({
 }: MonitorProps) => {
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
-  const { exerciseParams } = useExercisesProvider();
+  const { exsParams } = useExercisesProvider();
 
   const exerciseClick = () => {
     if (columnClassName === styles.bigColumn) {
@@ -49,7 +49,7 @@ const Monitor = ({
         <div className={styles.display} id="display">
           {exerciseParts[0] !== undefined ? (
             <>
-              {exerciseParams?.isColumn && (
+              {exsParams?.isColumn && (
                 <ColumnExercise
                   clickHandler={columnClick}
                   exerciseParts={exerciseParts}

@@ -8,18 +8,14 @@ import Computer from '../Computer/Computer';
 import { EExerciseCategories, IExerciseParams, categoriesMap } from '@/libs/exercises/math.model';
 import MathExercisesProvider from '@/libs/context/MathExercisesProvider';
 import LanguageProvider from '@/libs/context/LangProvider';
-import { useRouter } from 'next/navigation';
 
 export interface IExerciseComponentProps {
   lang: ELang;
   chosenMaxNum: number;
   cat: EExerciseCategories;
-  urlCurrentLevelCat: EExerciseCategories | undefined;
 }
 
-const ExercisePage = ({ urlCurrentLevelCat, cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
-  const router = useRouter();
-
+const ExercisePage = ({ cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
   const [levelsArray, setLevelsArray] = useState<EExerciseCategories[]>([]);
   const [currentCat, setCurrentCat] = useState(EExerciseCategories['equality']);
   const [exerciseArray, setExerciseArray] = useState<(string | number)[][]>([[]]);
@@ -27,26 +23,19 @@ const ExercisePage = ({ urlCurrentLevelCat, cat, chosenMaxNum, lang }: IExercise
 
   useEffect(() => {
     const ar = [...categoriesMap.keys()];
-    const startInd = ar.findIndex((c) => c === urlCurrentLevelCat);
-    const levels = ar.slice(Math.max(startInd, 0));
 
-    if (cat === EExerciseCategories['level'] && !urlCurrentLevelCat)
-      return router.replace(`/${lang}/math/level/${chosenMaxNum}/${levels[0]}`);
-
-    const currCat = cat === EExerciseCategories['level'] ? levels[0] : cat;
+    const currCat = cat === EExerciseCategories['level'] ? ar[0] : cat;
 
     setExsParams(categoriesMap.get(EExerciseCategories[currCat]));
     setCurrentCat(currCat);
-    setLevelsArray(levels);
+    setLevelsArray(ar);
     setExerciseArray(makeExerciseArray(currCat, chosenMaxNum));
   }, []);
 
   if (!exerciseArray[0].length || !exerciseArray.length) return <h2>Loading...</h2>;
 
-  // TODO: urlCurrentLevelCat?
   return (
     <section data-testid="ExercisePage" style={{ width: '100%' }}>
-      {JSON.stringify(exerciseArray)}
       <LanguageProvider language={lang}>
         <MathLevelProvider levels={levelsArray}>
           <MathExercisesProvider

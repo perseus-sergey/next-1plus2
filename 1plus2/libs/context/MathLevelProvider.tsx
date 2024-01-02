@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { EExerciseCategories } from '../exercises/math.model';
 
 interface IProps {
@@ -8,7 +8,7 @@ interface IProps {
 
 type TMathLevelContext = {
   levelsArray: EExerciseCategories[];
-  setLevelsArray: Dispatch<SetStateAction<EExerciseCategories[]>>;
+  shiftLevelsArray: () => void;
 };
 
 const MathLevelContext = createContext<TMathLevelContext>({} as TMathLevelContext);
@@ -20,12 +20,14 @@ export const useLevelsProvider = () => {
 };
 
 const MathLevelProvider = ({ children, levels = [] }: IProps) => {
-  const [_levelsArray, setLevelsArray] = useState<EExerciseCategories[]>(levels);
+  const [levelsArray, setLevelsArray] = useState<EExerciseCategories[]>(levels);
 
-  const levelsArray = useMemo(() => _levelsArray, [_levelsArray]);
+  // const levelsArray = useMemo(() => _levelsArray, [_levelsArray]);
+
+  const shiftLevelsArray = () => setLevelsArray(levelsArray.slice(1));
 
   return (
-    <MathLevelContext.Provider value={{ levelsArray, setLevelsArray }}>
+    <MathLevelContext.Provider value={{ levelsArray, shiftLevelsArray }}>
       {children}
     </MathLevelContext.Provider>
   );

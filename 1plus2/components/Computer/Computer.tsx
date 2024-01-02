@@ -12,8 +12,6 @@ import {
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
-// import { useRouter } from 'next/navigation';
-import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
 import CatComplete from '../CatComplete/CatComplete';
 import { IExsPart, makeExerciseParts } from '@/libs/exercises/math';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
@@ -31,11 +29,10 @@ const Computer = () => {
   const [isFinish, setIsFinish] = useState(false);
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
-  // const router = useRouter();
 
   const {
-    cat,
-    exerciseParams,
+    category,
+    exsParams,
     exercises,
     setExercises,
     mistakes,
@@ -44,10 +41,9 @@ const Computer = () => {
     setMistakesStr,
   } = useExercisesProvider();
 
-  const { levelsArray, setLevelsArray } = useLevelsProvider();
   const { language } = useLangProvider();
 
-  const [minusPlus, askElemNumbers, hint] = useExerciseParams(cat, exercises);
+  const [minusPlus, askElemNumbers, hint] = useExerciseParams(category, exercises);
 
   useEffect(() => {
     if (!exercises.length) return;
@@ -57,12 +53,12 @@ const Computer = () => {
         askElemNumbers,
         exercises[0],
         minusPlus,
-        exerciseParams?.equalMark,
-        cat === EExerciseCategories['inequality'],
+        exsParams?.equalMark,
+        category === EExerciseCategories['inequality'],
         hint
       )
     );
-  }, [cat, exercises, minusPlus, askElemNumbers, hint, exerciseParams?.equalMark]);
+  }, [category, exercises, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
 
   const audioDel = useRef<HTMLAudioElement | undefined>(
     typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_DEL) : undefined
@@ -103,10 +99,7 @@ const Computer = () => {
   const finishLevel = () => {
     audioCatFinish.current?.play();
     setExercises(arrayShift(exercises));
-    const [, ...rest] = levelsArray;
-    setLevelsArray(rest);
     setIsFinish(true);
-    // return router.push(`/${language}/math/level/${chosenMaxNum}/${rest[0]}`);
   };
 
   const checkAnswer = async () => {
@@ -164,7 +157,7 @@ const Computer = () => {
     );
   };
 
-  if (!language || !exerciseParams) return <h2>Loading...</h2>;
+  if (!language || !exsParams) return <h2>Loading...</h2>;
   if (isFinish) {
     if (badAnswer.length) setIsFinish(false);
     return <CatComplete />;
@@ -173,7 +166,7 @@ const Computer = () => {
   return (
     <>
       <Title
-        name={`${capitalizedFirstChar(cat)} - ${getTitleFromMap(
+        name={`${capitalizedFirstChar(category)} - ${getTitleFromMap(
           EMessageNames.LEFT_EXS_NUM_MSG,
           language
         )}: ${exercises.length} Mistakes: ${mistakes.length}`}
@@ -184,12 +177,12 @@ const Computer = () => {
           userAnswer={answerElementValue}
           arrExsLength={exercises.length}
           isRightAnswer={isRightAnswer}
-          isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
+          isDelBtnActive={!!Number(exsParams.keyboardKeys[0])}
           clearBtnHandler={clearBtnHandler}
         />
         <Keyboard
           keyboardBtnClickHandler={keyboardBtnClickHandler}
-          keyboardKeys={exerciseParams.keyboardKeys}
+          keyboardKeys={exsParams.keyboardKeys}
           enterBtnTitle={getTitleFromMap(EMessageNames.BTN_ENTER, language)}
           enterClickHandler={enterClickHandler}
           isEnterDisabled={isEnterDisabled}

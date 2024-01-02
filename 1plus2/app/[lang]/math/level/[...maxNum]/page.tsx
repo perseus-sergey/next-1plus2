@@ -40,23 +40,7 @@ export default ({ params }: IExercisePageProps) => {
       />
     );
 
-  const urlCurrentLevelCat: EExerciseCategories | undefined =
-    EExerciseCategories[maxNum[1] as EExerciseCategories];
-  if (maxNum[1] && !urlCurrentLevelCat)
-    return (
-      <WrongSegment
-        wrongMessage={`Wrong category: ${maxNum[1]}`}
-        redirectPath={`/${lang}/math/level`}
-        btnTitle="Choose Level"
-      />
-    );
-
   return (
-    <ExercisePage
-      lang={lang}
-      chosenMaxNum={chosenMaxNum}
-      cat={EExerciseCategories['level']}
-      urlCurrentLevelCat={urlCurrentLevelCat}
-    />
+    <ExercisePage lang={lang} chosenMaxNum={chosenMaxNum} cat={EExerciseCategories['level']} />
   );
 };

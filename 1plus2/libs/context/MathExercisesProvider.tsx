@@ -10,7 +10,8 @@ interface IProps {
 }
 
 type TMathExercisesContext = {
-  cat: EExerciseCategories;
+  category: EExerciseCategories;
+  setCategory: Dispatch<SetStateAction<EExerciseCategories>>;
   chosenMaxNum: number;
   exercises: (number | string)[][];
   setExercises: Dispatch<SetStateAction<(number | string)[][]>>;
@@ -18,7 +19,8 @@ type TMathExercisesContext = {
   setMistakes: Dispatch<SetStateAction<(number | string)[][]>>;
   mistakesStr: string[];
   setMistakesStr: Dispatch<SetStateAction<string[]>>;
-  exerciseParams: IExerciseParams | undefined;
+  exsParams: IExerciseParams | undefined;
+  setExsParams: Dispatch<SetStateAction<IExerciseParams | undefined>>;
 };
 
 const MathExercisesContext = createContext<TMathExercisesContext>({} as TMathExercisesContext);
@@ -36,6 +38,8 @@ const MathExercisesProvider = ({
   exerciseParams,
   chosenMaxNum,
 }: IProps) => {
+  const [category, setCategory] = useState(cat);
+  const [exsParams, setExsParams] = useState(exerciseParams);
   const [_exercises, setExercises] = useState<(number | string)[][]>(exercisesArray);
   const [_mistakes, setMistakes] = useState<(number | string)[][]>([]);
   const [_mistakesStr, setMistakesStr] = useState<string[]>([]);
@@ -47,7 +51,8 @@ const MathExercisesProvider = ({
   return (
     <MathExercisesContext.Provider
       value={{
-        cat,
+        category,
+        setCategory,
         chosenMaxNum,
         exercises,
         setExercises,
@@ -55,7 +60,8 @@ const MathExercisesProvider = ({
         setMistakes,
         mistakesStr,
         setMistakesStr,
-        exerciseParams,
+        exsParams,
+        setExsParams,
       }}
     >
       {children}
