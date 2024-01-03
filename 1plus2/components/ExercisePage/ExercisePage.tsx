@@ -16,15 +16,15 @@ export interface IExerciseComponentProps {
 }
 
 const ExercisePage = ({ cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
-  const [levelsArray, setLevelsArray] = useState<EExerciseCategories[]>([]);
+  const [levelsArray, setLevelsArray] = useState<EExerciseCategories[] | undefined>([]);
   const [currentCat, setCurrentCat] = useState(EExerciseCategories['equality']);
   const [exerciseArray, setExerciseArray] = useState<(string | number)[][]>([[]]);
   const [exsParams, setExsParams] = useState<IExerciseParams | undefined>();
+  const [isLevel] = useState(cat === EExerciseCategories['level']);
 
   useEffect(() => {
-    const ar = [...categoriesMap.keys()];
-
-    const currCat = cat === EExerciseCategories['level'] ? ar[0] : cat;
+    const ar = isLevel ? [...categoriesMap.keys()] : [];
+    const currCat = isLevel ? ar[0] : cat;
 
     setExsParams(categoriesMap.get(EExerciseCategories[currCat]));
     setCurrentCat(currCat);
@@ -37,7 +37,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
   return (
     <section data-testid="ExercisePage" style={{ width: '100%' }}>
       <LanguageProvider language={lang}>
-        <MathLevelProvider levels={levelsArray}>
+        <MathLevelProvider levels={levelsArray} isLevel={isLevel}>
           <MathExercisesProvider
             cat={currentCat}
             chosenMaxNum={chosenMaxNum}

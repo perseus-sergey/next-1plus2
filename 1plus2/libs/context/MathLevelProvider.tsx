@@ -3,12 +3,14 @@ import { EExerciseCategories } from '../exercises/math.model';
 
 interface IProps {
   children: React.ReactNode;
+  isLevel: boolean;
   levels?: EExerciseCategories[];
 }
 
 type TMathLevelContext = {
   levelsArray: EExerciseCategories[];
   shiftLevelsArray: () => void;
+  isLevel: boolean;
 };
 
 const MathLevelContext = createContext<TMathLevelContext>({} as TMathLevelContext);
@@ -19,7 +21,7 @@ export const useLevelsProvider = () => {
   return context;
 };
 
-const MathLevelProvider = ({ children, levels = [] }: IProps) => {
+const MathLevelProvider = ({ children, isLevel, levels = [] }: IProps) => {
   const [levelsArray, setLevelsArray] = useState<EExerciseCategories[]>(levels);
 
   // const levelsArray = useMemo(() => _levelsArray, [_levelsArray]);
@@ -27,7 +29,7 @@ const MathLevelProvider = ({ children, levels = [] }: IProps) => {
   const shiftLevelsArray = () => setLevelsArray(levelsArray.slice(1));
 
   return (
-    <MathLevelContext.Provider value={{ levelsArray, shiftLevelsArray }}>
+    <MathLevelContext.Provider value={{ levelsArray, shiftLevelsArray, isLevel }}>
       {children}
     </MathLevelContext.Provider>
   );
