@@ -1,21 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Keyboard from '../Keyboard/Keyboard';
 import { Title } from '../Title/Title';
 import { arrayShift, capitalizedFirstChar, sleep } from '@/libs/utils';
-import { ESoundPaths } from '@/libs/ESoundPaths';
 import {
   EExerciseCategories,
   QUESTION_MARK,
+  categoriesMap,
   keyboardInEqualKeys,
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
-import CatComplete from '../CatComplete/CatComplete';
-import { IExsPart, makeExerciseParts } from '@/libs/exercises/math';
+import CatComplete, { EndLevel } from '../CatComplete/CatComplete';
+import { IExsPart, makeExerciseArray, makeExerciseParts } from '@/libs/exercises/math';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { useLangProvider } from '@/libs/context/LangProvider';
+import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
+import { useRouter } from 'next/navigation';
+import { useSound } from '@/libs/hooks/useSound';
 
 export enum EIsRightAnswer {
   'NOT',
@@ -26,24 +29,38 @@ export enum EIsRightAnswer {
 const Computer = () => {
   const [exerciseParts, setExerciseParts] = useState<IExsPart[]>([]);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
-  const [isFinish, setIsFinish] = useState(false);
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
+  const [exsQuant, setExsQuant] = useState(0);
 
   const {
-    category,
     exsParams,
+    category,
+    setCategory,
     exercises,
     setExercises,
     mistakes,
     setMistakes,
     mistakesStr,
     setMistakesStr,
+    chosenMaxNum,
+    setExsParams,
+    isCatFinish,
+    setIsCatFinish,
   } = useExercisesProvider();
 
   const { language } = useLangProvider();
 
+  const { levelsArray, shiftLevelsArray, isLevel } = useLevelsProvider();
+
   const [minusPlus, askElemNumbers, hint] = useExerciseParams(category, exercises);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isCatFinish) return;
+    setExsQuant(exercises.length);
+  }, [isCatFinish]);
 
   useEffect(() => {
     if (!exercises.length) return;
@@ -60,29 +77,24 @@ const Computer = () => {
     );
   }, [category, exercises, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
 
-  const audioDel = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_DEL) : undefined
-  );
+  const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish } = useSound();
 
-  const audioKey = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_KEY) : undefined
-  );
+  const onNextCatBtnClicked = () => {
+    console.log('🚀 ~ file: CatComplete.tsx:82 ~ CatComplete ~ category:', category);
+    setIsCatFinish(false);
+    if (mistakes.length) {
+      setExercises(mistakes);
+    } else {
+      if (!isLevel) return router.push(`/${language}/math`);
 
-  const audioRightAnsw = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_RIGHT_ANSWER) : undefined
-  );
-
-  const audioWrongAnsw = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_WRONG_ANSWER) : undefined
-  );
-
-  const audioCatFinish = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_END) : undefined
-  );
-
-  // const audioLevelFinish = useRef<HTMLAudioElement | undefined>(
-  //   typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_END_LEVEL) : undefined
-  // );
+      shiftLevelsArray();
+      setCategory(levelsArray[1]);
+      setExsParams(categoriesMap.get(EExerciseCategories[levelsArray[1]]));
+      setExercises(makeExerciseArray(levelsArray[1], chosenMaxNum));
+    }
+    setMistakes([]);
+    setMistakesStr([]);
+  };
 
   const enterClickHandler = () => {
     if (!exercises.length || answerElementValue === QUESTION_MARK) return;
@@ -99,7 +111,7 @@ const Computer = () => {
   const finishLevel = () => {
     audioCatFinish.current?.play();
     setExercises(arrayShift(exercises));
-    setIsFinish(true);
+    setIsCatFinish(true);
   };
 
   const checkAnswer = async () => {
@@ -158,10 +170,13 @@ const Computer = () => {
   };
 
   if (!language || !exsParams) return <h2>Loading...</h2>;
-  if (isFinish) {
-    if (badAnswer.length) setIsFinish(false);
-    return <CatComplete />;
+  if (isCatFinish) {
+    if (badAnswer.length) setIsCatFinish(false);
+    return <CatComplete onNextCatBtnClicked={onNextCatBtnClicked} exsQuant={exsQuant} />;
   }
+
+  if (isLevel && (!category || category === EExerciseCategories['level']))
+    return <EndLevel language={language} />;
 
   return (
     <>

@@ -3,53 +3,36 @@ import TextButton from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
 import { capitalizedFirstChar } from '@/libs/utils';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
-import Computer from '../Computer/Computer';
 import { useLangProvider } from '@/libs/context/LangProvider';
-import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
-import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
-import { makeExerciseArray } from '@/libs/exercises/math';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';
 
-const EndLevel = ({ language }: { language: ELang }) => (
+export const EndLevel = ({ language }: { language: ELang }) => (
   <section className={styles.EndLevel}>
     <Title
       className={styles.EndLevelTitle}
       name={getTitleFromMap(EMessageNames.SHOW_END_LEVEL, language)}
     />
     <Link href={`/${language}/math`}>
-      <TextButton>{getTitleFromMap(EMessageNames.BTN_LEVELS, language)}</TextButton>
+      <TextButton>{getTitleFromMap(EMessageNames.CONTINUE, language)}</TextButton>
     </Link>
   </section>
 );
 
-const CatComplete = () => {
-  const {
-    category,
-    setCategory,
-    exercises,
-    setExercises,
-    mistakes,
-    setMistakes,
-    mistakesStr,
-    setMistakesStr,
-    chosenMaxNum,
-    setExsParams,
-  } = useExercisesProvider();
-
-  const { levelsArray, shiftLevelsArray, isLevel } = useLevelsProvider();
-
-  const { language } = useLangProvider();
-
-  const router = useRouter();
-
+const useCatComplTitle = (
+  language: ELang,
+  exsQuant: number,
+  mistQuant: number,
+  isCatFinish = false
+) => {
   const [{ title, btnTitle }, setTitles] = useState({ title: '', btnTitle: '' });
-  const [nextCat] = useState(levelsArray[1]);
 
   useEffect(() => {
-    const mistakeCoeff = mistakes.length / exercises.length;
+    if (!isCatFinish) return;
+
+    const mistakeCoeff = mistQuant / exsQuant;
+    console.log('🚀 ~ file: CatComplete. ~ mistQuant / exsQuant:', mistQuant, exsQuant);
     setTitles({
       title: !mistakeCoeff
         ? getTitleFromMap(EMessageNames.BRAVO, language)
@@ -60,26 +43,24 @@ const CatComplete = () => {
         ? getTitleFromMap(EMessageNames.CONTINUE, language)
         : getTitleFromMap(EMessageNames.CORRECTION, language),
     });
-  }, [mistakes.length, exercises.length]);
+    return () => console.log('useCatComplTitle FINISHED');
+  }, [isCatFinish]);
 
-  const onBtnClicked = () => {
-    if (mistakes.length) {
-      setExercises(mistakes);
-    } else {
-      if (!isLevel) return router.push(`/${language}/math`);
+  return { title, btnTitle };
+};
 
-      setCategory(nextCat);
-      setExsParams(categoriesMap.get(EExerciseCategories[nextCat]));
-      setExercises(makeExerciseArray(nextCat, chosenMaxNum));
-      shiftLevelsArray();
-    }
-    setMistakes([]);
-    setMistakesStr([]);
-  };
+const CatComplete = ({
+  exsQuant,
+  onNextCatBtnClicked,
+}: {
+  exsQuant: number;
+  onNextCatBtnClicked: () => void;
+}) => {
+  const { category, mistakes, mistakesStr, isCatFinish } = useExercisesProvider();
 
-  if (isLevel && !nextCat) return <EndLevel language={language} />;
+  const { language } = useLangProvider();
 
-  if (exercises.length) return <Computer />;
+  const { title, btnTitle } = useCatComplTitle(language, exsQuant, mistakes.length, isCatFinish);
 
   return (
     <section className={styles.CatComplete} data-testid="CatComplete">
@@ -93,7 +74,7 @@ const CatComplete = () => {
       {mistakesStr.map((mist, i) => (
         <p key={i}>{mist}</p>
       ))}
-      <TextButton onClick={onBtnClicked}>{btnTitle}</TextButton>
+      <TextButton onClick={onNextCatBtnClicked}>{btnTitle}</TextButton>
     </section>
   );
 };

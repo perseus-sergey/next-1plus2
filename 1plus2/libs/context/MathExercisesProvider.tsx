@@ -21,6 +21,8 @@ type TMathExercisesContext = {
   setMistakesStr: Dispatch<SetStateAction<string[]>>;
   exsParams: IExerciseParams | undefined;
   setExsParams: Dispatch<SetStateAction<IExerciseParams | undefined>>;
+  isCatFinish: boolean;
+  setIsCatFinish: Dispatch<SetStateAction<boolean>>;
 };
 
 const MathExercisesContext = createContext<TMathExercisesContext>({} as TMathExercisesContext);
@@ -40,6 +42,7 @@ const MathExercisesProvider = ({
 }: IProps) => {
   const [category, setCategory] = useState(cat);
   const [exsParams, setExsParams] = useState(exerciseParams);
+  const [isCatFinish, setIsCatFinish] = useState(false);
   const [_exercises, setExercises] = useState<(number | string)[][]>(exercisesArray);
   const [_mistakes, setMistakes] = useState<(number | string)[][]>([]);
   const [_mistakesStr, setMistakesStr] = useState<string[]>([]);
@@ -62,6 +65,8 @@ const MathExercisesProvider = ({
         setMistakesStr,
         exsParams,
         setExsParams,
+        isCatFinish,
+        setIsCatFinish,
       }}
     >
       {children}

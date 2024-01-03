@@ -23,7 +23,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
   const [isLevel] = useState(cat === EExerciseCategories['level']);
 
   useEffect(() => {
-    const ar = isLevel ? [...categoriesMap.keys()] : [];
+    const ar = isLevel ? [...categoriesMap.keys()].slice(7) : [];
     const currCat = isLevel ? ar[0] : cat;
 
     setExsParams(categoriesMap.get(EExerciseCategories[currCat]));
@@ -36,6 +36,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
 
   return (
     <section data-testid="ExercisePage" style={{ width: '100%' }}>
+      levelsArray: {JSON.stringify(levelsArray)}
       <LanguageProvider language={lang}>
         <MathLevelProvider levels={levelsArray} isLevel={isLevel}>
           <MathExercisesProvider
