@@ -15,10 +15,6 @@ type TMathExercisesContext = {
   chosenMaxNum: number;
   exercises: (number | string)[][];
   setExercises: Dispatch<SetStateAction<(number | string)[][]>>;
-  // mistakes: (number | string)[][];
-  // setMistakes: Dispatch<SetStateAction<(number | string)[][]>>;
-  // mistakesStr: string[];
-  // setMistakesStr: Dispatch<SetStateAction<string[]>>;
   exsParams: IExerciseParams | undefined;
   setExsParams: Dispatch<SetStateAction<IExerciseParams | undefined>>;
   isCatFinish: boolean;
@@ -44,12 +40,8 @@ const MathExercisesProvider = ({
   const [exsParams, setExsParams] = useState(exerciseParams);
   const [isCatFinish, setIsCatFinish] = useState(false);
   const [_exercises, setExercises] = useState<(number | string)[][]>(exercisesArray);
-  // const [_mistakes, setMistakes] = useState<(number | string)[][]>([]);
-  // const [_mistakesStr, setMistakesStr] = useState<string[]>([]);
 
   const exercises = useMemo(() => _exercises, [_exercises]);
-  // const mistakes = useMemo(() => _mistakes, [_mistakes]);
-  // const mistakesStr = useMemo(() => _mistakesStr, [_mistakesStr]);
 
   return (
     <MathExercisesContext.Provider
@@ -59,10 +51,6 @@ const MathExercisesProvider = ({
         chosenMaxNum,
         exercises,
         setExercises,
-        // mistakes,
-        // setMistakes,
-        // mistakesStr,
-        // setMistakesStr,
         exsParams,
         setExsParams,
         isCatFinish,

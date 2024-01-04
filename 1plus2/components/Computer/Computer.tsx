@@ -117,7 +117,7 @@ const Computer = () => {
     audioDel.current?.play();
   };
 
-  const finishLevel = () => {
+  const finishCat = () => {
     audioCatFinish.current?.play();
     setExercises(arrayShift(exercises));
     setIsCatFinish(true);
@@ -135,7 +135,7 @@ const Computer = () => {
     !isRightAnswer
       ? setExercises([...exercises, exercises[0]])
       : exercises.length < 2
-        ? finishLevel()
+        ? finishCat()
         : setExercises(arrayShift(exercises));
 
     setIsRightAnswer(EIsRightAnswer.NOT);
@@ -161,14 +161,6 @@ const Computer = () => {
     setIsRightAnswer(EIsRightAnswer.BAD);
   };
 
-  // function addError (){
-  //   error++;
-  //   error_spn.textContent = `${msg.mistks}: ${error}`;
-  // //	progressbar_span.textContent = `${arrTest.length}(${error})`;
-  //   circles_ul.classList.add('bad_li');
-  //   arrShowErr.push(spn_left.innerHTML + spn_mp.innerHTML + spn_centr.innerHTML + spn_eq.innerHTML + spn_right.innerHTML);
-  // }
-
   const keyboardBtnClickHandler = (value: string) => {
     audioKey.current?.play();
     setAnswerElementValue(
@@ -181,7 +173,7 @@ const Computer = () => {
   if (!language || !exsParams) return <h2>Loading...</h2>;
 
   if (isCatFinish) {
-    if (mistakes.length) setIsCatFinish(false);
+    // if (badAnswer.length) setIsCatFinish(false);
     return (
       <CatComplete
         title={catCompleteTitle}
