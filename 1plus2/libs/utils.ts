@@ -5,15 +5,24 @@ export const arrayShift = <T>(array: T[][]): T[][] => {
   return rest;
 };
 
+export const uniqueArray = <T>(array: T[]): T[] => [...new Set(array)];
+
+export const isUniqDeepArray = <T>(arr: T[][]): boolean =>
+  new Set(arr.map((item) => item.join('|'))).size === arr.length;
+
+export const deepUniqueArraySize = <T>(arr: T[][]): number =>
+  new Set(arr.map((item) => item.join('|'))).size;
+
+export const deepUniqueArray = <T>(arr: T[][]) =>
+  Array.from(new Set(arr.map((mapItem) => JSON.stringify(mapItem))), (jItem) => JSON.parse(jItem));
+
+export const getExerciseQuantity = ({ start = 10, max = 100, step = 10 }) =>
+  Math.floor((max + step - start) / step);
+
 export const createMaxNumArray = ({ start = 10, max = 100, step = 10 }) =>
   createArray(getExerciseQuantity({ start, max, step })).map((_, i) => i * step + start);
 
 export const shuffleArray = <T>(array: T[]): T[] => array.sort(() => Math.random() - 0.5);
-
-export const uniqueArray = <T>(array: T[]): T[] => [...new Set(array)];
-
-export const getExerciseQuantity = ({ start = 10, max = 100, step = 10 }) =>
-  Math.floor((max + step - start) / step);
 
 export const capitalizedFirstChar = (word: string) =>
   word.replace(/^(.)/, (match) => match.toUpperCase());

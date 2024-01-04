@@ -26,7 +26,6 @@ export const useCatComplTitle = (
         ? getTitleFromMap(EMessageNames.CONTINUE, language)
         : getTitleFromMap(EMessageNames.CORRECTION, language),
     });
-    return () => console.log('useCatComplTitle FINISHED');
   }, [isCatFinish]);
 
   return { catCompleteTitle, btnCatCompleteTitle };

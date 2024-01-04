@@ -9,6 +9,30 @@ import { EExerciseCategories, IExerciseParams, categoriesMap } from '@/libs/exer
 import MathExercisesProvider from '@/libs/context/MathExercisesProvider';
 import LanguageProvider from '@/libs/context/LangProvider';
 
+const getLevels = (maxNum: number) => {
+  switch (true) {
+    case maxNum <= 10:
+      return [...categoriesMap.keys()].filter(
+        (c) =>
+          c !== EExerciseCategories['level'] &&
+          c !== EExerciseCategories['equal-over-ten'] &&
+          c !== EExerciseCategories['equal-five'] &&
+          c !== EExerciseCategories['equal-ten']
+      );
+    case maxNum <= 20:
+      return [...categoriesMap.keys()].filter(
+        (c) =>
+          c !== EExerciseCategories['level'] &&
+          c !== EExerciseCategories['equal-over-ten'] &&
+          c !== EExerciseCategories['equal-ten']
+      );
+    default:
+      return [...categoriesMap.keys()].filter(
+        (c) => c !== EExerciseCategories['level'] && c !== EExerciseCategories['sequence']
+      );
+  }
+};
+
 export interface IExerciseComponentProps {
   lang: ELang;
   chosenMaxNum: number;
@@ -23,7 +47,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
   const [isLevel] = useState(cat === EExerciseCategories['level']);
 
   useEffect(() => {
-    const ar = isLevel ? [...categoriesMap.keys()].slice(7) : [];
+    const ar = isLevel ? getLevels(chosenMaxNum) : [];
     const currCat = isLevel ? ar[0] : cat;
 
     setExsParams(categoriesMap.get(EExerciseCategories[currCat]));

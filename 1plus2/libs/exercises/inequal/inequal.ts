@@ -12,14 +12,15 @@ const makeLightArr = (
 ): (string | number)[][] => {
   const n1 = Math.floor(Math.random() * (maxNum + 1)); // 0,maxNum
   const n2 = Math.floor(Math.random() * (maxNum + 1)); // 0,maxNum
+
+  if (n1 === n2) return makeLightArr(maxNum, existArr, quant);
+
   const part1 = ['', n1, rightAnswIneq(n1, n2), n2];
   const reversePart1 = ['', n2, rightAnswIneq(n2, n1), n1];
 
-  if (n1 === n2) makeLightArr(maxNum, existArr, quant);
-
-  if (!isWrongPushedIntoArray(quant, maxNum, existArr, part1, 0)) {
+  if (!isWrongPushedIntoArray(quant, maxNum, existArr, part1, 1)) {
     return [...existArr, part1];
-  } else if (!JSON.stringify(existArr).includes(JSON.stringify(reversePart1))) {
+  } else if (!isWrongPushedIntoArray(quant, maxNum, existArr, reversePart1, 3)) {
     return [...existArr, reversePart1];
   } else return makeLightArr(maxNum, existArr, quant);
 };

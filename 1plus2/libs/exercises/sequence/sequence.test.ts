@@ -1,12 +1,49 @@
-import setArrSequence from './sequence';
+import { deepUniqueArraySize } from '@/libs/utils';
+import { makeExerciseArray } from '../math';
+import { EExerciseCategories, categoriesMap } from '../math.model';
 
-describe('setArrSequence', () => {
-  const testingArrayQuantity = 5;
-  it(`array quantity should be equal 10. Testing quantity: ${testingArrayQuantity}`, () => {
-    for (let index = 0; index < testingArrayQuantity; index++) {
-      const arr = setArrSequence(20);
-      console.log('🚀 ~ file: sequence.test.ts:8 ~ it ~ arr:', JSON.stringify(arr));
-      expect(arr.length).toEqual(10);
+const cat = EExerciseCategories['sequence'];
+const attempts = 100;
+
+describe(`🚀 ~ Category: ${cat}`, () => {
+  const mapObj = categoriesMap.get(cat);
+  if (!mapObj) return;
+  const { start, max, step } = mapObj.exercise;
+
+  for (let maxN = start; maxN < max + 1; maxN += step) {
+    const numExercisesInArray = Math.min(maxN, 10);
+
+    it(`array quantity should be equal ${numExercisesInArray}. \nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${numExercisesInArray}`, () => {
+      for (let index = 0; index < attempts; index++) {
+        const arr = makeExerciseArray(cat, maxN);
+        // console.log(`🚀 ~ file: ${cat}.test ~ arr:`, arr);
+        expect(arr.length).toEqual(numExercisesInArray);
+      }
+    });
+
+    it(`Max Number in every parts should be <= ${maxN}.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${numExercisesInArray}`, () => {
+      for (let index = 0; index < attempts; index++) {
+        const arr = makeExerciseArray(cat, maxN);
+
+        arr.forEach((part) =>
+          part.forEach((n) => {
+            const num = +n;
+            if (!num) return;
+            expect(num <= maxN).toBe(true);
+          })
+        );
+      }
+    });
+
+    const uniq = numExercisesInArray < maxN;
+
+    if (uniq) {
+      it(`array parts SHOULD be unique.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexercisesInArray: ${numExercisesInArray}`, () => {
+        for (let index = 0; index < attempts; index++) {
+          const arr = makeExerciseArray(cat, maxN);
+          expect(arr.length).toEqual(deepUniqueArraySize(arr));
+        }
+      });
     }
-  });
+  }
 });
