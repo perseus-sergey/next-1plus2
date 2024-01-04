@@ -16,7 +16,6 @@ export const useCatComplTitle = (
     if (!isCatFinish) return;
 
     const mistakeCoeff = mistQuant / exsQuant;
-    console.log('🚀 ~ file: CatComplete. ~ mistQuant / exsQuant:', mistQuant, exsQuant);
     setTitles({
       catCompleteTitle: !mistakeCoeff
         ? getTitleFromMap(EMessageNames.BRAVO, language)

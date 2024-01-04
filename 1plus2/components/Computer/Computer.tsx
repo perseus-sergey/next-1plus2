@@ -88,23 +88,6 @@ const Computer = () => {
 
   const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish } = useSound();
 
-  const onNextCatBtnClicked = () => {
-    console.log('🚀 ~ file: CatComplete.tsx:82 ~ CatComplete ~ category:', category);
-    setIsCatFinish(false);
-    if (mistakes.length) {
-      setExercises(mistakes);
-    } else {
-      if (!isLevel) return router.push(`/${language}/math`);
-
-      shiftLevelsArray();
-      setCategory(levelsArray[1]);
-      setExsParams(categoriesMap.get(EExerciseCategories[levelsArray[1]]));
-      setExercises(makeExerciseArray(levelsArray[1], chosenMaxNum));
-    }
-    setMistakes([]);
-    setMistakesStr([]);
-  };
-
   const enterClickHandler = () => {
     if (!exercises.length || answerElementValue === QUESTION_MARK) return;
     setIsEnterDisabled(true);
@@ -170,10 +153,25 @@ const Computer = () => {
     );
   };
 
+  const onNextCatBtnClicked = () => {
+    if (mistakes.length) {
+      setExercises(mistakes);
+    } else {
+      if (!isLevel) return router.push(`/${language}/math`);
+
+      shiftLevelsArray();
+      setCategory(levelsArray[1]);
+      setExsParams(categoriesMap.get(EExerciseCategories[levelsArray[1]]));
+      setExercises(makeExerciseArray(levelsArray[1], chosenMaxNum));
+    }
+    setIsCatFinish(false);
+    setMistakes([]);
+    setMistakesStr([]);
+  };
+
   if (!language || !exsParams) return <h2>Loading...</h2>;
 
-  if (isCatFinish) {
-    // if (badAnswer.length) setIsCatFinish(false);
+  if (isCatFinish)
     return (
       <CatComplete
         title={catCompleteTitle}
@@ -184,7 +182,6 @@ const Computer = () => {
         mistakesStr={mistakesStr}
       />
     );
-  }
 
   if (isLevel && (!category || category === EExerciseCategories['level']))
     return <EndLevel language={language} />;
