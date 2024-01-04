@@ -28,7 +28,7 @@ const getLevels = (maxNum: number) => {
       );
     default:
       return [...categoriesMap.keys()].filter(
-        (c) => c !== EExerciseCategories['level'] && c !== EExerciseCategories['sequence']
+        (c) => c !== EExerciseCategories['level'] && c !== EExerciseCategories['composition']
       );
   }
 };
