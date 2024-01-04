@@ -4,9 +4,17 @@ import { Title } from '../Title/Title';
 import { capitalizedFirstChar } from '@/libs/utils';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { useLangProvider } from '@/libs/context/LangProvider';
-import { useEffect, useState } from 'react';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';
+
+interface ICatComplete {
+  exsQuant: number;
+  onNextCatBtnClicked: () => void;
+  title: string;
+  btnTitle: string;
+  mistakes: (number | string)[][];
+  mistakesStr: string[];
+}
 
 export const EndLevel = ({ language }: { language: ELang }) => (
   <section className={styles.EndLevel}>
@@ -20,47 +28,16 @@ export const EndLevel = ({ language }: { language: ELang }) => (
   </section>
 );
 
-const useCatComplTitle = (
-  language: ELang,
-  exsQuant: number,
-  mistQuant: number,
-  isCatFinish = false
-) => {
-  const [{ title, btnTitle }, setTitles] = useState({ title: '', btnTitle: '' });
-
-  useEffect(() => {
-    if (!isCatFinish) return;
-
-    const mistakeCoeff = mistQuant / exsQuant;
-    console.log('🚀 ~ file: CatComplete. ~ mistQuant / exsQuant:', mistQuant, exsQuant);
-    setTitles({
-      title: !mistakeCoeff
-        ? getTitleFromMap(EMessageNames.BRAVO, language)
-        : mistakeCoeff <= 0.2
-          ? getTitleFromMap(EMessageNames.NO_BAD, language)
-          : getTitleFromMap(EMessageNames.BAD, language),
-      btnTitle: !mistakeCoeff
-        ? getTitleFromMap(EMessageNames.CONTINUE, language)
-        : getTitleFromMap(EMessageNames.CORRECTION, language),
-    });
-    return () => console.log('useCatComplTitle FINISHED');
-  }, [isCatFinish]);
-
-  return { title, btnTitle };
-};
-
 const CatComplete = ({
-  exsQuant,
   onNextCatBtnClicked,
-}: {
-  exsQuant: number;
-  onNextCatBtnClicked: () => void;
-}) => {
-  const { category, mistakes, mistakesStr, isCatFinish } = useExercisesProvider();
+  title,
+  btnTitle,
+  mistakes,
+  mistakesStr,
+}: ICatComplete) => {
+  const { category } = useExercisesProvider();
 
   const { language } = useLangProvider();
-
-  const { title, btnTitle } = useCatComplTitle(language, exsQuant, mistakes.length, isCatFinish);
 
   return (
     <section className={styles.CatComplete} data-testid="CatComplete">

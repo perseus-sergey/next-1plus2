@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Keyboard from '../Keyboard/Keyboard';
@@ -19,6 +19,7 @@ import { useLangProvider } from '@/libs/context/LangProvider';
 import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
 import { useRouter } from 'next/navigation';
 import { useSound } from '@/libs/hooks/useSound';
+import { useCatComplTitle } from '@/libs/hooks/useCatComplTitle';
 
 export enum EIsRightAnswer {
   'NOT',
@@ -32,6 +33,11 @@ const Computer = () => {
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
   const [exsQuant, setExsQuant] = useState(0);
+  const [_mistakes, setMistakes] = useState<(number | string)[][]>([]);
+  const [_mistakesStr, setMistakesStr] = useState<string[]>([]);
+
+  const mistakes = useMemo(() => _mistakes, [_mistakes]);
+  const mistakesStr = useMemo(() => _mistakesStr, [_mistakesStr]);
 
   const {
     exsParams,
@@ -39,10 +45,6 @@ const Computer = () => {
     setCategory,
     exercises,
     setExercises,
-    mistakes,
-    setMistakes,
-    mistakesStr,
-    setMistakesStr,
     chosenMaxNum,
     setExsParams,
     isCatFinish,
@@ -52,6 +54,13 @@ const Computer = () => {
   const { language } = useLangProvider();
 
   const { levelsArray, shiftLevelsArray, isLevel } = useLevelsProvider();
+
+  const { catCompleteTitle, btnCatCompleteTitle } = useCatComplTitle(
+    language,
+    exsQuant,
+    mistakes.length,
+    isCatFinish
+  );
 
   const [minusPlus, askElemNumbers, hint] = useExerciseParams(category, exercises);
 
@@ -170,9 +179,19 @@ const Computer = () => {
   };
 
   if (!language || !exsParams) return <h2>Loading...</h2>;
+
   if (isCatFinish) {
-    if (badAnswer.length) setIsCatFinish(false);
-    return <CatComplete onNextCatBtnClicked={onNextCatBtnClicked} exsQuant={exsQuant} />;
+    if (mistakes.length) setIsCatFinish(false);
+    return (
+      <CatComplete
+        title={catCompleteTitle}
+        btnTitle={btnCatCompleteTitle}
+        onNextCatBtnClicked={onNextCatBtnClicked}
+        exsQuant={exsQuant}
+        mistakes={mistakes}
+        mistakesStr={mistakesStr}
+      />
+    );
   }
 
   if (isLevel && (!category || category === EExerciseCategories['level']))
