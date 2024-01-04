@@ -60,7 +60,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
 
   return (
     <section data-testid="ExercisePage" style={{ width: '100%' }}>
-      levelsArray: {JSON.stringify(levelsArray)}
+      {/* levelsArray: {JSON.stringify(levelsArray)} */}
       <LanguageProvider language={lang}>
         <MathLevelProvider levels={levelsArray} isLevel={isLevel}>
           <MathExercisesProvider
