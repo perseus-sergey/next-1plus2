@@ -1,41 +1,47 @@
-import { setArrInequal } from './inequal';
+import { deepUniqueArraySize } from '@/libs/utils';
+import { makeExerciseArray } from '../math';
+import { EExerciseCategories, categoriesMap } from '../math.model';
 
-describe('setArrInequal', () => {
-  const attempts = 5;
-  const maxNum = 100;
-  const exercisesInArray = 10;
+const cat = EExerciseCategories['inequality'];
+const attempts = 100;
 
-  for (let maxN = 10; maxN < maxNum + 1; maxN += 10) {
-    it(`array quantity should be equal ${exercisesInArray}. \nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${exercisesInArray}`, () => {
+describe(`🚀 ~ Category: ${cat}`, () => {
+  const mapObj = categoriesMap.get(cat);
+  if (!mapObj) return;
+  const { start, max, step } = mapObj.exercise;
+
+  for (let maxN = start; maxN < max + 1; maxN += step) {
+    const numExercisesInArray = Math.min(maxN, 10);
+
+    it(`array quantity should be equal ${numExercisesInArray}. \nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${numExercisesInArray}`, () => {
       for (let index = 0; index < attempts; index++) {
-        const arr = setArrInequal(maxN, exercisesInArray);
-        // console.log('🚀 ~ file: inequal.test.ts:12 ~ it ~ arr:', arr);
-        expect(arr.length).toEqual(exercisesInArray);
+        const arr = makeExerciseArray(cat, maxN);
+        // console.log(`🚀 ~ file: ${cat}.test ~ arr:`, arr);
+        expect(arr.length).toEqual(numExercisesInArray);
       }
     });
 
-    it(`Max Number in every parts should be <= ${maxN}.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${exercisesInArray}`, () => {
+    it(`Max Number in every parts should be <= ${maxN}.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${numExercisesInArray}`, () => {
       for (let index = 0; index < attempts; index++) {
-        const arr = setArrInequal(maxN, exercisesInArray);
+        const arr = makeExerciseArray(cat, maxN);
 
-        arr.forEach((part) => {
+        arr.forEach((part) =>
           part.forEach((n) => {
             const num = +n;
             if (!num) return;
             expect(num <= maxN).toBe(true);
-          });
-        });
+          })
+        );
       }
     });
 
-    const uniq = exercisesInArray < maxN;
+    const uniq = numExercisesInArray < maxN;
 
     if (uniq) {
-      it(`array parts should be unique.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexercisesInArray: ${exercisesInArray}`, () => {
+      it(`array parts SHOULD be unique.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexercisesInArray: ${numExercisesInArray}`, () => {
         for (let index = 0; index < attempts; index++) {
-          const arr = setArrInequal(maxN, exercisesInArray);
-          const uniqArr = [...new Set(arr)];
-          expect(arr.length).toEqual(uniqArr.length);
+          const arr = makeExerciseArray(cat, maxN);
+          expect(arr.length).toEqual(deepUniqueArraySize(arr));
         }
       });
     }

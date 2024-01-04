@@ -35,7 +35,7 @@ export const titleMap: TTitleMap = new Map([
   [EMessageNames.MISSION_CHOICE, { [ELang.en]: 'Choose the task', [ELang.ua]: 'Обери завдання' }],
   [
     EMessageNames.SHOW_END_LEVEL,
-    { [ELang.en]: 'level is completed', [ELang.ua]: 'рівень пройдено' },
+    { [ELang.en]: 'Level is completed', [ELang.ua]: 'Рівень пройдено' },
   ],
   [
     EMessageNames.CATEGORY_CHOICE,

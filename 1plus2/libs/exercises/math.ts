@@ -1,9 +1,10 @@
+import { TMathHint } from '../hooks/useExerciseParams';
 import { ELang } from '../langMessages';
 import { setArrCompos } from './composition/composition';
 import setArrEqual from './equal/equal';
 import setArrFive from './five/five';
 import { setArrInequal } from './inequal/inequal';
-import { EExerciseCategories, TCatObject, categoriesMap } from './math.model';
+import { EExerciseCategories, TCatObject, TMinusPlus, categoriesMap } from './math.model';
 import { setArrOverTen } from './overTen/overTen';
 import setArrPair from './pairs/pairs';
 import setArrSequence from './sequence/sequence';
@@ -32,6 +33,47 @@ export const isWrongPushedIntoArray = (
     (uniq && JSON.stringify(existingParts).includes(JSON.stringify(pushedParts)))
   );
 };
+
+export interface IExsPart {
+  value: string | number;
+  hint: string;
+  isQuestionPart: boolean;
+}
+
+export const makeExerciseParts = (
+  askElemNumbers: number[],
+  exercise: (number | string)[],
+  minusPlus: TMinusPlus,
+  equalMark: string | undefined,
+  isInequalCat: boolean,
+  { hintN1, hintMinusPlus, hintN2, hintEqual, hintResponse }: TMathHint
+): IExsPart[] => [
+  {
+    value: exercise[0],
+    hint: hintN1,
+    isQuestionPart: askElemNumbers.includes(0),
+  },
+  {
+    value: minusPlus,
+    hint: hintMinusPlus,
+    isQuestionPart: false,
+  },
+  {
+    value: Math.abs(+exercise[1]),
+    hint: hintN2,
+    isQuestionPart: askElemNumbers.includes(1),
+  },
+  {
+    value: equalMark || '',
+    hint: hintEqual,
+    isQuestionPart: isInequalCat && askElemNumbers.includes(2),
+  },
+  {
+    value: exercise[exercise.length - 1],
+    hint: hintResponse,
+    isQuestionPart: !isInequalCat && askElemNumbers.includes(2),
+  },
+];
 
 export const makeExerciseArray = (
   category: EExerciseCategories,

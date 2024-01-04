@@ -4,17 +4,16 @@ import style from './Mission.module.scss';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 
 interface MissionProps {
-  levelButtonClicked: () => void;
   lang: ELang;
 }
 
-const Mission = ({ levelButtonClicked, lang }: MissionProps) => {
+const Mission = ({ lang }: MissionProps) => {
   return (
     <section>
       <div className={style.centered}>
-        <TextButton id="level" onClick={levelButtonClicked}>
-          {getTitleFromMap(EMessageNames.BTN_LEVELS, lang)}
-        </TextButton>
+        <Link href={`/${lang}/math/level`}>
+          <TextButton>{getTitleFromMap(EMessageNames.BTN_LEVELS, lang)}</TextButton>
+        </Link>
         <Link href={`/${lang}/math/category`}>
           <TextButton>{getTitleFromMap(EMessageNames.BTN_CAT, lang)}</TextButton>
         </Link>

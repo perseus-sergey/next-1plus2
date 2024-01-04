@@ -38,13 +38,12 @@ const setArrEqual = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): (string | nu
   const maxNumOfLevel = Math.floor(maxNum / HARD_LEVELS_IN_ARRAY);
   const quantExsPerLevel = Math.floor(numOfExs / HARD_LEVELS_IN_ARRAY);
 
-  const arrTest = createArray(HARD_LEVELS_IN_ARRAY).reduce((acc: (string | number)[][], _, n) => {
+  const arrTest = createArray(HARD_LEVELS_IN_ARRAY).reduce((mainAcc, _, n) => {
     const quant = quantExsPerLevel > 3 ? Math.floor(quantExsPerLevel * 0.7 * (n + 1)) : 3;
-    // console.log('🚀 ~ file: equal.ts:39 ~ arrTest ~ quant:', quant);
     return [
-      ...acc,
+      ...mainAcc,
       ...createArray(quant).reduce(
-        (acc) => [...acc, makeExsParts(quant, maxNumOfLevel * (n + 1), acc)],
+        (acc) => [...acc, makeExsParts(quant, maxNumOfLevel * (n + 1), [...mainAcc, ...acc])],
         []
       ),
     ];

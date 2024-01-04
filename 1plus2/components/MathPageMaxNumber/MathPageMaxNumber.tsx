@@ -6,12 +6,16 @@ import { createMaxNumArray } from '@/libs/utils';
 import { Title } from '../Title/Title';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { categoriesMap } from '@/libs/exercises/math.model';
+import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
 
 const MathPageMaxNumber = ({ params }: ICatNamePageProps) => {
   const catObj = categoriesMap.get(params.cat);
 
   if (!catObj) return redirect(`/${params.lang}/math/category`);
+  const getHref = (value: number) =>
+    params.cat === EExerciseCategories['level']
+      ? `/${params.lang}/math/level/${value}`
+      : `/${params.lang}/math/category/${params.cat}/${value}`;
 
   return (
     <section className="keyboard" data-testid="MathPageMaxNumber">
@@ -19,7 +23,7 @@ const MathPageMaxNumber = ({ params }: ICatNamePageProps) => {
 
       <div className="keyboard-line">
         {createMaxNumArray(catObj.exercise).map((value) => (
-          <Link href={`/${params.lang}/math/category/${params.cat}/${value}`} key={value}>
+          <Link href={getHref(value)} key={value}>
             <KeyboardButton value={`${value}`} />
           </Link>
         ))}

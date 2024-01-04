@@ -1,49 +1,33 @@
-import { NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
+import { IExsPart, NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
 import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
-import { TMinusPlus, TUnequalMark } from '@/libs/exercises/math.model';
-import { TMathHint } from '@/libs/hooks/useExerciseParams';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import { EIsRightAnswer } from '../Computer/Computer';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
 import { useState } from 'react';
+import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 
 interface MonitorProps {
-  exercise: (string | number)[];
-  minusPlus: TMinusPlus;
-  hint: TMathHint;
+  exerciseParts: IExsPart[];
   userAnswer: string;
-  equalMark: TUnequalMark;
-  askElemNumbers: number[];
   arrExsLength: number;
   isRightAnswer: EIsRightAnswer;
   clearBtnHandler?: () => void;
-  isColumn: boolean | undefined;
-  isInequalCat?: boolean;
+  // isColumn: boolean | undefined;
   isDelBtnActive?: boolean;
 }
 
 const Monitor = ({
-  exercise,
-  minusPlus,
-  hint,
+  exerciseParts,
   userAnswer,
   isRightAnswer,
   clearBtnHandler,
-  askElemNumbers,
-  isColumn,
-  equalMark = '=',
   arrExsLength = 10,
-  isInequalCat = false,
   isDelBtnActive = true,
 }: MonitorProps) => {
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
-
-  const { hintN1, hintMinusPlus, hintN2, hintEqual, hintResponse } = hint;
-  const n1 = exercise[0];
-  const n2 = Math.abs(+exercise[1]);
-  const nLast = exercise[exercise.length - 1];
+  const { exsParams } = useExercisesProvider();
 
   const exerciseClick = () => {
     if (columnClassName === styles.bigColumn) {
@@ -63,17 +47,13 @@ const Monitor = ({
     <section className={styles.Monitor} data-testid="Monitor">
       <div className={styles.displayWrapper}>
         <div className={styles.display} id="display">
-          {n1 !== undefined ? (
+          {exerciseParts[0] !== undefined ? (
             <>
-              {isColumn && (
+              {exsParams?.isColumn && (
                 <ColumnExercise
                   clickHandler={columnClick}
-                  n1={n1}
-                  n2={n2}
-                  nLast={nLast}
-                  minusPlus={minusPlus}
+                  exerciseParts={exerciseParts}
                   userAnswer={userAnswer}
-                  askElemNumbers={askElemNumbers}
                   className={columnClassName}
                 />
               )}
@@ -89,36 +69,15 @@ const Monitor = ({
                       : exerciseClassNames.join(' ')
                 }
               >
-                <ExercisePart
-                  rightValue={n1}
-                  hint={hintN1}
-                  userAnswer={userAnswer}
-                  isQuestionPart={askElemNumbers.includes(0)}
-                />
-                <ExercisePart
-                  rightValue={minusPlus}
-                  hint={hintMinusPlus}
-                  userAnswer={userAnswer}
-                  isQuestionPart={false}
-                />
-                <ExercisePart
-                  rightValue={n2}
-                  hint={hintN2}
-                  userAnswer={userAnswer}
-                  isQuestionPart={askElemNumbers.includes(1)}
-                />
-                <ExercisePart
-                  rightValue={equalMark}
-                  hint={hintEqual}
-                  userAnswer={userAnswer}
-                  isQuestionPart={isInequalCat && askElemNumbers.includes(2)}
-                />
-                <ExercisePart
-                  rightValue={nLast}
-                  hint={hintResponse}
-                  userAnswer={userAnswer}
-                  isQuestionPart={!isInequalCat && askElemNumbers.includes(2)}
-                />
+                {exerciseParts.map(({ value, hint, isQuestionPart }, indx) => (
+                  <ExercisePart
+                    key={indx}
+                    rightValue={value}
+                    hint={hint}
+                    userAnswer={userAnswer}
+                    isQuestionPart={isQuestionPart}
+                  />
+                ))}
               </button>
             </>
           ) : (

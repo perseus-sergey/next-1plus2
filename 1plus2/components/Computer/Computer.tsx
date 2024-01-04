@@ -1,22 +1,25 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
-import { IExerciseComponentProps } from '../ExercisePage/ExercisePage';
 import Keyboard from '../Keyboard/Keyboard';
 import { Title } from '../Title/Title';
-import { arrayShift, sleep } from '@/libs/utils';
-import { ESoundPaths } from '@/libs/ESoundPaths';
+import { arrayShift, capitalizedFirstChar, sleep } from '@/libs/utils';
 import {
   EExerciseCategories,
   QUESTION_MARK,
+  categoriesMap,
   keyboardInEqualKeys,
 } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
-
-export interface IComputerProps extends IExerciseComponentProps {
-  exerciseArray: (string | number)[][];
-}
+import CatComplete, { EndLevel } from '../CatComplete/CatComplete';
+import { IExsPart, makeExerciseArray, makeExerciseParts } from '@/libs/exercises/math';
+import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
+import { useLangProvider } from '@/libs/context/LangProvider';
+import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
+import { useRouter } from 'next/navigation';
+import { useSound } from '@/libs/hooks/useSound';
+import { useCatComplTitle } from '@/libs/hooks/useCatComplTitle';
 
 export enum EIsRightAnswer {
   'NOT',
@@ -24,31 +27,66 @@ export enum EIsRightAnswer {
   'BAD',
 }
 
-const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) => {
-  const [exercises, setExercises] = useState(exerciseArray);
+const Computer = () => {
+  const [exerciseParts, setExerciseParts] = useState<IExsPart[]>([]);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
-  const [badAnswers, setBadAnswers] = useState<(string | number)[][]>([]);
-  const [mistakes, setMistakes] = useState<string[]>([]);
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
+  const [exsQuant, setExsQuant] = useState(0);
+  const [_mistakes, setMistakes] = useState<(number | string)[][]>([]);
+  const [_mistakesStr, setMistakesStr] = useState<string[]>([]);
 
-  const [minusPlus, askElemNumbers, hint] = useExerciseParams(cat, exercises);
+  const mistakes = useMemo(() => _mistakes, [_mistakes]);
+  const mistakesStr = useMemo(() => _mistakesStr, [_mistakesStr]);
 
-  const audioDel = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_DEL) : undefined
+  const {
+    exsParams,
+    category,
+    setCategory,
+    exercises,
+    setExercises,
+    chosenMaxNum,
+    setExsParams,
+    isCatFinish,
+    setIsCatFinish,
+  } = useExercisesProvider();
+
+  const { language } = useLangProvider();
+
+  const { levelsArray, shiftLevelsArray, isLevel } = useLevelsProvider();
+
+  const { catCompleteTitle, btnCatCompleteTitle } = useCatComplTitle(
+    language,
+    exsQuant,
+    mistakes.length,
+    isCatFinish
   );
 
-  const audioKey = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_KEY) : undefined
-  );
+  const [minusPlus, askElemNumbers, hint] = useExerciseParams(category, exercises);
 
-  const audioRightAnsw = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_RIGHT_ANSWER) : undefined
-  );
+  const router = useRouter();
 
-  const audioWrongAnsw = useRef<HTMLAudioElement | undefined>(
-    typeof Audio !== 'undefined' ? new Audio(ESoundPaths.AUDIO_WRONG_ANSWER) : undefined
-  );
+  useEffect(() => {
+    if (isCatFinish) return;
+    setExsQuant(exercises.length);
+  }, [isCatFinish]);
+
+  useEffect(() => {
+    if (!exercises.length) return;
+
+    setExerciseParts(
+      makeExerciseParts(
+        askElemNumbers,
+        exercises[0],
+        minusPlus,
+        exsParams?.equalMark,
+        category === EExerciseCategories['inequality'],
+        hint
+      )
+    );
+  }, [category, exercises, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
+
+  const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish } = useSound();
 
   const enterClickHandler = () => {
     if (!exercises.length || answerElementValue === QUESTION_MARK) return;
@@ -62,6 +100,12 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
     audioDel.current?.play();
   };
 
+  const finishCat = () => {
+    audioCatFinish.current?.play();
+    setExercises(arrayShift(exercises));
+    setIsCatFinish(true);
+  };
+
   const checkAnswer = async () => {
     const properAnswer = isNaN(+exercises[0][askElemNumbers[0]])
       ? exercises[0][askElemNumbers[0]]
@@ -71,9 +115,11 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
 
     await sleep();
 
-    isRightAnswer
-      ? setExercises(arrayShift(exercises))
-      : setExercises([...exercises, exercises[0]]);
+    !isRightAnswer
+      ? setExercises([...exercises, exercises[0]])
+      : exercises.length < 2
+        ? finishCat()
+        : setExercises(arrayShift(exercises));
 
     setIsRightAnswer(EIsRightAnswer.NOT);
     setAnswerElementValue(QUESTION_MARK);
@@ -86,21 +132,17 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
   };
 
   const badAnswer = () => {
-    const [n1, n2] = exercises[0];
     audioWrongAnsw.current?.play();
-    setBadAnswers([...badAnswers, exercises[0]]);
-    // TODO: change for each cat
-    setMistakes([...mistakes, `${n1} ${minusPlus} ${n2} ${'='} ${answerElementValue}`]);
+    setMistakes([...mistakes, exercises[0]]);
+
+    setMistakesStr([
+      ...mistakesStr,
+      exerciseParts
+        .map(({ value, isQuestionPart }) => (isQuestionPart ? `[${answerElementValue}]` : value))
+        .join(' '),
+    ]);
     setIsRightAnswer(EIsRightAnswer.BAD);
   };
-
-  // function addError (){
-  //   error++;
-  //   error_spn.textContent = `${msg.mistks}: ${error}`;
-  // //	progressbar_span.textContent = `${arrTest.length}(${error})`;
-  //   circles_ul.classList.add('bad_li');
-  //   arrShowErr.push(spn_left.innerHTML + spn_mp.innerHTML + spn_centr.innerHTML + spn_eq.innerHTML + spn_right.innerHTML);
-  // }
 
   const keyboardBtnClickHandler = (value: string) => {
     audioKey.current?.play();
@@ -111,33 +153,60 @@ const Computer = ({ lang, exerciseParams, exerciseArray, cat }: IComputerProps) 
     );
   };
 
-  if (!lang || !exerciseParams) return <h2>Loading...</h2>;
-  if (!exercises.length) return <h2>{JSON.stringify(mistakes)}</h2>;
+  const onNextCatBtnClicked = () => {
+    if (mistakes.length) {
+      setExercises(mistakes);
+    } else {
+      if (!isLevel) return router.push(`/${language}/math`);
+
+      shiftLevelsArray();
+      setCategory(levelsArray[1]);
+      setExsParams(categoriesMap.get(EExerciseCategories[levelsArray[1]]));
+      setExercises(makeExerciseArray(levelsArray[1], chosenMaxNum));
+    }
+    setIsCatFinish(false);
+    setMistakes([]);
+    setMistakesStr([]);
+  };
+
+  if (!language || !exsParams) return <h2>Loading...</h2>;
+
+  if (isCatFinish)
+    return (
+      <CatComplete
+        title={catCompleteTitle}
+        btnTitle={btnCatCompleteTitle}
+        onNextCatBtnClicked={onNextCatBtnClicked}
+        exsQuant={exsQuant}
+        mistakes={mistakes}
+        mistakesStr={mistakesStr}
+      />
+    );
+
+  if (isLevel && (!category || category === EExerciseCategories['level']))
+    return <EndLevel language={language} />;
 
   return (
     <>
       <Title
-        name={`${getTitleFromMap(EMessageNames.LEFT_EXS_NUM_MSG, lang)}: ${exercises.length}`}
+        name={`${capitalizedFirstChar(category)} - ${getTitleFromMap(
+          EMessageNames.LEFT_EXS_NUM_MSG,
+          language
+        )}: ${exercises.length} Mistakes: ${mistakes.length}`}
       />
       <section className={styles.Computer} data-testid="Computer">
         <Monitor
-          exercise={exercises[0]}
-          hint={hint}
-          minusPlus={minusPlus}
+          exerciseParts={exerciseParts}
           userAnswer={answerElementValue}
-          askElemNumbers={askElemNumbers}
-          equalMark={exerciseParams.equalMark}
           arrExsLength={exercises.length}
           isRightAnswer={isRightAnswer}
-          isDelBtnActive={!!Number(exerciseParams.keyboardKeys[0])}
-          isInequalCat={cat === EExerciseCategories['inequality']}
+          isDelBtnActive={!!Number(exsParams.keyboardKeys[0])}
           clearBtnHandler={clearBtnHandler}
-          isColumn={exerciseParams.isColumn}
         />
         <Keyboard
           keyboardBtnClickHandler={keyboardBtnClickHandler}
-          keyboardKeys={exerciseParams.keyboardKeys}
-          enterBtnTitle={getTitleFromMap(EMessageNames.BTN_ENTER, lang)}
+          keyboardKeys={exsParams.keyboardKeys}
+          enterBtnTitle={getTitleFromMap(EMessageNames.BTN_ENTER, language)}
           enterClickHandler={enterClickHandler}
           isEnterDisabled={isEnterDisabled}
         />

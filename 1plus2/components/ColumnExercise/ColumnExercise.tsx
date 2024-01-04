@@ -1,24 +1,16 @@
-import { TMinusPlus } from '@/libs/exercises/math.model';
+import { IExsPart } from '@/libs/exercises/math';
 import styles from './ColumnExercise.module.scss';
 
 interface IColumnExerciseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   clickHandler: () => void;
-  n1: string | number;
-  n2: number;
-  nLast: string | number;
+  exerciseParts: IExsPart[];
   userAnswer: string;
-  minusPlus: TMinusPlus;
-  askElemNumbers: number[];
 }
 
 const ColumnExercise = ({
   clickHandler,
-  n1,
-  n2,
-  nLast,
+  exerciseParts,
   userAnswer,
-  minusPlus,
-  askElemNumbers,
   className,
 }: IColumnExerciseProps) => (
   <button
@@ -31,28 +23,28 @@ const ColumnExercise = ({
       <tbody>
         <tr>
           <td className={styles.minusPlus} rowSpan={2}>
-            {minusPlus}
+            {exerciseParts[1].value}
           </td>
-          {askElemNumbers.includes(0) ? (
+          {exerciseParts[0].isQuestionPart ? (
             <td className={styles.exsAskPart}>{userAnswer}</td>
           ) : (
-            <td>{n1}</td>
+            <td>{exerciseParts[0].value}</td>
           )}
         </tr>
         <tr>
-          {askElemNumbers.includes(1) ? (
+          {exerciseParts[2].isQuestionPart ? (
             <td className={styles.exsAskPart}>{userAnswer}</td>
           ) : (
-            <td>{n2}</td>
+            <td>{exerciseParts[2].value}</td>
           )}
         </tr>
         <tr>
-          {askElemNumbers.includes(2) ? (
+          {exerciseParts[4].isQuestionPart ? (
             <td colSpan={2} className={styles.exsAskPart}>
               {userAnswer}
             </td>
           ) : (
-            <td colSpan={2}>{nLast}</td>
+            <td colSpan={2}>{exerciseParts[4].value}</td>
           )}
         </tr>
       </tbody>

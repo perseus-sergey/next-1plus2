@@ -33,6 +33,7 @@ export enum EExerciseCategories {
   'composition' = 'composition',
   'equal-five' = 'equal-five',
   'equal-over-ten' = 'equal-over-ten',
+  'level' = 'level',
 }
 
 export const categoriesMap: TCatMap = new Map([
@@ -116,7 +117,7 @@ export const categoriesMap: TCatMap = new Map([
     {
       [ELang.en]: { title: 'title', description: '10 + 5' },
       [ELang.ua]: { title: 'назва', description: '10 + 5' },
-      exercise: { start: 50, max: 100, step: 10 },
+      exercise: { start: 20, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
       isColumn: true,
@@ -124,6 +125,17 @@ export const categoriesMap: TCatMap = new Map([
   ],
   [
     EExerciseCategories['equal-over-ten'],
+    {
+      [ELang.en]: { title: 'title', description: '7 + 8' },
+      [ELang.ua]: { title: 'назва', description: '7 + 8' },
+      exercise: { start: 10, max: 100, step: 10 },
+      equalMark: '=',
+      keyboardKeys: keyboardNumKeys,
+      isColumn: true,
+    },
+  ],
+  [
+    EExerciseCategories['level'],
     {
       [ELang.en]: { title: 'title', description: '7 + 8' },
       [ELang.ua]: { title: 'назва', description: '7 + 8' },
