@@ -6,6 +6,7 @@ import { EIsRightAnswer } from '../Computer/Computer';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
 import { useState } from 'react';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
+import { Loader } from '../loaders/Loader';
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
@@ -81,7 +82,9 @@ const Monitor = ({
               </button>
             </>
           ) : (
-            <span>Loading...</span>
+            <span>
+              <Loader /> Loading...
+            </span>
           )}
         </div>
       </div>
