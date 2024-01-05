@@ -7,14 +7,17 @@ import ColumnExercise from '../ColumnExercise/ColumnExercise';
 import { useState } from 'react';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { Loader } from '../loaders/Loader';
+import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
+import { useLangProvider } from '@/libs/context/LangProvider';
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
   userAnswer: string;
   arrExsLength: number;
   isRightAnswer: EIsRightAnswer;
+  exsRemains: number;
+  mistakes: number;
   clearBtnHandler?: () => void;
-  // isColumn: boolean | undefined;
   isDelBtnActive?: boolean;
 }
 
@@ -22,6 +25,8 @@ const Monitor = ({
   exerciseParts,
   userAnswer,
   isRightAnswer,
+  exsRemains,
+  mistakes,
   clearBtnHandler,
   arrExsLength = 10,
   isDelBtnActive = true,
@@ -29,6 +34,7 @@ const Monitor = ({
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
   const { exsParams } = useExercisesProvider();
+  const { language } = useLangProvider();
 
   const exerciseClick = () => {
     if (columnClassName === styles.bigColumn) {
@@ -46,6 +52,16 @@ const Monitor = ({
 
   return (
     <section className={styles.Monitor} data-testid="Monitor">
+      <div className={styles.monitorHeader}>
+        <div className={styles.exsQuant}>{`${getTitleFromMap(
+          EMessageNames.LEFT_EXS_NUM_MSG,
+          language
+        )}: ${exsRemains}`}</div>
+        <div className={styles.mistakeQuant}>{`${getTitleFromMap(
+          EMessageNames.MISTAKES,
+          language
+        )}: ${mistakes}`}</div>
+      </div>
       <div className={styles.displayWrapper}>
         <div className={styles.display} id="display">
           {exerciseParts[0] !== undefined ? (

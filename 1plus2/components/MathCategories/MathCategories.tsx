@@ -4,7 +4,7 @@ import { Title } from '../Title/Title';
 import styles from './MathCategories.module.scss';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';
-import { categoriesMap } from '@/libs/exercises/math.model';
+import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
 import { getCatFromMap } from '@/libs/exercises/math';
 
 const MathCategories = (props: ICatPageProps) => {
@@ -14,11 +14,13 @@ const MathCategories = (props: ICatPageProps) => {
     <section data-testid="MathCategories">
       <Title name={getTitleFromMap(EMessageNames.CATEGORY_CHOICE, lang)} />
       <div className={styles.MathCategories}>
-        {[...categoriesMap.keys()].map((catSlug) => (
-          <Link href={`/${lang}/math/category/${catSlug}`} key={catSlug}>
-            <TextButton>{getCatFromMap(catSlug, lang).description}</TextButton>
-          </Link>
-        ))}
+        {[...categoriesMap.keys()]
+          .filter((c) => c !== EExerciseCategories['level'])
+          .map((catSlug) => (
+            <Link href={`/${lang}/math/category/${catSlug}`} key={catSlug}>
+              <TextButton>{getCatFromMap(catSlug, lang).description}</TextButton>
+            </Link>
+          ))}
       </div>
     </section>
   );

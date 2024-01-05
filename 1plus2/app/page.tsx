@@ -1,14 +1,20 @@
 import Link from 'next/link';
 import styles from './page.module.scss';
-import { ELang } from '@/libs/langMessages';
+import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
+import { Title } from '@/components/Title/Title';
+import TextButton from '@/components/TextButton/TextButton';
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <h1>Home Page</h1>
+      <Title name={getTitleFromMap(EMessageNames.TITLE_HOME_PAGE)} />
       <div className={styles.links}>
-        <Link href={`/${ELang['ua']}/math`}>Математика</Link>
-        <Link href={`/${ELang['en']}/math`}>Maths</Link>
+        <Link href={`/${ELang['ua']}/math`}>
+          <TextButton>{getTitleFromMap(EMessageNames.BTN_MATH, ELang.ua)}</TextButton>
+        </Link>
+        <Link href={`/${ELang['en']}/math`}>
+          <TextButton>{getTitleFromMap(EMessageNames.BTN_MATH, ELang.en)}</TextButton>
+        </Link>
       </div>
     </main>
   );

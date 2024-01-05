@@ -13,6 +13,8 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
+  --color-title-h1: 185, 218, 242, 1;
+
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,
     #16abff33 0deg,
@@ -117,7 +119,7 @@ button, a {
 .section-title {
   display: flex;
   justify-content: center;
-  color: rgba(185, 218, 242, 1);
+  color: rgba(var(--color-title-h1));
   padding: 2vh;
   font-weight: bold;
   text-align: center;
