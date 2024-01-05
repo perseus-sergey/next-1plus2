@@ -1,1 +1,7 @@
-export default () => <h2>Loading...</h2>;
+import { Loader } from '@/components/loaders/Loader';
+
+export default () => (
+  <h2>
+    <Loader /> Loading...
+  </h2>
+);

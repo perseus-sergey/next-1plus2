@@ -8,6 +8,7 @@ import Computer from '../Computer/Computer';
 import { EExerciseCategories, IExerciseParams, categoriesMap } from '@/libs/exercises/math.model';
 import MathExercisesProvider from '@/libs/context/MathExercisesProvider';
 import LanguageProvider from '@/libs/context/LangProvider';
+import { Loader } from '../loaders/Loader';
 
 const getLevels = (maxNum: number) => {
   switch (true) {
@@ -56,7 +57,13 @@ const ExercisePage = ({ cat, chosenMaxNum, lang }: IExerciseComponentProps) => {
     setExerciseArray(makeExerciseArray(currCat, chosenMaxNum));
   }, []);
 
-  if (!exerciseArray[0].length || !exerciseArray.length) return <h2>Loading...</h2>;
+  if (!exerciseArray[0].length || !exerciseArray.length)
+    return (
+      <h2>
+        <Loader />
+        Loading...
+      </h2>
+    );
 
   return (
     <section data-testid="ExercisePage" style={{ width: '100%' }}>

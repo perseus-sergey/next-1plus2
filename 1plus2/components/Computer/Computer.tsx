@@ -20,6 +20,7 @@ import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
 import { useRouter } from 'next/navigation';
 import { useSound } from '@/libs/hooks/useSound';
 import { useCatComplTitle } from '@/libs/hooks/useCatComplTitle';
+import { Loader } from '../loaders/Loader';
 
 export enum EIsRightAnswer {
   'NOT',
@@ -169,7 +170,12 @@ const Computer = () => {
     setMistakesStr([]);
   };
 
-  if (!language || !exsParams) return <h2>Loading...</h2>;
+  if (!language || !exsParams)
+    return (
+      <h2>
+        <Loader /> Loading...
+      </h2>
+    );
 
   if (isCatFinish)
     return (
