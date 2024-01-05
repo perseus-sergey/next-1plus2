@@ -6,6 +6,7 @@ import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';
+import { getCatFromMap } from '@/libs/exercises/math';
 
 interface ICatComplete {
   exsQuant: number;
@@ -43,7 +44,8 @@ const CatComplete = ({
     <section className={styles.CatComplete} data-testid="CatComplete">
       <Title name={title} />
       <p>
-        {getTitleFromMap(EMessageNames.CATEGORY, language)}: {capitalizedFirstChar(category)}
+        {getTitleFromMap(EMessageNames.CATEGORY, language)}:{' '}
+        {capitalizedFirstChar(getCatFromMap(category, language).title)}
       </p>
       <p>
         {getTitleFromMap(EMessageNames.MISTAKES, language)}: {mistakes.length}

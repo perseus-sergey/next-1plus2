@@ -40,8 +40,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['sequence'],
     {
-      [ELang.en]: { title: 'title', description: '1 2 ?' },
-      [ELang.ua]: { title: 'назва', description: '1 2 ?' },
+      [ELang.en]: { title: 'Sequence', description: '1 2 ?' },
+      [ELang.ua]: { title: 'Послідовність', description: '1 2 ?' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '',
       keyboardKeys: keyboardNumKeys,
@@ -50,8 +50,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['equality'],
     {
-      [ELang.en]: { title: 'title', description: '1 + 2' },
-      [ELang.ua]: { title: 'назва', description: '1 + 2' },
+      [ELang.en]: { title: 'Equality', description: '1 + 2' },
+      [ELang.ua]: { title: 'Рівність', description: '1 + 2' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
@@ -61,8 +61,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['pairs'],
     {
-      [ELang.en]: { title: 'title', description: '1 + 1' },
-      [ELang.ua]: { title: 'назва', description: '1 + 1' },
+      [ELang.en]: { title: 'Pairs', description: '1 + 1' },
+      [ELang.ua]: { title: 'Пари', description: '1 + 1' },
       exercise: { start: 20, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
@@ -72,8 +72,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['link-equality'],
     {
-      [ELang.en]: { title: 'title', description: '1 + ?' },
-      [ELang.ua]: { title: 'назва', description: '1 + ?' },
+      [ELang.en]: { title: 'Links', description: '1 + ?' },
+      [ELang.ua]: { title: "Зв'язки", description: '1 + ?' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
@@ -83,8 +83,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['inequality'],
     {
-      [ELang.en]: { title: 'title', description: '< = >' },
-      [ELang.ua]: { title: 'назва', description: '< = >' },
+      [ELang.en]: { title: 'Inequality', description: '< = >' },
+      [ELang.ua]: { title: 'Нерівність', description: '< = >' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '',
       keyboardKeys: keyboardInEqualKeys,
@@ -93,8 +93,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['equal-ten'],
     {
-      [ELang.en]: { title: 'title', description: '1 + 10' },
-      [ELang.ua]: { title: 'назва', description: '1 + 10' },
+      [ELang.en]: { title: 'Tens', description: '1 + 10' },
+      [ELang.ua]: { title: 'Десятки', description: '1 + 10' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
@@ -104,8 +104,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['composition'],
     {
-      [ELang.en]: { title: 'title', description: 'Composition 11..19' },
-      [ELang.ua]: { title: 'назва', description: 'Склад 11..19' },
+      [ELang.en]: { title: 'Composition', description: 'Composition 11..19' },
+      [ELang.ua]: { title: 'Склад', description: 'Склад 11..19' },
       exercise: { start: 5, max: 20, step: 1 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
@@ -115,8 +115,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['equal-five'],
     {
-      [ELang.en]: { title: 'title', description: '10 + 5' },
-      [ELang.ua]: { title: 'назва', description: '10 + 5' },
+      [ELang.en]: { title: 'Fives', description: '10 + 5' },
+      [ELang.ua]: { title: "П'ятірки", description: '10 + 5' },
       exercise: { start: 20, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
@@ -126,8 +126,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['equal-over-ten'],
     {
-      [ELang.en]: { title: 'title', description: '7 + 8' },
-      [ELang.ua]: { title: 'назва', description: '7 + 8' },
+      [ELang.en]: { title: 'Over tens', description: '7 + 8' },
+      [ELang.ua]: { title: 'Через десятки', description: '7 + 8' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
@@ -137,8 +137,8 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['level'],
     {
-      [ELang.en]: { title: 'title', description: '7 + 8' },
-      [ELang.ua]: { title: 'назва', description: '7 + 8' },
+      [ELang.en]: { title: 'Levels', description: '7 + 8' },
+      [ELang.ua]: { title: 'Рівні', description: '7 + 8' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,

@@ -13,7 +13,12 @@ import {
 import Monitor from '../Monitor/Monitor';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
 import CatComplete, { EndLevel } from '../CatComplete/CatComplete';
-import { IExsPart, makeExerciseArray, makeExerciseParts } from '@/libs/exercises/math';
+import {
+  IExsPart,
+  getCatFromMap,
+  makeExerciseArray,
+  makeExerciseParts,
+} from '@/libs/exercises/math';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { useLevelsProvider } from '@/libs/context/MathLevelProvider';
@@ -63,7 +68,7 @@ const Computer = () => {
     isCatFinish
   );
 
-  const [minusPlus, askElemNumbers, hint] = useExerciseParams(category, exercises);
+  const [minusPlus, askElemNumbers, hint] = useExerciseParams(category, exercises[0]);
 
   const router = useRouter();
 
@@ -194,12 +199,7 @@ const Computer = () => {
 
   return (
     <>
-      <Title
-        name={`${capitalizedFirstChar(category)} - ${getTitleFromMap(
-          EMessageNames.LEFT_EXS_NUM_MSG,
-          language
-        )}: ${exercises.length} Mistakes: ${mistakes.length}`}
-      />
+      <Title name={`${capitalizedFirstChar(getCatFromMap(category, language).title)}`} />
       <section className={styles.Computer} data-testid="Computer">
         <Monitor
           exerciseParts={exerciseParts}
@@ -208,6 +208,8 @@ const Computer = () => {
           isRightAnswer={isRightAnswer}
           isDelBtnActive={!!Number(exsParams.keyboardKeys[0])}
           clearBtnHandler={clearBtnHandler}
+          exsRemains={exercises.length}
+          mistakes={mistakes.length}
         />
         <Keyboard
           keyboardBtnClickHandler={keyboardBtnClickHandler}

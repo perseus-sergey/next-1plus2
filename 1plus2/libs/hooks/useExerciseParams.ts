@@ -99,7 +99,7 @@ const getExsSequenceParams = (exercise: (number | string)[]): [TMathHint, number
 
 export const useExerciseParams = (
   cat: EExerciseCategories,
-  exercises: (string | number)[][]
+  currentExercise: (string | number)[]
 ): [TMinusPlus, number[], TMathHint] => {
   const [minusPlus, setMinusPlus] = useState<TMinusPlus>('');
   const [askElemNumbers, setAskElemNumbers] = useState<number[]>([2]);
@@ -109,10 +109,10 @@ export const useExerciseParams = (
     part1 === undefined || isNaN(+part1) ? '' : +part1 >= 0 ? '+' : '-';
 
   const setExerciseParams = useCallback(() => {
-    const [part0, part1] = exercises[0];
+    const [part0, part1] = currentExercise;
 
     if (cat === EExerciseCategories['sequence']) {
-      const [OMathHint, r] = getExsSequenceParams(exercises[0]);
+      const [OMathHint, r] = getExsSequenceParams(currentExercise);
 
       setHint(OMathHint);
       setMinusPlus('');
@@ -120,32 +120,36 @@ export const useExerciseParams = (
     } else if (cat === EExerciseCategories['pairs']) {
       setMinusPlus('+');
       setAskElemNumbers(Math.floor(Math.random() * 2) ? [2] : [0, 1]);
-      setHint(getHintDefault(exercises[0]));
+      setHint(getHintDefault(currentExercise));
     } else if (cat === EExerciseCategories['link-equality']) {
-      const [OMathHint, r] = getExsLinkParams(exercises[0]);
+      const [OMathHint, r] = getExsLinkParams(currentExercise);
 
       setHint(OMathHint);
       setAskElemNumbers([r]);
       setMinusPlus(getMinusPlus(part1));
     } else if (cat === EExerciseCategories['inequality']) {
+      setAskElemNumbers([2]);
       setMinusPlus(part0 === '' ? '' : getMinusPlus(part1));
-      setHint(getHintInequal(exercises[0]));
+      setHint(getHintInequal(currentExercise));
     } else if (cat === EExerciseCategories['composition']) {
+      setHint(mathHintEmpty);
       setMinusPlus(getMinusPlus(part1));
       setAskElemNumbers(Math.floor(Math.random() * 2) ? [1] : [0]);
     } else if (cat === EExerciseCategories['equal-over-ten']) {
+      setAskElemNumbers([2]);
       setHint(getHintOverTen(+part0, +part1));
       setMinusPlus(getMinusPlus(part1));
     } else {
+      setAskElemNumbers([2]);
       setMinusPlus(getMinusPlus(part1));
-      setHint(getHintDefault(exercises[0]));
+      setHint(getHintDefault(currentExercise));
     }
-  }, [cat, exercises]);
+  }, [cat, currentExercise]);
 
   useEffect(() => {
-    if (!exercises.length) return;
+    if (!currentExercise) return;
     setExerciseParams();
-  }, [setExerciseParams, exercises]);
+  }, [setExerciseParams, currentExercise]);
 
   return [minusPlus, askElemNumbers, hint];
 };

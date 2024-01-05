@@ -29,6 +29,8 @@ export enum EMessageNames {
   'BTN_LEVELS' = 'btnLevels',
   'BTN_CAT' = 'btnCat',
   'BTN_ENTER' = 'btnEnter',
+  'BTN_MATH' = 'btnMath',
+  'TITLE_HOME_PAGE' = 'titleHomePage',
 }
 
 export const titleMap: TTitleMap = new Map([
@@ -58,6 +60,8 @@ export const titleMap: TTitleMap = new Map([
   [EMessageNames.BTN_LEVELS, { [ELang.en]: 'Levels', [ELang.ua]: 'Рівні' }],
   [EMessageNames.BTN_CAT, { [ELang.en]: 'Categories', [ELang.ua]: 'Категорії' }],
   [EMessageNames.BTN_ENTER, { [ELang.en]: 'Confirm', [ELang.ua]: 'Далі' }],
+  [EMessageNames.BTN_MATH, { [ELang.en]: 'Maths', [ELang.ua]: 'Математика' }],
+  [EMessageNames.TITLE_HOME_PAGE, { [ELang.en]: 'Home Page', [ELang.ua]: 'Домашня Сторінка' }],
 ]);
 
 export enum EPageTitles {
