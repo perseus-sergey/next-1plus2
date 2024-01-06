@@ -62,7 +62,6 @@ const Computer = () => {
   const { levelsArray, shiftLevelsArray, isLevel } = useLevelsProvider();
 
   const { catCompleteTitle, btnCatCompleteTitle } = useCatComplTitle(
-    language,
     exsQuant,
     mistakes.length,
     isCatFinish
