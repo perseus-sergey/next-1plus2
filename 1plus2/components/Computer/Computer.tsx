@@ -91,7 +91,8 @@ const Computer = () => {
     );
   }, [category, exercises, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
 
-  const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish } = useSound();
+  const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
+    useSound();
 
   const enterClickHandler = () => {
     if (!exercises.length || answerElementValue === QUESTION_MARK) return;
@@ -182,7 +183,6 @@ const Computer = () => {
     );
 
   if (isCatFinish)
-    // if (isCatFinish || mistakes.length > 2)
     return (
       <CatComplete
         title={catCompleteTitle}
@@ -194,8 +194,10 @@ const Computer = () => {
       />
     );
 
-  if (isLevel && (!category || category === EExerciseCategories['level']))
-    return <EndLevel language={language} />;
+  if (isLevel && (!category || category === EExerciseCategories['level'])) {
+    audioLevelFinish.current?.play();
+    return <EndLevel language={language} maxNumb={chosenMaxNum} />;
+  }
 
   return (
     <>

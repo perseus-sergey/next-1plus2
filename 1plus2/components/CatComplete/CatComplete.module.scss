@@ -1,3 +1,37 @@
+.EndLevelTitle {
+  color: #d6ecff;
+  animation: animEndLevel 2s linear;
+
+  @keyframes animEndLevel {
+    0% {
+      transform: translateY(1000px) rotate(720deg) scale(0);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0) rotate(0deg) scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+.endLevelBtn {
+  animation: animEndLevelBtn 2s linear;
+
+  @keyframes animEndLevelBtn {
+    0% {
+      transform: translateY(-100px) scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(200px) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+}
+
 .titleH1 {
   animation: anim_h1 0.6s linear;
 
