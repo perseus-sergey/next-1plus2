@@ -94,6 +94,8 @@ const Computer = () => {
   const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
     useSound();
 
+  useEffect(() => console.log('Comp Render'), [exercises]);
+
   const enterClickHandler = () => {
     if (!exercises.length || answerElementValue === QUESTION_MARK) return;
     setIsEnterDisabled(true);
@@ -210,7 +212,6 @@ const Computer = () => {
           isRightAnswer={isRightAnswer}
           isDelBtnActive={!!Number(exsParams.keyboardKeys[0])}
           clearBtnHandler={clearBtnHandler}
-          exsRemains={exercises.length}
           mistakes={mistakes.length}
         />
         <Keyboard

@@ -15,7 +15,6 @@ interface MonitorProps {
   userAnswer: string;
   arrExsLength: number;
   isRightAnswer: EIsRightAnswer;
-  exsRemains: number;
   mistakes: number;
   clearBtnHandler?: () => void;
   isDelBtnActive?: boolean;
@@ -25,7 +24,6 @@ const Monitor = ({
   exerciseParts,
   userAnswer,
   isRightAnswer,
-  exsRemains,
   mistakes,
   clearBtnHandler,
   arrExsLength = 10,
@@ -56,7 +54,7 @@ const Monitor = ({
         <div className={styles.exsQuant}>{`${getTitleFromMap(
           EMessageNames.LEFT_EXS_NUM_MSG,
           language
-        )}: ${exsRemains}`}</div>
+        )}: ${arrExsLength}`}</div>
         {!!mistakes && (
           <div className={styles.mistakeQuant}>
             {`${getTitleFromMap(EMessageNames.MISTAKES, language)}: ${mistakes}`}
