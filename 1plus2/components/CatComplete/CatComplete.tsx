@@ -11,8 +11,8 @@ import { getCatFromMap } from '@/libs/exercises/math';
 interface ICatComplete {
   exsQuant: number;
   onNextCatBtnClicked: () => void;
-  title: string;
-  btnTitle: string;
+  title: EMessageNames;
+  btnTitle: EMessageNames;
   mistakes: (number | string)[][];
   mistakesStr: string[];
 }
@@ -41,20 +41,43 @@ const CatComplete = ({
   const { language } = useLangProvider();
 
   return (
-    <section className={styles.CatComplete} data-testid="CatComplete">
-      <Title name={title} />
-      <p>
-        {getTitleFromMap(EMessageNames.CATEGORY, language)}:{' '}
-        {capitalizedFirstChar(getCatFromMap(category, language).title)}
-      </p>
-      <p>
-        {getTitleFromMap(EMessageNames.MISTAKES, language)}: {mistakes.length}
-      </p>
-      {mistakesStr.map((mist, i) => (
-        <p key={i}>{mist}</p>
-      ))}
-      <TextButton onClick={onNextCatBtnClicked}>{btnTitle}</TextButton>
-    </section>
+    <>
+      <Title
+        name={getTitleFromMap(title, language)}
+        className={`${styles.titleH1} ${
+          title === EMessageNames.BRAVO
+            ? styles.goodTitle
+            : title === EMessageNames.NO_BAD
+              ? styles.normTitle
+              : styles.badTitle
+        }`}
+      />
+      <section className={styles.report}>
+        <section>
+          <h2 className={styles.reportTitle}>
+            {getTitleFromMap(EMessageNames.TITLE_REPORT, language)}:
+          </h2>
+          <p>
+            {getTitleFromMap(EMessageNames.CATEGORY, language)}:{' '}
+            {capitalizedFirstChar(getCatFromMap(category, language).title)}
+          </p>
+          <p>
+            {getTitleFromMap(EMessageNames.MISTAKES, language)}: {mistakes.length}
+          </p>
+        </section>
+        <section>
+          <h2 className={styles.reportTitle}>
+            {getTitleFromMap(EMessageNames.MISTAKES, language)}:
+          </h2>
+          {mistakesStr.map((mist, i) => (
+            <p key={i}>{mist}</p>
+          ))}
+        </section>
+      </section>
+      <div className={styles.confirmBtnWrapper}>
+        <TextButton onClick={onNextCatBtnClicked}>{getTitleFromMap(btnTitle, language)}</TextButton>
+      </div>
+    </>
   );
 };
 

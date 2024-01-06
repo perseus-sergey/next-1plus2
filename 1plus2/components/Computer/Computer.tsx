@@ -62,7 +62,6 @@ const Computer = () => {
   const { levelsArray, shiftLevelsArray, isLevel } = useLevelsProvider();
 
   const { catCompleteTitle, btnCatCompleteTitle } = useCatComplTitle(
-    language,
     exsQuant,
     mistakes.length,
     isCatFinish
@@ -183,6 +182,7 @@ const Computer = () => {
     );
 
   if (isCatFinish)
+    // if (isCatFinish || mistakes.length > 2)
     return (
       <CatComplete
         title={catCompleteTitle}

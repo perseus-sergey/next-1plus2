@@ -4,6 +4,10 @@
   flex-direction: column;
   gap: 5vh;
 
+  & > * {
+    flex: 1;
+  }
+
   @media screen and (orientation: portrait) {
     gap: 15vw;
   }

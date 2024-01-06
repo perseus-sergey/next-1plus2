@@ -106,7 +106,8 @@ a {
   text-decoration: none;
 }
 
-button, a {
+button,
+a {
   cursor: pointer;
 }
 
@@ -143,6 +144,19 @@ button, a {
     4px 6px 9px rgb(252 250 250 / 20%),
     0 6px 16px rgb(0 0 0 / 25%),
     0 11px 11px rgb(0 0 0 / 20%);
+  animation: anim_h1 0.6s linear;
+
+  @keyframes anim_h1 {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 
   @media screen and (orientation: portrait) {
     font-size: 7vw;
