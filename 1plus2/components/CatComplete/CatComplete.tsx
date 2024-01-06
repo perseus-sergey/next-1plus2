@@ -17,16 +17,18 @@ interface ICatComplete {
   mistakesStr: string[];
 }
 
-export const EndLevel = ({ language }: { language: ELang }) => (
-  <section className={styles.EndLevel}>
+export const EndLevel = ({ language, maxNumb }: { language: ELang; maxNumb: number }) => (
+  <>
     <Title
       className={styles.EndLevelTitle}
-      name={getTitleFromMap(EMessageNames.SHOW_END_LEVEL, language)}
+      name={`${maxNumb} ${getTitleFromMap(EMessageNames.SHOW_END_LEVEL, language)}`}
     />
-    <Link href={`/${language}/math`}>
-      <TextButton>{getTitleFromMap(EMessageNames.CONTINUE, language)}</TextButton>
-    </Link>
-  </section>
+    <div className={`${styles.endLevelBtn} ${styles.confirmBtnWrapper}`}>
+      <Link href={`/${language}/math`}>
+        <TextButton>{getTitleFromMap(EMessageNames.CONTINUE, language)}</TextButton>
+      </Link>
+    </div>
+  </>
 );
 
 const CatComplete = ({
