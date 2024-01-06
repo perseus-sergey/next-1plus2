@@ -137,12 +137,12 @@ export const categoriesMap: TCatMap = new Map([
   [
     EExerciseCategories['level'],
     {
-      [ELang.en]: { title: 'Levels', description: '7 + 8' },
-      [ELang.ua]: { title: 'Рівні', description: '7 + 8' },
+      [ELang.en]: { title: 'Levels', description: 'Levels' },
+      [ELang.ua]: { title: 'Рівні', description: 'Levels' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '=',
       keyboardKeys: keyboardNumKeys,
-      isColumn: true,
+      isColumn: false,
     },
   ],
 ]);

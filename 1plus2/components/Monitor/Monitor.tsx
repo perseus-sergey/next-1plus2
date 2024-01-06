@@ -57,10 +57,11 @@ const Monitor = ({
           EMessageNames.LEFT_EXS_NUM_MSG,
           language
         )}: ${exsRemains}`}</div>
-        <div className={styles.mistakeQuant}>{`${getTitleFromMap(
-          EMessageNames.MISTAKES,
-          language
-        )}: ${mistakes}`}</div>
+        {!!mistakes && (
+          <div className={styles.mistakeQuant}>
+            {`${getTitleFromMap(EMessageNames.MISTAKES, language)}: ${mistakes}`}
+          </div>
+        )}
       </div>
       <div className={styles.displayWrapper}>
         <div className={styles.display} id="display">

@@ -183,6 +183,7 @@ const Computer = () => {
     );
 
   if (isCatFinish)
+    // if (isCatFinish || mistakes.length > 2)
     return (
       <CatComplete
         title={catCompleteTitle}

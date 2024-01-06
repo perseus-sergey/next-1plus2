@@ -1,7 +1,10 @@
 .exercisePart {
   display: flex;
   flex-direction: column;
-  animation: anim_part 0.6s linear;
+
+  &.move {
+    animation: anim_part 0.6s linear;
+  }
 }
 
 @keyframes anim_part {
@@ -9,7 +12,7 @@
     transform: rotate(180deg) scale(0);
     opacity: 0;
   }
-  
+
   50% {
     transform: rotate(0) scale(1.5);
     opacity: 1;
@@ -31,7 +34,6 @@
   white-space: nowrap;
 }
 
-
 .exsAskPart {
-  color: #3EAEF2;
+  color: #3eaef2;
 }

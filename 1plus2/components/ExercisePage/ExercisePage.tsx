@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import styles from './ExercisePage.module.scss';
 import { ELang } from '@/libs/langMessages';
 import { makeExerciseArray } from '@/libs/exercises/math';
 import MathLevelProvider from '@/libs/context/MathLevelProvider';
@@ -40,7 +41,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     );
 
   return (
-    <section data-testid="ExercisePage" style={{ width: '100%' }}>
+    <section data-testid="ExercisePage" className={styles.ExercisePage}>
       <LanguageProvider language={lang}>
         <MathLevelProvider levels={levels} isLevel={isLevel}>
           <MathExercisesProvider
