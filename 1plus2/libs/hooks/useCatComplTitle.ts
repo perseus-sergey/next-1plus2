@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ELang, EMessageNames, getTitleFromMap } from '../langMessages';
+import { EMessageNames } from '../langMessages';
 
-export const useCatComplTitle = (
-  language: ELang,
-  exsQuant: number,
-  mistQuant: number,
-  isCatFinish = false
-) => {
+export const useCatComplTitle = (exsQuant: number, mistQuant: number, isCatFinish = false) => {
   const [{ catCompleteTitle, btnCatCompleteTitle }, setTitles] = useState({
     catCompleteTitle: EMessageNames.NO_BAD,
     btnCatCompleteTitle: EMessageNames.NO_BAD,
@@ -25,18 +20,6 @@ export const useCatComplTitle = (
       btnCatCompleteTitle: !mistakeCoeff ? EMessageNames.CONTINUE : EMessageNames.CORRECTION,
     });
   }, [isCatFinish]);
-  //   const mistakeCoeff = mistQuant / exsQuant;
-  //   setTitles({
-  //     catCompleteTitle: !mistakeCoeff
-  //       ? getTitleFromMap(EMessageNames.BRAVO, language)
-  //       : mistakeCoeff <= 0.2
-  //         ? getTitleFromMap(EMessageNames.NO_BAD, language)
-  //         : getTitleFromMap(EMessageNames.BAD, language),
-  //     btnCatCompleteTitle: !mistakeCoeff
-  //       ? getTitleFromMap(EMessageNames.CONTINUE, language)
-  //       : getTitleFromMap(EMessageNames.CORRECTION, language),
-  //   });
-  // }, [isCatFinish]);
 
   return { catCompleteTitle, btnCatCompleteTitle };
 };
