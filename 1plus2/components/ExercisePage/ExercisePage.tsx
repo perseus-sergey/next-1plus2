@@ -30,7 +30,7 @@ import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
 import { ELevelsActionKind, levelsReducer } from '@/libs/reducers/levelReducer';
 
 export enum EIsRightAnswer {
-  'NOT',
+  '_',
   'RIGHT',
   'BAD',
 }
@@ -51,7 +51,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   const [isLevel] = useState(cat === EExerciseCategories['level']);
   const [exerciseParts, setExerciseParts] = useState<IExsPart[]>([]);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
-  const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer.NOT);
+  const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer._);
   const [answerElementValue, setAnswerElementValue] = useState(QUESTION_MARK);
   const [mistakes, setMistakes] = useState<(number | string)[][]>([]);
   const [mistakesStr, setMistakesStr] = useState<string[]>([]);
@@ -101,7 +101,6 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   };
 
   const finishCat = () => {
-    console.log('🚀 ~  finishCat:');
     audioCatFinish.current?.play();
     setExerciseArray((arr) => arrayShift(arr));
     setIsCatFinish(true);
@@ -122,7 +121,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
         ? finishCat()
         : setExerciseArray((arr) => arrayShift(arr));
 
-    setIsRightAnswer(EIsRightAnswer.NOT);
+    setIsRightAnswer(EIsRightAnswer._);
     setAnswerElementValue(QUESTION_MARK);
     setIsEnterDisabled(false);
   };
