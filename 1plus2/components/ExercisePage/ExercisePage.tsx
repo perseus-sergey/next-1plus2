@@ -195,7 +195,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     return (
       <h2>
         <Loader />
-        Loading...
+        Loading....
       </h2>
     );
   if (!lang || !exsParams || !exerciseParts)
