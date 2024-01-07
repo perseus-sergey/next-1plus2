@@ -4,7 +4,6 @@ import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
 import { useState } from 'react';
-import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
@@ -16,6 +15,7 @@ interface MonitorProps {
   arrExsLength: number;
   isRightAnswer: EIsRightAnswer;
   mistakes: number;
+  isColumn: boolean | undefined;
   clearBtnHandler?: () => void;
   isDelBtnActive?: boolean;
 }
@@ -27,11 +27,11 @@ const Monitor = ({
   mistakes,
   clearBtnHandler,
   arrExsLength,
+  isColumn = false,
   isDelBtnActive = true,
 }: MonitorProps) => {
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
-  const { exsParams } = useExercisesProvider();
   const { language } = useLangProvider();
 
   const exerciseClick = () => {
@@ -65,7 +65,7 @@ const Monitor = ({
         <div className={styles.display} id="display">
           {exerciseParts[0] !== undefined ? (
             <>
-              {exsParams?.isColumn && (
+              {isColumn && (
                 <ColumnExercise
                   clickHandler={columnClick}
                   exerciseParts={exerciseParts}

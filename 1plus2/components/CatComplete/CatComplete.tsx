@@ -2,11 +2,11 @@ import styles from './CatComplete.module.scss';
 import TextButton from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
 import { capitalizedFirstChar } from '@/libs/utils';
-import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';
 import { getCatFromMap } from '@/libs/exercises/math';
+import { EExerciseCategories } from '@/libs/exercises/math.model';
 
 interface ICatComplete {
   exsQuant: number;
@@ -15,6 +15,7 @@ interface ICatComplete {
   btnTitle: EMessageNames;
   mistakes: (number | string)[][];
   mistakesStr: string[];
+  category: EExerciseCategories;
 }
 
 export const EndLevel = ({ language, maxNumb }: { language: ELang; maxNumb: number }) => (
@@ -35,9 +36,8 @@ const CatComplete = ({
   btnTitle,
   mistakes,
   mistakesStr,
+  category,
 }: ICatComplete) => {
-  const { category } = useExercisesProvider();
-
   const { language } = useLangProvider();
 
   return (
