@@ -2,13 +2,13 @@ import { IExsPart, NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
 import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
-import { EIsRightAnswer } from '../Computer/Computer';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
 import { useState } from 'react';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
+import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
@@ -26,7 +26,7 @@ const Monitor = ({
   isRightAnswer,
   mistakes,
   clearBtnHandler,
-  arrExsLength = 10,
+  arrExsLength,
   isDelBtnActive = true,
 }: MonitorProps) => {
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);

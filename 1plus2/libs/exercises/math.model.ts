@@ -1,6 +1,6 @@
 import { ELang } from '../langMessages';
 
-const keyboardNumKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+export const keyboardNumKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 export const keyboardInEqualKeys = ['<', '=', '>'];
 export type TUnequalMark = '>' | '<' | '=' | '';
 export type TMinusPlus = '-' | '+' | '';

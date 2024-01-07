@@ -1,5 +1,5 @@
 import { TMathHint } from '../hooks/useExerciseParams';
-import { ELang } from '../langMessages';
+import { ELang, EMessageNames } from '../langMessages';
 import { setArrCompos } from './composition/composition';
 import setArrEqual from './equal/equal';
 import setArrFive from './five/five';
@@ -32,6 +32,18 @@ export const isWrongPushedIntoArray = (
     +pushedParts[answerPositionInPart] <= 0 ||
     (uniq && JSON.stringify(existingParts).includes(JSON.stringify(pushedParts)))
   );
+};
+
+export const getCatComplTitles = (exsQuant: number, mistQuant: number) => {
+  const mistakeCoeff = mistQuant / exsQuant;
+  return {
+    catCompleteTitle: !mistakeCoeff
+      ? EMessageNames.BRAVO
+      : mistakeCoeff <= 0.2
+        ? EMessageNames.NO_BAD
+        : EMessageNames.BAD,
+    btnCatCompleteTitle: !mistakeCoeff ? EMessageNames.CONTINUE : EMessageNames.CORRECTION,
+  };
 };
 
 export interface IExsPart {
