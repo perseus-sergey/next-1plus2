@@ -1,7 +1,7 @@
 import styles from './CatComplete.module.scss';
 import TextButton from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
-import { capitalizedFirstChar } from '@/libs/utils';
+import { capitalizedWord } from '@/libs/utils';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Link from 'next/link';
@@ -59,7 +59,7 @@ const CatComplete = ({
           </h2>
           <p>
             {getTitleFromMap(EMessageNames.CATEGORY, language)}:{' '}
-            {capitalizedFirstChar(getCatFromMap(category, language).title)}
+            {capitalizedWord(getCatFromMap(category, language).title)}
           </p>
           <p>
             {getTitleFromMap(EMessageNames.MISTAKES, language)}: {mistakes.length}

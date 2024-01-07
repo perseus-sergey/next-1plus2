@@ -24,7 +24,7 @@ export const createMaxNumArray = ({ start = 10, max = 100, step = 10 }) =>
 
 export const shuffleArray = <T>(array: T[]): T[] => array.sort(() => Math.random() - 0.5);
 
-export const capitalizedFirstChar = (word: string) =>
+export const capitalizedWord = (word: string) =>
   word.replace(/^(.)/, (match) => match.toUpperCase());
 
 export const sleep = (ms = 1000) => new Promise((resolve) => setTimeout(resolve, ms));

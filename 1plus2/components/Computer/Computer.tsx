@@ -2,7 +2,7 @@ import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Keyboard from '../Keyboard/Keyboard';
 import { Title } from '../Title/Title';
-import { capitalizedFirstChar } from '@/libs/utils';
+import { capitalizedWord } from '@/libs/utils';
 import { EExerciseCategories, IExerciseParams, keyboardNumKeys } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 import { IExsPart, getCatFromMap } from '@/libs/exercises/math';
@@ -40,7 +40,7 @@ const Computer = ({
 
   return (
     <>
-      <Title name={`${capitalizedFirstChar(getCatFromMap(category, language).title)}`} />
+      <Title name={`${capitalizedWord(getCatFromMap(category, language).title)}`} />
       <section className={styles.Computer} data-testid="Computer">
         <Monitor
           exerciseParts={exerciseParts}
