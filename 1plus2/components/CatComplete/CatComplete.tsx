@@ -23,11 +23,9 @@ export const EndLevel = ({ language, maxNumb }: { language: ELang; maxNumb: numb
       className={styles.EndLevelTitle}
       name={`${maxNumb} ${getTitleFromMap(EMessageNames.SHOW_END_LEVEL, language)}`}
     />
-    <div className={`${styles.endLevelBtn} ${styles.confirmBtnWrapper}`}>
-      <Link href={`/${language}/math`}>
-        <TextButton>{getTitleFromMap(EMessageNames.CONTINUE, language)}</TextButton>
-      </Link>
-    </div>
+    <Link href={`/${language}/math`}>
+      <TextButton>{getTitleFromMap(EMessageNames.CONTINUE, language)}</TextButton>
+    </Link>
   </>
 );
 
@@ -67,24 +65,20 @@ const CatComplete = ({
             {getTitleFromMap(EMessageNames.MISTAKES, language)}: {mistakes.length}
           </p>
         </section>
-        <section>
-          <h2 className={styles.reportTitle}>
-            {getTitleFromMap(EMessageNames.MISTAKES, language)}:
-          </h2>
-          {mistakesStr.map((mist, i) => (
-            <p key={i}>{mist}</p>
-          ))}
-        </section>
+        {!!mistakes.length && (
+          <section>
+            <h2 className={styles.reportTitle}>
+              {getTitleFromMap(EMessageNames.MISTAKES, language)}:
+            </h2>
+            {mistakesStr.map((mist, i) => (
+              <p key={i}>{mist}</p>
+            ))}
+          </section>
+        )}
       </section>
-      <div className={styles.confirmBtnWrapper}>
-        <TextButton onClick={onNextCatBtnClicked}>{getTitleFromMap(btnTitle, language)}</TextButton>
-      </div>
+      <TextButton onClick={onNextCatBtnClicked}>{getTitleFromMap(btnTitle, language)}</TextButton>
     </>
   );
 };
 
 export default CatComplete;
-
-// 	var time 	= msToTime(new Date() - dateStartTest);
-// 	header.classList.add('move');
-// 	else {res = msg.bad; spn_h1.classList.add("h1_bad")}

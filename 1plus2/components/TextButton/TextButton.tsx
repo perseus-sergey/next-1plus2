@@ -5,12 +5,14 @@ interface TextButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 }
 
 export default ({ children, className, ...attributes }: TextButtonProps) => (
-  <button
-    className={className ? `${styles.TextButton} ${className}` : styles.TextButton}
-    data-testid="TextButton"
-    type="button"
-    {...attributes}
-  >
-    {children}
-  </button>
+  <div className={styles.BtnWrapper}>
+    <button
+      className={className ? `${styles.TextButton} ${className}` : styles.TextButton}
+      data-testid="TextButton"
+      type="button"
+      {...attributes}
+    >
+      {children}
+    </button>
+  </div>
 );

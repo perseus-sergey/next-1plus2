@@ -2,20 +2,19 @@ import { IExsPart, NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
 import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
-import { EIsRightAnswer } from '../Computer/Computer';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
 import { useState } from 'react';
 import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
+import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
   userAnswer: string;
   arrExsLength: number;
   isRightAnswer: EIsRightAnswer;
-  exsRemains: number;
   mistakes: number;
   clearBtnHandler?: () => void;
   isDelBtnActive?: boolean;
@@ -25,10 +24,9 @@ const Monitor = ({
   exerciseParts,
   userAnswer,
   isRightAnswer,
-  exsRemains,
   mistakes,
   clearBtnHandler,
-  arrExsLength = 10,
+  arrExsLength,
   isDelBtnActive = true,
 }: MonitorProps) => {
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
@@ -56,7 +54,7 @@ const Monitor = ({
         <div className={styles.exsQuant}>{`${getTitleFromMap(
           EMessageNames.LEFT_EXS_NUM_MSG,
           language
-        )}: ${exsRemains}`}</div>
+        )}: ${arrExsLength}`}</div>
         {!!mistakes && (
           <div className={styles.mistakeQuant}>
             {`${getTitleFromMap(EMessageNames.MISTAKES, language)}: ${mistakes}`}

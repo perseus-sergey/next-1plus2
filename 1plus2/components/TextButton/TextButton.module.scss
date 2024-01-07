@@ -1,3 +1,7 @@
+.BtnWrapper {
+  text-align: center;
+}
+
 .TextButton {
   cursor: pointer;
   position: relative;
@@ -18,8 +22,12 @@
     font-size: 3.5vw;
     padding: 3vw 9vw;
   }
+
+  &:hover {
+    background-image: linear-gradient(#bdd7fa, #5d66b1 35.71%, #3b3f85 38.24%, #40def7);
+  }
 }
 
-.TextButton:hover {
-  background-image: linear-gradient(#bdd7fa, #5d66b1 35.71%, #3b3f85 38.24%, #40def7);
-}
+// .TextButton:hover {
+//   background-image: linear-gradient(#bdd7fa, #5d66b1 35.71%, #3b3f85 38.24%, #40def7);
+// }
