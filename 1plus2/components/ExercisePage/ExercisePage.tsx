@@ -22,7 +22,7 @@ import {
 import LanguageProvider from '@/libs/context/LangProvider';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';
-import { useSound } from '@/libs/hooks/useSound';
+// import { useSound } from '@/libs/hooks/useSound';
 import CatComplete, { EndLevel } from '../CatComplete/CatComplete';
 import { useRouter } from 'next/navigation';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
@@ -96,11 +96,11 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   const clearBtnHandler = () => {
     if (answerElementValue === QUESTION_MARK) return;
     setAnswerElementValue(QUESTION_MARK);
-    audioDel.current?.play();
+    // audioDel.current?.play();
   };
 
   const finishCat = () => {
-    audioCatFinish.current?.play();
+    // audioCatFinish.current?.play();
     setExerciseArray((arr) => arrayShift(arr));
     setIsCatFinish(true);
   };
@@ -126,12 +126,12 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   };
 
   const rightAnswer = () => {
-    audioRightAnsw.current?.play();
+    // audioRightAnsw.current?.play();
     setIsRightAnswer(EIsRightAnswer.RIGHT);
   };
 
   const badAnswer = () => {
-    audioWrongAnsw.current?.play();
+    // audioWrongAnsw.current?.play();
     setMistakes((arr) => [...arr, exerciseArray[0]]);
 
     setMistakesStr([
@@ -144,7 +144,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   };
 
   const keyboardBtnClickHandler = (value: string) => {
-    audioKey.current?.play();
+    // audioKey.current?.play();
     setAnswerElementValue(
       answerElementValue === QUESTION_MARK || keyboardInEqualKeys.includes(answerElementValue)
         ? value
@@ -170,7 +170,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   };
 
   if (isLevel && (!currentCat || currentCat === EExerciseCategories['level'])) {
-    audioLevelFinish.current?.play();
+    // audioLevelFinish.current?.play();
     return <EndLevel language={lang} maxNumb={chosenMaxNum} />;
   }
 
