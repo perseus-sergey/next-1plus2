@@ -84,8 +84,8 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     );
   }, [currentCat, exerciseArray, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
 
-  const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
-    useSound();
+  // const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
+  //   useSound();
 
   const enterClickHandler = () => {
     if (!exerciseArray.length || answerElementValue === QUESTION_MARK) return;
