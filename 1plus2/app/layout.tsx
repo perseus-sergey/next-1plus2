@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.scss';
 import { ELang, EMetaTypes, EPageTitles, SITE_BASE_URL, metaMap } from '@/libs/langMessages';
 import { Lobster } from 'next/font/google';
+import BreadCrumb from '@/components/BreadCrumb/BreadCrumb';
 
 const lobsterFont = Lobster({
   subsets: ['latin', 'cyrillic'],
@@ -27,7 +28,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={lobsterFont.variable}>{children}</body>
+      <body className={lobsterFont.variable}>
+        <BreadCrumb homeElement={'Home'} isCapitalizeLinks />
+        {children}
+      </body>
     </html>
   );
 }
