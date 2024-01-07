@@ -4,6 +4,7 @@
 .container {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
   padding: 10px 20px;
   font-size: 1.2em;
   color: #b9dbf2;
