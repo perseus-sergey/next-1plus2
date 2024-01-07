@@ -3,10 +3,9 @@ import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Keyboard from '../Keyboard/Keyboard';
 import { Title } from '../Title/Title';
 import { capitalizedFirstChar } from '@/libs/utils';
-import { keyboardNumKeys } from '@/libs/exercises/math.model';
+import { EExerciseCategories, IExerciseParams, keyboardNumKeys } from '@/libs/exercises/math.model';
 import Monitor from '../Monitor/Monitor';
 import { IExsPart, getCatFromMap } from '@/libs/exercises/math';
-import { useExercisesProvider } from '@/libs/context/MathExercisesProvider';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
 
@@ -20,6 +19,8 @@ interface IComputerProps {
   isEnterDisabled: boolean;
   mistakesLength: number;
   exercisesLength: number;
+  category: EExerciseCategories;
+  exsParams: IExerciseParams | undefined;
 }
 
 const Computer = ({
@@ -32,9 +33,9 @@ const Computer = ({
   isEnterDisabled,
   mistakesLength,
   exercisesLength,
+  category,
+  exsParams,
 }: IComputerProps) => {
-  const { exsParams, category } = useExercisesProvider();
-
   const { language } = useLangProvider();
 
   return (
@@ -49,6 +50,7 @@ const Computer = ({
           isDelBtnActive={!!Number(exsParams?.keyboardKeys[0])}
           clearBtnHandler={clearBtnHandler}
           mistakes={mistakesLength}
+          isColumn={exsParams?.isColumn}
         />
         <Keyboard
           keyboardBtnClickHandler={keyboardBtnClickHandler}

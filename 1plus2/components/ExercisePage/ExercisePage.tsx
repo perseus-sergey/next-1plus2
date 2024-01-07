@@ -19,7 +19,6 @@ import {
   categoriesMap,
   keyboardInEqualKeys,
 } from '@/libs/exercises/math.model';
-import MathExercisesProvider from '@/libs/context/MathExercisesProvider';
 import LanguageProvider from '@/libs/context/LangProvider';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';
@@ -188,6 +187,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
         exsQuant={exsArrayLength}
         mistakes={mistakes}
         mistakesStr={mistakesStr}
+        category={currentCat}
       />
     );
   }
@@ -209,24 +209,19 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     <section data-testid="ExercisePage" className={styles.ExercisePage}>
       <LanguageProvider language={lang}>
         <MathLevelProvider levels={levelsObj.levels} isLevel={isLevel}>
-          <MathExercisesProvider
-            cat={currentCat}
-            chosenMaxNum={chosenMaxNum}
-            exercisesArray={exerciseArray}
-            exerciseParams={exsParams}
-          >
-            <Computer
-              exerciseParts={exerciseParts}
-              answerElementValue={answerElementValue}
-              isRightAnswer={isRightAnswer}
-              clearBtnHandler={clearBtnHandler}
-              keyboardBtnClickHandler={keyboardBtnClickHandler}
-              enterClickHandler={enterClickHandler}
-              isEnterDisabled={isEnterDisabled}
-              mistakesLength={mistakes.length}
-              exercisesLength={exerciseArray.length}
-            />
-          </MathExercisesProvider>
+          <Computer
+            exerciseParts={exerciseParts}
+            answerElementValue={answerElementValue}
+            isRightAnswer={isRightAnswer}
+            clearBtnHandler={clearBtnHandler}
+            keyboardBtnClickHandler={keyboardBtnClickHandler}
+            enterClickHandler={enterClickHandler}
+            isEnterDisabled={isEnterDisabled}
+            mistakesLength={mistakes.length}
+            exercisesLength={exerciseArray.length}
+            category={currentCat}
+            exsParams={exsParams}
+          />
         </MathLevelProvider>
       </LanguageProvider>
     </section>
