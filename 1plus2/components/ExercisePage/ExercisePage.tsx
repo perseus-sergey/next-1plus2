@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useReducer, useState } from 'react';
+import { MutableRefObject, useEffect, useReducer, useState } from 'react';
 import styles from './ExercisePage.module.scss';
 import { ELang } from '@/libs/langMessages';
 import {
@@ -22,7 +22,7 @@ import {
 import LanguageProvider from '@/libs/context/LangProvider';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';
-// import { useSound } from '@/libs/hooks/useSound';
+import { useSound } from '@/libs/hooks/useSound';
 import CatComplete, { EndLevel } from '../CatComplete/CatComplete';
 import { useRouter } from 'next/navigation';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
@@ -84,8 +84,14 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     );
   }, [currentCat, exerciseArray, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
 
-  // const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
-  //   useSound();
+  const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
+    useSound();
+
+  const playSound = async (sound: MutableRefObject<HTMLAudioElement | undefined>) => {
+    sound.current?.play();
+    await sleep(2000);
+    sound.current?.pause();
+  };
 
   const enterClickHandler = () => {
     if (!exerciseArray.length || answerElementValue === QUESTION_MARK) return;
@@ -96,10 +102,12 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   const clearBtnHandler = () => {
     if (answerElementValue === QUESTION_MARK) return;
     setAnswerElementValue(QUESTION_MARK);
+    playSound(audioDel);
     // audioDel.current?.play();
   };
 
   const finishCat = () => {
+    playSound(audioCatFinish);
     // audioCatFinish.current?.play();
     setExerciseArray((arr) => arrayShift(arr));
     setIsCatFinish(true);
@@ -126,11 +134,13 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   };
 
   const rightAnswer = () => {
+    playSound(audioRightAnsw);
     // audioRightAnsw.current?.play();
     setIsRightAnswer(EIsRightAnswer.RIGHT);
   };
 
   const badAnswer = () => {
+    playSound(audioWrongAnsw);
     // audioWrongAnsw.current?.play();
     setMistakes((arr) => [...arr, exerciseArray[0]]);
 
@@ -144,6 +154,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   };
 
   const keyboardBtnClickHandler = (value: string) => {
+    playSound(audioKey);
     // audioKey.current?.play();
     setAnswerElementValue(
       answerElementValue === QUESTION_MARK || keyboardInEqualKeys.includes(answerElementValue)
@@ -170,6 +181,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   };
 
   if (isLevel && (!currentCat || currentCat === EExerciseCategories['level'])) {
+    playSound(audioLevelFinish);
     // audioLevelFinish.current?.play();
     return <EndLevel language={lang} maxNumb={chosenMaxNum} />;
   }
