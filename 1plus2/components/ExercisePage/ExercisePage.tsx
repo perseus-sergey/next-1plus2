@@ -1,6 +1,6 @@
 'use client';
 
-import { MutableRefObject, useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import styles from './ExercisePage.module.scss';
 import { ELang } from '@/libs/langMessages';
 import {
@@ -22,11 +22,12 @@ import {
 import LanguageProvider from '@/libs/context/LangProvider';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';
-import { useSound } from '@/libs/hooks/useSound';
+import { useMySound } from '@/libs/hooks/useSound';
 import CatComplete, { EndLevel } from '../CatComplete/CatComplete';
 import { useRouter } from 'next/navigation';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
 import { ELevelsActionKind, levelsReducer } from '@/libs/reducers/levelReducer';
+import { PlayFunction } from 'use-sound/dist/types';
 
 export enum EIsRightAnswer {
   '_',
@@ -48,6 +49,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   const [exsParams, setExsParams] = useState<IExerciseParams | undefined>();
   const [isCatFinish, setIsCatFinish] = useState(false);
   const [isLevel] = useState(cat === EExerciseCategories['level']);
+  const [isSound] = useState(true);
   const [exerciseParts, setExerciseParts] = useState<IExsPart[]>([]);
   const [isEnterDisabled, setIsEnterDisabled] = useState(false);
   const [isRightAnswer, setIsRightAnswer] = useState(EIsRightAnswer._);
@@ -85,13 +87,21 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   }, [currentCat, exerciseArray, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
 
   const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
-    useSound();
+    useMySound();
 
-  const playSound = async (sound: MutableRefObject<HTMLAudioElement | undefined>) => {
-    sound.current?.play();
-    await sleep(2000);
-    sound.current?.pause();
+  const playSound = (sound: PlayFunction) => {
+    if (!isSound) return;
+    sound();
+    // await sleep(2000);
+    // sound.current?.pause();
   };
+
+  // const playSound = async (sound: MutableRefObject<HTMLAudioElement | undefined>) => {
+  //   if (!isSound) return;
+  //   sound.current?.play();
+  //   await sleep(2000);
+  //   sound.current?.pause();
+  // };
 
   const enterClickHandler = () => {
     if (!exerciseArray.length || answerElementValue === QUESTION_MARK) return;
