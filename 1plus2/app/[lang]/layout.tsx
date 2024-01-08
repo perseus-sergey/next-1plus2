@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import styles from '../page.module.scss';
 import { ELang, EMetaTypes, EPageTitles, metaMap } from '@/libs/langMessages';
 
 export interface IMathPageProps {
@@ -12,6 +11,4 @@ export const generateMetadata = ({ params }: IMathPageProps): Metadata => ({
   keywords: metaMap.get(EPageTitles.MAIN)?.[EMetaTypes.KEYWORDS][params.lang],
 });
 
-export default ({ children }: { children: React.ReactNode }) => (
-  <main className={styles.main}>{children}</main>
-);
+export default ({ children }: { children: React.ReactNode }) => <>{children}</>;

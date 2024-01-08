@@ -8,6 +8,7 @@ import Monitor from '../Monitor/Monitor';
 import { IExsPart, getCatFromMap } from '@/libs/exercises/math';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
+import React from 'react';
 
 interface IComputerProps {
   exerciseParts: IExsPart[];
@@ -64,4 +65,4 @@ const Computer = ({
   );
 };
 
-export default Computer;
+export default React.memo(Computer);

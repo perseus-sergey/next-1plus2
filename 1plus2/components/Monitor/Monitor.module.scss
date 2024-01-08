@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 0 10px 16px;
+  padding: 0 10px 12px;
   border-radius: 5px;
   border-bottom: 1px solid #222c44;
   background-color: #3c4d77;
@@ -17,8 +17,8 @@
 .monitorHeader {
   display: flex;
   justify-content: space-between;
-  font-size: 1.5em;
-  padding: 10px;
+  font-size: 1rem;
+  padding: 0.3rem;
   text-shadow: 1px 1px 1px #000000;
 
   .exsQuant {
@@ -34,10 +34,17 @@
   margin-bottom: 12px;
   padding: 4px;
   background-image: linear-gradient(to bottom, #1a2133, #4d6398);
+
+  @media screen and (max-width: var(--media-width-medium)) {
+    margin-bottom: 7px;
+    padding: 0;
+    border: inset #5e70a1 4px;
+    background-image: none;
+  }
 }
 
 .display {
-  min-height: 6em;
+  min-height: 5rem;
   display: flex;
   justify-content: flex-start;
   overflow: auto;
@@ -45,11 +52,7 @@
   word-wrap: break-word;
   border-radius: 4px;
   background-color: #2b3755;
-  gap: 10%;
-
-  @media screen and (orientation: portrait) {
-    gap: 5%;
-  }
+  gap: 1vw;
 }
 
 .properAnswer * {
@@ -59,28 +62,6 @@
 .badAnswer * {
   color: #f06d70 !important;
 }
-
-/*----------------------- Animate Exercises (start) --------------------			*/
-.exsPart {
-  animation: anim_div 0.6s linear;
-}
-
-@keyframes anim_div {
-  0% {
-    transform: rotate(180deg) scale(0);
-    opacity: 0;
-  }
-
-  50% {
-    transform: rotate(0) scale(1.5);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-/*----------------------- Animate Exercises (end) --------------------			*/
 
 .minusPlus {
   padding-right: 5px;
@@ -181,14 +162,4 @@
 
 .clearButton {
   padding: 0 1rem !important;
-  font-size: 1.5em !important;
-}
-
-@media screen and (max-width: var(--media-width-medium)) {
-  .displayWrapper {
-    margin-bottom: 7px;
-    padding: 0;
-    border: inset #5e70a1 4px;
-    background-image: none;
-  }
 }
