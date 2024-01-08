@@ -1,3 +1,8 @@
+$media_width_small: 320px;
+$media_width_medium: 600px;
+$media_height_medium: 450px;
+
+
 .Monitor {
   display: flex;
   flex-direction: column;
@@ -17,9 +22,13 @@
 .monitorHeader {
   display: flex;
   justify-content: space-between;
-  font-size: 1rem;
+  font-size: 1.3rem;
   padding: 0.3rem;
   text-shadow: 1px 1px 1px #000000;
+  
+  @media screen and (max-width: $media_width_medium), (max-height: $media_height_medium) {
+    font-size: 1rem;
+  }
 
   .exsQuant {
     color: rgba(var(--color-title-h1));
@@ -35,7 +44,7 @@
   padding: 4px;
   background-image: linear-gradient(to bottom, #1a2133, #4d6398);
 
-  @media screen and (max-width: var(--media-width-medium)) {
+  @media screen and (max-width: $media_width_medium), (max-height: $media_height_medium) {
     margin-bottom: 7px;
     padding: 0;
     border: inset #5e70a1 4px;
