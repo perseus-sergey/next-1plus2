@@ -117,14 +117,23 @@ a {
   }
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  min-height: 70vh;
+}
+
 .section-title {
   display: flex;
   justify-content: center;
   color: rgba(var(--color-title-h1));
-  padding: 2vh;
+  padding: 1vh;
   font-weight: bold;
   text-align: center;
-  font-size: 8vh;
+  font-size: 6vh;
   text-shadow:
     0px -2px 0 #191f40,
     0px -2px 0 #191f40,
@@ -160,7 +169,6 @@ a {
 
   @media screen and (orientation: portrait) {
     font-size: 7vw;
-    padding: 5vw;
   }
 }
 

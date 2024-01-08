@@ -17,8 +17,8 @@
 .monitorHeader {
   display: flex;
   justify-content: space-between;
-  font-size: 1.5em;
-  padding: 10px;
+  font-size: 1rem;
+  padding: 0.3rem;
   text-shadow: 1px 1px 1px #000000;
 
   .exsQuant {
@@ -37,7 +37,7 @@
 }
 
 .display {
-  min-height: 6em;
+  min-height: 5rem;
   display: flex;
   justify-content: flex-start;
   overflow: auto;
@@ -45,11 +45,7 @@
   word-wrap: break-word;
   border-radius: 4px;
   background-color: #2b3755;
-  gap: 10%;
-
-  @media screen and (orientation: portrait) {
-    gap: 5%;
-  }
+  gap: 1vw;
 }
 
 .properAnswer * {
@@ -181,7 +177,6 @@
 
 .clearButton {
   padding: 0 1rem !important;
-  font-size: 1.5em !important;
 }
 
 @media screen and (max-width: var(--media-width-medium)) {

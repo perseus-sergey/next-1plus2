@@ -23,7 +23,7 @@ const BreadCrumb = ({
   const paths = usePathname();
   const pathNames = paths.split('/').filter((path) => path);
   return (
-    <div
+    <section
       className={className ? `${styles.BreadCrumb} ${className}` : styles.BreadCrumb}
       data-testid="BreadCrumb"
     >
@@ -51,7 +51,7 @@ const BreadCrumb = ({
           );
         })}
       </ul>
-    </div>
+    </section>
   );
 };
 

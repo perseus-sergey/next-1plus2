@@ -3,18 +3,14 @@
   outline: none;
   background: none;
   font: inherit;
+  font-size: 0.7em;
   color: inherit;
-  padding: 0 5%;
+  padding: 0 3vw;
   font-weight: normal;
   transition: all 0.3s ease-in-out;
-
-  @media screen and (orientation: portrait) {
-    margin-right: 5%;
-  }
 }
 
 .columnTable {
-  font-size: 1em;
   text-align: right;
   border-collapse: collapse;
 }

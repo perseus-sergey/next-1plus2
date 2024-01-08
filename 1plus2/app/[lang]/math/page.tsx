@@ -1,6 +1,15 @@
-import MathPageComponent from '@/components/MathPageComponent/MathPageComponent';
 import { IMathPageProps } from '../layout';
+import { Title } from '@/components/Title/Title';
+import Mission from '@/components/Mission/Mission';
+import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 
 export default function MathPage(props: IMathPageProps) {
-  return <MathPageComponent {...props} />;
+  const { lang = ELang.en } = props.params;
+
+  return (
+    <>
+      <Title name={getTitleFromMap(EMessageNames.MISSION_CHOICE, lang)} />
+      <Mission lang={lang} />
+    </>
+  );
 }

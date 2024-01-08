@@ -3,10 +3,10 @@ import TextButton from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
 import { capitalizedWord } from '@/libs/utils';
 import { useLangProvider } from '@/libs/context/LangProvider';
-import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
-import Link from 'next/link';
+import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { getCatFromMap } from '@/libs/exercises/math';
 import { EExerciseCategories } from '@/libs/exercises/math.model';
+import React from 'react';
 
 interface ICatComplete {
   exsQuant: number;
@@ -17,18 +17,6 @@ interface ICatComplete {
   mistakesStr: string[];
   category: EExerciseCategories;
 }
-
-export const EndLevel = ({ language, maxNumb }: { language: ELang; maxNumb: number }) => (
-  <>
-    <Title
-      className={styles.EndLevelTitle}
-      name={`${maxNumb} ${getTitleFromMap(EMessageNames.SHOW_END_LEVEL, language)}`}
-    />
-    <Link href={`/${language}/math`}>
-      <TextButton>{getTitleFromMap(EMessageNames.CONTINUE, language)}</TextButton>
-    </Link>
-  </>
-);
 
 const CatComplete = ({
   onNextCatBtnClicked,
@@ -81,4 +69,4 @@ const CatComplete = ({
   );
 };
 
-export default CatComplete;
+export default React.memo(CatComplete);

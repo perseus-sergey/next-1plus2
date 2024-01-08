@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useReducer, useState } from 'react';
-import styles from './ExercisePage.module.scss';
+import React, { useEffect, useReducer, useState } from 'react';
+// import styles from './ExercisePage.module.scss';
 import { ELang } from '@/libs/langMessages';
 import {
   IExsPart,
@@ -23,11 +23,12 @@ import LanguageProvider from '@/libs/context/LangProvider';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';
 import { useMySound } from '@/libs/hooks/useSound';
-import CatComplete, { EndLevel } from '../CatComplete/CatComplete';
+import CatComplete from '../CatComplete/CatComplete';
 import { useRouter } from 'next/navigation';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
 import { ELevelsActionKind, levelsReducer } from '@/libs/reducers/levelReducer';
 import { PlayFunction } from 'use-sound/dist/types';
+import EndLevel from '../EndLevel/EndLevel';
 
 export enum EIsRightAnswer {
   '_',
@@ -89,19 +90,7 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
     useMySound();
 
-  const playSound = (sound: PlayFunction) => {
-    if (!isSound) return;
-    sound();
-    // await sleep(2000);
-    // sound.current?.pause();
-  };
-
-  // const playSound = async (sound: MutableRefObject<HTMLAudioElement | undefined>) => {
-  //   if (!isSound) return;
-  //   sound.current?.play();
-  //   await sleep(2000);
-  //   sound.current?.pause();
-  // };
+  const playSound = (sound: PlayFunction) => isSound && sound();
 
   const enterClickHandler = () => {
     if (!exerciseArray.length || answerElementValue === QUESTION_MARK) return;
@@ -113,12 +102,10 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     if (answerElementValue === QUESTION_MARK) return;
     setAnswerElementValue(QUESTION_MARK);
     playSound(audioDel);
-    // audioDel.current?.play();
   };
 
   const finishCat = () => {
     playSound(audioCatFinish);
-    // audioCatFinish.current?.play();
     setExerciseArray((arr) => arrayShift(arr));
     setIsCatFinish(true);
   };
@@ -145,13 +132,11 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
 
   const rightAnswer = () => {
     playSound(audioRightAnsw);
-    // audioRightAnsw.current?.play();
     setIsRightAnswer(EIsRightAnswer.RIGHT);
   };
 
   const badAnswer = () => {
     playSound(audioWrongAnsw);
-    // audioWrongAnsw.current?.play();
     setMistakes((arr) => [...arr, exerciseArray[0]]);
 
     setMistakesStr([
@@ -165,7 +150,6 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
 
   const keyboardBtnClickHandler = (value: string) => {
     playSound(audioKey);
-    // audioKey.current?.play();
     setAnswerElementValue(
       answerElementValue === QUESTION_MARK || keyboardInEqualKeys.includes(answerElementValue)
         ? value
@@ -192,7 +176,6 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
 
   if (isLevel && (!currentCat || currentCat === EExerciseCategories['level'])) {
     playSound(audioLevelFinish);
-    // audioLevelFinish.current?.play();
     return <EndLevel language={lang} maxNumb={chosenMaxNum} />;
   }
 
@@ -228,26 +211,24 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     );
 
   return (
-    <section data-testid="ExercisePage" className={styles.ExercisePage}>
-      <LanguageProvider language={lang}>
-        <MathLevelProvider levels={levelsObj.levels} isLevel={isLevel}>
-          <Computer
-            exerciseParts={exerciseParts}
-            answerElementValue={answerElementValue}
-            isRightAnswer={isRightAnswer}
-            clearBtnHandler={clearBtnHandler}
-            keyboardBtnClickHandler={keyboardBtnClickHandler}
-            enterClickHandler={enterClickHandler}
-            isEnterDisabled={isEnterDisabled}
-            mistakesLength={mistakes.length}
-            exercisesLength={exerciseArray.length}
-            category={currentCat}
-            exsParams={exsParams}
-          />
-        </MathLevelProvider>
-      </LanguageProvider>
-    </section>
+    <LanguageProvider language={lang}>
+      <MathLevelProvider levels={levelsObj.levels} isLevel={isLevel}>
+        <Computer
+          exerciseParts={exerciseParts}
+          answerElementValue={answerElementValue}
+          isRightAnswer={isRightAnswer}
+          clearBtnHandler={clearBtnHandler}
+          keyboardBtnClickHandler={keyboardBtnClickHandler}
+          enterClickHandler={enterClickHandler}
+          isEnterDisabled={isEnterDisabled}
+          mistakesLength={mistakes.length}
+          exercisesLength={exerciseArray.length}
+          category={currentCat}
+          exsParams={exsParams}
+        />
+      </MathLevelProvider>
+    </LanguageProvider>
   );
 };
 
-export default ExercisePage;
+export default React.memo(ExercisePage);

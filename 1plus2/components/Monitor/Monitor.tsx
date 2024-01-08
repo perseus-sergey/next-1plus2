@@ -3,7 +3,7 @@ import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
@@ -51,14 +51,14 @@ const Monitor = ({
   return (
     <section className={styles.Monitor} data-testid="Monitor">
       <div className={styles.monitorHeader}>
-        <div className={styles.exsQuant}>{`${getTitleFromMap(
+        <span className={styles.exsQuant}>{`${getTitleFromMap(
           EMessageNames.LEFT_EXS_NUM_MSG,
           language
-        )}: ${arrExsLength}`}</div>
+        )}: ${arrExsLength}`}</span>
         {!!mistakes && (
-          <div className={styles.mistakeQuant}>
+          <span className={styles.mistakeQuant}>
             {`${getTitleFromMap(EMessageNames.MISTAKES, language)}: ${mistakes}`}
-          </div>
+          </span>
         )}
       </div>
       <div className={styles.displayWrapper}>
@@ -122,4 +122,4 @@ const Monitor = ({
   );
 };
 
-export default Monitor;
+export default React.memo(Monitor);
