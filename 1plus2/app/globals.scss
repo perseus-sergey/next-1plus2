@@ -190,8 +190,8 @@ a {
   justify-content: center;
   gap: 3vh;
 
-  @media screen and (orientation: portrait) {
-    gap: 2vw;
+  @media screen and (pointer: coarse) {
+    gap: 1rem;
   }
 }
 

@@ -1,0 +1,40 @@
+.FlyingDigits {
+  color: rgba(255, 255, 255, 0.07);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  z-index: -1;
+
+  li {
+    user-select: none;
+    display: block;
+    width: 20px;
+    height: 20px;
+    list-style: none;
+    font-family: 'Lobster', sans-serif;
+    font-weight: bold;
+    animation: animate 25s linear infinite;
+    transform: translateY(110vh);
+
+    @media (hover: hover) {
+      &:hover {
+        color: rgba(206, 255, 210, 0.267);
+      }
+    }
+  }
+
+  @keyframes animate {
+    0% {
+      transform: translateY(110vh) rotate(0deg) scale(1);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateY(-10vh) rotate(720deg) scale(1.5);
+      opacity: 0.2;
+    }
+  }
+}

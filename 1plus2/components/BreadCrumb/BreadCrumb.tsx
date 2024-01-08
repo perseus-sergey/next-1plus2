@@ -23,11 +23,12 @@ const BreadCrumb = ({
   const paths = usePathname();
   const pathNames = paths.split('/').filter((path) => path);
   return (
-    <section
+    <nav
+      aria-label="Breadcrumb"
       className={className ? `${styles.BreadCrumb} ${className}` : styles.BreadCrumb}
       data-testid="BreadCrumb"
     >
-      <ul className={styles.container}>
+      <ol className={styles.container}>
         <li className={`${styles.item} ${styles.firstItem}`}>
           <Link href={'/'}>{homeElement}</Link>
         </li>
@@ -50,8 +51,8 @@ const BreadCrumb = ({
             </React.Fragment>
           );
         })}
-      </ul>
-    </section>
+      </ol>
+    </nav>
   );
 };
 

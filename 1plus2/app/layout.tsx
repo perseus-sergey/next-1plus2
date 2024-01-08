@@ -3,6 +3,7 @@ import './globals.scss';
 import { ELang, EMetaTypes, EPageTitles, SITE_BASE_URL, metaMap } from '@/libs/langMessages';
 import { Lobster } from 'next/font/google';
 import BreadCrumb from '@/components/BreadCrumb/BreadCrumb';
+import FlyingDigits from '@/components/FlyingDigits/FlyingDigits';
 
 const lobsterFont = Lobster({
   subsets: ['latin', 'cyrillic'],
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={lobsterFont.variable}>
         <BreadCrumb homeElement={'Home'} isCapitalizeLinks />
         <main className="main">{children}</main>
+        <FlyingDigits />
       </body>
     </html>
   );
