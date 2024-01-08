@@ -6,7 +6,6 @@ const getFlyingDigits = () =>
     .map((dig, i) => ({
       title: dig,
       style: {
-        // paddingLeft: `${Math.floor(Math.random() * 10) + 30}vw`,
         marginLeft: `${Math.floor(Math.random() * 80) + 5}vw`,
         fontSize: `${Math.floor(Math.random() * 6) + 2}em`,
         animationDelay: i % 2 ? '0s' : `${Math.floor(Math.random() * 11)}s`,
