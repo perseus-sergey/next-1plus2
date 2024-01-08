@@ -1,35 +1,12 @@
 import ExercisePage from '@/components/ExercisePage/ExercisePage';
 import WrongSegment from '@/components/WrongSegment/WrongSegment';
+import { getLevelsByMaxNum } from '@/libs/exercises/math';
 import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
 import { ELang } from '@/libs/langMessages';
 
 export interface IExercisePageProps {
   params: { lang: ELang; maxNum: string[] };
 }
-
-const getLevels = (maxNum: number) => {
-  switch (true) {
-    case maxNum <= 10:
-      return [...categoriesMap.keys()].filter(
-        (c) =>
-          c !== EExerciseCategories['level'] &&
-          c !== EExerciseCategories['equal-over-ten'] &&
-          c !== EExerciseCategories['equal-five'] &&
-          c !== EExerciseCategories['equal-ten']
-      );
-    case maxNum <= 20:
-      return [...categoriesMap.keys()].filter(
-        (c) =>
-          c !== EExerciseCategories['level'] &&
-          c !== EExerciseCategories['equal-over-ten'] &&
-          c !== EExerciseCategories['equal-ten']
-      );
-    default:
-      return [...categoriesMap.keys()].filter(
-        (c) => c !== EExerciseCategories['level'] && c !== EExerciseCategories['composition']
-      );
-  }
-};
 
 export default ({ params }: IExercisePageProps) => {
   const { lang, maxNum } = params;
@@ -69,7 +46,7 @@ export default ({ params }: IExercisePageProps) => {
       lang={lang}
       chosenMaxNum={chosenMaxNum}
       cat={EExerciseCategories['level']}
-      levels={getLevels(chosenMaxNum)}
+      levels={getLevelsByMaxNum(chosenMaxNum)}
     />
   );
 };

@@ -46,6 +46,30 @@ export const getCatComplTitles = (exsQuant: number, mistQuant: number) => {
   };
 };
 
+export const getLevelsByMaxNum = (maxNum: number) => {
+  switch (true) {
+    case maxNum <= 10:
+      return [...categoriesMap.keys()].filter(
+        (c) =>
+          c !== EExerciseCategories['level'] &&
+          c !== EExerciseCategories['equal-over-ten'] &&
+          c !== EExerciseCategories['equal-five'] &&
+          c !== EExerciseCategories['equal-ten']
+      );
+    case maxNum <= 20:
+      return [...categoriesMap.keys()].filter(
+        (c) =>
+          c !== EExerciseCategories['level'] &&
+          c !== EExerciseCategories['equal-over-ten'] &&
+          c !== EExerciseCategories['equal-ten']
+      );
+    default:
+      return [...categoriesMap.keys()].filter(
+        (c) => c !== EExerciseCategories['level'] && c !== EExerciseCategories['composition']
+      );
+  }
+};
+
 export interface IExsPart {
   value: string | number;
   hint: string;
