@@ -26,8 +26,9 @@
   &:hover {
     background-image: linear-gradient(#bdd7fa, #5d66b1 35.71%, #3b3f85 38.24%, #40def7);
   }
-}
 
-// .TextButton:hover {
-//   background-image: linear-gradient(#bdd7fa, #5d66b1 35.71%, #3b3f85 38.24%, #40def7);
-// }
+  &:active {
+    background-image: none;
+    background-color: #4094c2;
+  }
+}

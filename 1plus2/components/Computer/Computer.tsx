@@ -52,6 +52,7 @@ const Computer = ({
           clearBtnHandler={clearBtnHandler}
           mistakes={mistakesLength}
           isColumn={exsParams?.isColumn}
+          dropHandler={keyboardBtnClickHandler}
         />
         <Keyboard
           keyboardBtnClickHandler={keyboardBtnClickHandler}

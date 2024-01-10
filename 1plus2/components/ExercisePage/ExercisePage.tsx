@@ -29,6 +29,7 @@ import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
 import { ELevelsActionKind, levelsReducer } from '@/libs/reducers/levelReducer';
 import { PlayFunction } from 'use-sound/dist/types';
 import EndLevel from '../EndLevel/EndLevel';
+import DragProvider from '@/libs/context/DragProvider';
 
 export enum EIsRightAnswer {
   '_',
@@ -148,13 +149,19 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     setIsRightAnswer(EIsRightAnswer.BAD);
   };
 
-  const keyboardBtnClickHandler = (value: string) => {
-    playSound(audioKey);
-    setAnswerElementValue(
-      answerElementValue === QUESTION_MARK || keyboardInEqualKeys.includes(answerElementValue)
-        ? value
-        : `${answerElementValue}${value}`
-    );
+  const keyboardBtnClickHandler = (value: string, isRemove = false) => {
+    if (isRemove) {
+      setAnswerElementValue((oldVal) =>
+        oldVal === QUESTION_MARK || oldVal.length < 1 ? oldVal : oldVal.slice(0, oldVal.length - 1)
+      );
+    } else {
+      playSound(audioKey);
+      setAnswerElementValue((oldVal) =>
+        oldVal === QUESTION_MARK || keyboardInEqualKeys.includes(oldVal)
+          ? value
+          : `${oldVal}${value}`
+      );
+    }
   };
 
   const onNextCatBtnClicked = () => {
@@ -212,21 +219,23 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
 
   return (
     <LanguageProvider language={lang}>
-      <MathLevelProvider levels={levelsObj.levels} isLevel={isLevel}>
-        <Computer
-          exerciseParts={exerciseParts}
-          answerElementValue={answerElementValue}
-          isRightAnswer={isRightAnswer}
-          clearBtnHandler={clearBtnHandler}
-          keyboardBtnClickHandler={keyboardBtnClickHandler}
-          enterClickHandler={enterClickHandler}
-          isEnterDisabled={isEnterDisabled}
-          mistakesLength={mistakes.length}
-          exercisesLength={exerciseArray.length}
-          category={currentCat}
-          exsParams={exsParams}
-        />
-      </MathLevelProvider>
+      <DragProvider>
+        <MathLevelProvider levels={levelsObj.levels} isLevel={isLevel}>
+          <Computer
+            exerciseParts={exerciseParts}
+            answerElementValue={answerElementValue}
+            isRightAnswer={isRightAnswer}
+            clearBtnHandler={clearBtnHandler}
+            keyboardBtnClickHandler={keyboardBtnClickHandler}
+            enterClickHandler={enterClickHandler}
+            isEnterDisabled={isEnterDisabled}
+            mistakesLength={mistakes.length}
+            exercisesLength={exerciseArray.length}
+            category={currentCat}
+            exsParams={exsParams}
+          />
+        </MathLevelProvider>
+      </DragProvider>
     </LanguageProvider>
   );
 };

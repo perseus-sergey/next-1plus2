@@ -3,11 +3,12 @@ import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
-import React, { useState } from 'react';
+import React, { DragEvent, useState } from 'react';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
+import { useDragProvider } from '@/libs/context/DragProvider';
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
@@ -16,6 +17,7 @@ interface MonitorProps {
   isRightAnswer: EIsRightAnswer;
   mistakes: number;
   isColumn: boolean | undefined;
+  dropHandler: (value: string, isRemove?: boolean) => void;
   clearBtnHandler?: () => void;
   isDelBtnActive?: boolean;
 }
@@ -25,6 +27,7 @@ const Monitor = ({
   userAnswer,
   isRightAnswer,
   mistakes,
+  dropHandler,
   clearBtnHandler,
   arrExsLength,
   isColumn = false,
@@ -33,6 +36,7 @@ const Monitor = ({
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
   const { language } = useLangProvider();
+  const { draggedValue } = useDragProvider();
 
   const exerciseClick = () => {
     if (columnClassName === styles.bigColumn) {
@@ -46,6 +50,23 @@ const Monitor = ({
       setColumnClassName(styles.bigColumn);
       setExerciseClassNames([...exerciseClassNames, styles.smallExercise]);
     }
+  };
+
+  const monitorDropHandler = () => {};
+
+  const monitorDragOver = (e: DragEvent<HTMLElement>) => {
+    const { value } = draggedValue;
+    dropHandler(value);
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  const monitorDragLeave = (e: DragEvent<HTMLElement>) => {
+    const { value } = draggedValue;
+    dropHandler(value, true);
+
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   return (
@@ -62,7 +83,12 @@ const Monitor = ({
         )}
       </div>
       <div className={styles.displayWrapper}>
-        <div className={styles.display} id="display">
+        <div
+          className={styles.display}
+          onDragEnter={monitorDragOver}
+          onDragLeave={monitorDragLeave}
+          onDrop={monitorDropHandler}
+        >
           {exerciseParts[0] !== undefined ? (
             <>
               {isColumn && (
