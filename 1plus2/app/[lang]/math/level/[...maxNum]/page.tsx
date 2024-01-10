@@ -1,4 +1,4 @@
-import ExercisePage from '@/components/ExercisePage/ExercisePage';
+import ExerciseLayout from '@/components/ExerciseLayout/ExerciseLayout';
 import WrongSegment from '@/components/WrongSegment/WrongSegment';
 import { getLevelsByMaxNum } from '@/libs/exercises/math';
 import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
@@ -42,7 +42,7 @@ export default ({ params }: IExercisePageProps) => {
     );
 
   return (
-    <ExercisePage
+    <ExerciseLayout
       lang={lang}
       chosenMaxNum={chosenMaxNum}
       cat={EExerciseCategories['level']}

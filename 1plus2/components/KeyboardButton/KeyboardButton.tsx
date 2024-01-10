@@ -9,11 +9,6 @@ interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   btnClickHandler?: (value: string) => void;
 }
 
-const keyInitStyle = {
-  fontColor: styles.keyColorPink,
-  bgColor: styles.keyBgColorYellow,
-};
-
 const generateRandomColor = (): string[] => {
   const keyColorStyles = [
     { fontColor: styles.keyColorYellow, bgColor: styles.keyBgColorYellow },
@@ -35,13 +30,16 @@ const generateRandomColor = (): string[] => {
 };
 
 const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
-  const [{ fontColor, bgColor }, setKeyStyle] = useState(keyInitStyle);
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);
-  const { setDraggedValue } = useDragProvider();
+  const [elStyles, setElStyles] = useState({});
+  const { setDraggedValue, isDraggable } = useDragProvider();
 
   useEffect(() => {
     const [fontColor, bgColor] = generateRandomColor();
-    setKeyStyle({ fontColor, bgColor });
+    setElStyles({
+      color: fontColor,
+      backgroundImage: bgColor,
+    });
   }, []);
 
   const setMovingElemPosition = (e: MouseEvent | Touch) => {
@@ -57,7 +55,7 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
 
     el.style.zIndex = `${100}`;
     setMovingEl(el);
-    setDraggedValue({ value });
+    setDraggedValue(value);
   };
 
   const touchMove = (event: TouchEvent) => setMovingElemPosition(event.targetTouches[0]);
@@ -81,18 +79,16 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
       type="button"
       value={value}
       onClick={btnClickHandler ? () => btnClickHandler(value) : () => {}}
-      style={{
-        color: fontColor,
-        backgroundImage: bgColor,
-      }}
+      style={elStyles}
       className={styles.KeyboardButton}
       data-testid="KeyboardButton"
-      onMouseDown={(e) => moveStart(e)}
-      onTouchStart={(e) => moveStart(e)}
-      onMouseMove={(e) => mouseMove(e)}
-      onTouchMove={(e) => touchMove(e)}
-      onMouseUp={moveEnd}
-      onTouchEnd={moveEnd}
+      onMouseDown={isDraggable ? (e) => moveStart(e) : undefined}
+      onTouchStart={isDraggable ? (e) => moveStart(e) : undefined}
+      onMouseMove={isDraggable ? (e) => mouseMove(e) : undefined}
+      onTouchMove={isDraggable ? (e) => touchMove(e) : undefined}
+      onMouseUp={isDraggable ? moveEnd : undefined}
+      onTouchEnd={isDraggable ? moveEnd : undefined}
+      onTouchCancel={isDraggable ? moveEnd : undefined}
       onDragStart={() => false}
     >
       {value}

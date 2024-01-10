@@ -1,17 +1,14 @@
 import React, { Dispatch, SetStateAction, createContext, useContext, useState } from 'react';
 
-export interface IDraggedObject {
-  value: string;
-  element?: EventTarget | null;
-}
-
 interface IProps {
   children: React.ReactNode;
 }
 
 type TDragContext = {
-  draggedValue: IDraggedObject;
-  setDraggedValue: Dispatch<SetStateAction<IDraggedObject>>;
+  draggedValue: string;
+  setDraggedValue: Dispatch<SetStateAction<string>>;
+  isDraggable: boolean;
+  setIsDraggable: Dispatch<SetStateAction<boolean>>;
 };
 
 const DragContext = createContext<TDragContext>({} as TDragContext);
@@ -23,10 +20,11 @@ export const useDragProvider = () => {
 };
 
 const DragProvider = ({ children }: IProps) => {
-  const [draggedValue, setDraggedValue] = useState<IDraggedObject>({ value: '', element: null });
+  const [draggedValue, setDraggedValue] = useState<string>('');
+  const [isDraggable, setIsDraggable] = useState<boolean>(false);
 
   return (
-    <DragContext.Provider value={{ draggedValue, setDraggedValue }}>
+    <DragContext.Provider value={{ draggedValue, setDraggedValue, isDraggable, setIsDraggable }}>
       {children}
     </DragContext.Provider>
   );

@@ -36,12 +36,13 @@ const Monitor = ({
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
   const { language } = useLangProvider();
-  const { draggedValue } = useDragProvider();
+  const { draggedValue, setIsDraggable } = useDragProvider();
 
   const exerciseClick = () => {
     if (columnClassName === styles.bigColumn) {
       setColumnClassName('');
       setExerciseClassNames(exerciseClassNames.filter((cl) => cl !== styles.smallExercise));
+      setIsDraggable(false);
     }
   };
 
@@ -49,21 +50,20 @@ const Monitor = ({
     if (!columnClassName) {
       setColumnClassName(styles.bigColumn);
       setExerciseClassNames([...exerciseClassNames, styles.smallExercise]);
+      setIsDraggable(true);
     }
   };
 
   const monitorDropHandler = () => {};
 
   const monitorDragOver = (e: DragEvent<HTMLElement>) => {
-    const { value } = draggedValue;
-    dropHandler(value);
+    dropHandler(draggedValue);
     e.stopPropagation();
     e.preventDefault();
   };
 
   const monitorDragLeave = (e: DragEvent<HTMLElement>) => {
-    const { value } = draggedValue;
-    dropHandler(value, true);
+    dropHandler(draggedValue, true);
 
     e.stopPropagation();
     e.preventDefault();
