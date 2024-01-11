@@ -8,6 +8,7 @@ import { isOverDropZoneFn } from '@/libs/exercises/math';
 interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
   btnClickHandler?: (value: string) => void;
+  isDraggable?: boolean;
 }
 
 const generateRandomColor = (): string[] => {
@@ -30,7 +31,7 @@ const generateRandomColor = (): string[] => {
   return [keyColorStyles[colorIndx].fontColor, keyColorStyles[bgColorIndx].bgColor];
 };
 
-const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
+const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: KeyboardButtonProps) => {
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);
   const [elStyles, setElStyles] = useState({});
   const { setDraggedValue, setIsOverDropZone, isOverDropZone, dropZoneRect, setIsDragging } =
@@ -75,8 +76,6 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
 
   const touchMove = (event: TouchEvent) => setMovingElemPosition(event.targetTouches[0]);
 
-  // const mouseMove = (event: MouseEvent<HTMLButtonElement>) => setMovingElemPosition(event);
-
   const moveEnd = () => {
     if (!movingEl) return;
     setElStyles((oldStyles) => ({
@@ -101,12 +100,12 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
       value={value}
       onClick={btnClickHandler ? () => btnClickHandler(value) : () => {}}
       style={elStyles}
-      className={`${styles.KeyboardButton} ${styles.shake}`}
+      className={`${styles.KeyboardButton}${isDraggable ? ` ${styles.shake}` : ''}`}
       data-testid="KeyboardButton"
-      onTouchStart={(e) => moveStart(e)}
-      onTouchMove={(e) => touchMove(e)}
-      onTouchEnd={moveEnd}
-      onTouchCancel={moveEnd}
+      onTouchStart={isDraggable ? (e) => moveStart(e) : undefined}
+      onTouchMove={isDraggable ? (e) => touchMove(e) : undefined}
+      onTouchEnd={isDraggable ? moveEnd : undefined}
+      onTouchCancel={isDraggable ? moveEnd : undefined}
       onDragStart={() => false}
     >
       {value}

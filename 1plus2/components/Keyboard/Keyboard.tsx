@@ -24,6 +24,7 @@ const Keyboard = ({
           key={keyboardKey}
           value={keyboardKey}
           btnClickHandler={keyboardBtnClickHandler}
+          isDraggable={true}
         />
       ))}
     </div>
