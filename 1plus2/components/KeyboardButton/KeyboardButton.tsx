@@ -33,14 +33,8 @@ const generateRandomColor = (): string[] => {
 const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);
   const [elStyles, setElStyles] = useState({});
-  const {
-    setDraggedValue,
-    isDraggable,
-    setIsOverDropZone,
-    isOverDropZone,
-    dropZoneRect,
-    setIsDragging,
-  } = useDragProvider();
+  const { setDraggedValue, setIsOverDropZone, isOverDropZone, dropZoneRect, setIsDragging } =
+    useDragProvider();
 
   useEffect(() => {
     const [fontColor, bgColor] = generateRandomColor();
@@ -81,7 +75,7 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
 
   const touchMove = (event: TouchEvent) => setMovingElemPosition(event.targetTouches[0]);
 
-  const mouseMove = (event: MouseEvent<HTMLButtonElement>) => setMovingElemPosition(event);
+  // const mouseMove = (event: MouseEvent<HTMLButtonElement>) => setMovingElemPosition(event);
 
   const moveEnd = () => {
     if (!movingEl) return;
@@ -107,15 +101,12 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
       value={value}
       onClick={btnClickHandler ? () => btnClickHandler(value) : () => {}}
       style={elStyles}
-      className={`${styles.KeyboardButton}${isDraggable ? ` ${styles.shake}` : ''}`}
+      className={`${styles.KeyboardButton} ${styles.shake}`}
       data-testid="KeyboardButton"
-      onMouseDown={isDraggable ? (e) => moveStart(e) : undefined}
-      onTouchStart={isDraggable ? (e) => moveStart(e) : undefined}
-      onMouseMove={isDraggable ? (e) => mouseMove(e) : undefined}
-      onTouchMove={isDraggable ? (e) => touchMove(e) : undefined}
-      onMouseUp={isDraggable ? moveEnd : undefined}
-      onTouchEnd={isDraggable ? moveEnd : undefined}
-      onTouchCancel={isDraggable ? moveEnd : undefined}
+      onTouchStart={(e) => moveStart(e)}
+      onTouchMove={(e) => touchMove(e)}
+      onTouchEnd={moveEnd}
+      onTouchCancel={moveEnd}
       onDragStart={() => false}
     >
       {value}

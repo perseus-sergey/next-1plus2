@@ -57,7 +57,7 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
   const [mistakesStr, setMistakesStr] = useState<string[]>([]);
 
   const { language: lang } = useLangProvider();
-  const { isDraggable, draggedValue, isDragging, isOverDropZone } = useDragProvider();
+  const { isColumn, draggedValue, isDragging, isOverDropZone } = useDragProvider();
 
   const [levelsObj, changeLevelsArray] = useReducer(levelsReducer, { levels });
 
@@ -156,11 +156,13 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
 
   const keyboardBtnClickHandler = useCallback(
     (value: string, isRemove = false) => {
+      if (!value) return;
+
       if (isRemove) {
         setAnswerElementValue((oldVal) =>
           oldVal === QUESTION_MARK || oldVal.length < 2
             ? QUESTION_MARK
-            : isDraggable
+            : isColumn
               ? oldVal.slice(1)
               : oldVal.slice(0, oldVal.length - 1)
         );
@@ -169,13 +171,13 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
         setAnswerElementValue((oldVal) =>
           oldVal === QUESTION_MARK || keyboardInequalKeys.includes(oldVal)
             ? value
-            : isDraggable
+            : isColumn
               ? `${value}${oldVal}`
               : `${oldVal}${value}`
         );
       }
     },
-    [isDraggable, audioKey]
+    [isColumn, audioKey]
   );
 
   const onNextCatBtnClicked = () => {

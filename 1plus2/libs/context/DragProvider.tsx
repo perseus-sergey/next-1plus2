@@ -14,8 +14,8 @@ interface IProps {
 type TDragContext = {
   draggedValue: string;
   setDraggedValue: Dispatch<SetStateAction<string>>;
-  isDraggable: boolean;
-  setIsDraggable: Dispatch<SetStateAction<boolean>>;
+  isColumn: boolean;
+  setIsColumn: Dispatch<SetStateAction<boolean>>;
   isDragging: boolean;
   setIsDragging: Dispatch<SetStateAction<boolean>>;
   isOverDropZone: boolean;
@@ -34,7 +34,7 @@ export const useDragProvider = () => {
 
 const DragProvider = ({ children }: IProps) => {
   const [draggedValue, setDraggedValue] = useState<string>('');
-  const [isDraggable, setIsDraggable] = useState<boolean>(false);
+  const [isColumn, setIsColumn] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isOverDropZone, setIsOverDropZone] = useState<boolean>(false);
   const [dropZoneRect, setDropZoneRect] = useState<DOMRect | null>(null);
@@ -44,8 +44,8 @@ const DragProvider = ({ children }: IProps) => {
       value={{
         draggedValue,
         setDraggedValue,
-        isDraggable,
-        setIsDraggable,
+        isColumn,
+        setIsColumn,
         isDragging,
         setIsDragging,
         isOverDropZone,

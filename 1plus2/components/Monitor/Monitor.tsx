@@ -35,7 +35,7 @@ const Monitor = ({
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
   const { language } = useLangProvider();
-  const { setIsDraggable, setDropZoneRect } = useDragProvider();
+  const { setIsColumn, setDropZoneRect } = useDragProvider();
   const [rect, reference] = useRect('resize');
 
   const measuredRectRef = useCallback(() => {
@@ -51,7 +51,7 @@ const Monitor = ({
     if (columnClassName === styles.bigColumn) {
       setColumnClassName('');
       setExerciseClassNames(exerciseClassNames.filter((cl) => cl !== styles.smallExercise));
-      setIsDraggable(false);
+      setIsColumn(false);
     }
   };
 
@@ -59,7 +59,7 @@ const Monitor = ({
     if (!columnClassName) {
       setColumnClassName(styles.bigColumn);
       setExerciseClassNames([...exerciseClassNames, styles.smallExercise]);
-      setIsDraggable(true);
+      setIsColumn(true);
     }
   };
 
