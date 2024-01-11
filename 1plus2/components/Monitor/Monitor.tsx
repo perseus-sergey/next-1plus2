@@ -3,12 +3,13 @@ import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
-import React, { DragEvent, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
 import { useDragProvider } from '@/libs/context/DragProvider';
+import { useRect } from '@/libs/hooks/useRect';
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
@@ -17,7 +18,6 @@ interface MonitorProps {
   isRightAnswer: EIsRightAnswer;
   mistakes: number;
   isColumn: boolean | undefined;
-  dropHandler: (value: string, isRemove?: boolean) => void;
   clearBtnHandler?: () => void;
   isDelBtnActive?: boolean;
 }
@@ -27,7 +27,6 @@ const Monitor = ({
   userAnswer,
   isRightAnswer,
   mistakes,
-  dropHandler,
   clearBtnHandler,
   arrExsLength,
   isColumn = false,
@@ -36,7 +35,17 @@ const Monitor = ({
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
   const { language } = useLangProvider();
-  const { draggedValue, setIsDraggable } = useDragProvider();
+  const { setIsDraggable, setDropZoneRect } = useDragProvider();
+  const [rect, reference] = useRect('resize');
+
+  const measuredRectRef = useCallback(() => {
+    if (!rect) return;
+    setDropZoneRect(rect);
+  }, [setDropZoneRect, rect]);
+
+  useEffect(() => {
+    measuredRectRef();
+  }, [measuredRectRef]);
 
   const exerciseClick = () => {
     if (columnClassName === styles.bigColumn) {
@@ -54,21 +63,6 @@ const Monitor = ({
     }
   };
 
-  const monitorDropHandler = () => {};
-
-  const monitorDragOver = (e: DragEvent<HTMLElement>) => {
-    dropHandler(draggedValue);
-    e.stopPropagation();
-    e.preventDefault();
-  };
-
-  const monitorDragLeave = (e: DragEvent<HTMLElement>) => {
-    dropHandler(draggedValue, true);
-
-    e.stopPropagation();
-    e.preventDefault();
-  };
-
   return (
     <section className={styles.Monitor} data-testid="Monitor">
       <div className={styles.monitorHeader}>
@@ -83,12 +77,7 @@ const Monitor = ({
         )}
       </div>
       <div className={styles.displayWrapper}>
-        <div
-          className={styles.display}
-          onDragEnter={monitorDragOver}
-          onDragLeave={monitorDragLeave}
-          onDrop={monitorDropHandler}
-        >
+        <div ref={reference} className={styles.display}>
           {exerciseParts[0] !== undefined ? (
             <>
               {isColumn && (

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 // import styles from './ExercisePage.module.scss';
 import {
   IExsPart,
@@ -57,7 +57,7 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
   const [mistakesStr, setMistakesStr] = useState<string[]>([]);
 
   const { language: lang } = useLangProvider();
-  const { isDraggable } = useDragProvider();
+  const { isDraggable, draggedValue, isDragging, isOverDropZone } = useDragProvider();
 
   const [levelsObj, changeLevelsArray] = useReducer(levelsReducer, { levels });
 
@@ -87,6 +87,11 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
       )
     );
   }, [currentCat, exerciseArray, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    keyboardBtnClickHandler(draggedValue, !isOverDropZone);
+  }, [isOverDropZone]);
 
   const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
     useMySound();
@@ -149,26 +154,29 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
     setIsRightAnswer(EIsRightAnswer.BAD);
   };
 
-  const keyboardBtnClickHandler = (value: string, isRemove = false) => {
-    if (isRemove) {
-      setAnswerElementValue((oldVal) =>
-        oldVal === QUESTION_MARK || oldVal.length < 1
-          ? oldVal
-          : isDraggable
-            ? oldVal.slice(1)
-            : oldVal.slice(0, oldVal.length - 1)
-      );
-    } else {
-      playSound(audioKey);
-      setAnswerElementValue((oldVal) =>
-        oldVal === QUESTION_MARK || keyboardInequalKeys.includes(oldVal)
-          ? value
-          : isDraggable
-            ? `${value}${oldVal}`
-            : `${oldVal}${value}`
-      );
-    }
-  };
+  const keyboardBtnClickHandler = useCallback(
+    (value: string, isRemove = false) => {
+      if (isRemove) {
+        setAnswerElementValue((oldVal) =>
+          oldVal === QUESTION_MARK || oldVal.length < 2
+            ? QUESTION_MARK
+            : isDraggable
+              ? oldVal.slice(1)
+              : oldVal.slice(0, oldVal.length - 1)
+        );
+      } else {
+        playSound(audioKey);
+        setAnswerElementValue((oldVal) =>
+          oldVal === QUESTION_MARK || keyboardInequalKeys.includes(oldVal)
+            ? value
+            : isDraggable
+              ? `${value}${oldVal}`
+              : `${oldVal}${value}`
+        );
+      }
+    },
+    [isDraggable]
+  );
 
   const onNextCatBtnClicked = () => {
     if (mistakes.length) {

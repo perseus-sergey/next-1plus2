@@ -1,8 +1,9 @@
 'use client';
 
-import { MouseEvent, Touch, TouchEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, Touch, TouchEvent, useEffect, useState } from 'react';
 import styles from './KeyboardButton.module.scss';
 import { useDragProvider } from '@/libs/context/DragProvider';
+import { isOverDropZoneFn } from '@/libs/exercises/math';
 
 interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
@@ -32,28 +33,48 @@ const generateRandomColor = (): string[] => {
 const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);
   const [elStyles, setElStyles] = useState({});
-  const { setDraggedValue, isDraggable } = useDragProvider();
+  const {
+    setDraggedValue,
+    isDraggable,
+    setIsOverDropZone,
+    isOverDropZone,
+    dropZoneRect,
+    setIsDragging,
+  } = useDragProvider();
 
   useEffect(() => {
     const [fontColor, bgColor] = generateRandomColor();
-    setElStyles({
+    setElStyles((oldStyles) => ({
+      ...oldStyles,
       color: fontColor,
       backgroundImage: bgColor,
-    });
+    }));
   }, []);
 
   const setMovingElemPosition = (e: MouseEvent | Touch) => {
     if (!movingEl) return;
-    movingEl.style.position = 'fixed';
-    movingEl.style.top = `${e.clientY - movingEl.clientHeight / 2}px`;
-    movingEl.style.left = `${e.clientX - movingEl.clientWidth / 2}px`;
+    setElStyles((oldStyles) => ({
+      ...oldStyles,
+      position: 'fixed',
+      top: `${e.clientY - movingEl.clientHeight / 2}px`,
+      left: `${e.clientX - movingEl.clientWidth / 2}px`,
+      opacity: isOverDropZone ? 0 : 1,
+    }));
+
+    const movingElRect = movingEl.getBoundingClientRect();
+    if (!dropZoneRect || !movingElRect) return;
+    setIsOverDropZone(isOverDropZoneFn(dropZoneRect, movingElRect));
+    setIsDragging(true);
   };
 
   const moveStart = (e: MouseEvent | TouchEvent) => {
     const el = e.target as HTMLElement;
     if (!el) return;
 
-    el.style.zIndex = `${100}`;
+    setElStyles((oldStyles) => ({
+      ...oldStyles,
+      zIndex: `${100}`,
+    }));
     setMovingEl(el);
     setDraggedValue(value);
   };
@@ -64,14 +85,20 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
 
   const moveEnd = () => {
     if (!movingEl) return;
-    movingEl.style.left = '';
-    movingEl.style.top = '';
-    movingEl.style.height = '';
-    movingEl.style.width = '';
-    movingEl.style.position = '';
-    movingEl.style.zIndex = '';
-
+    setElStyles((oldStyles) => ({
+      ...oldStyles,
+      left: '',
+      top: '',
+      height: '',
+      width: '',
+      position: '',
+      opacity: '1',
+      zIndex: '',
+    }));
+    setIsOverDropZone(false);
     setMovingEl(null);
+    setDraggedValue('');
+    setIsDragging(false);
   };
 
   return (
@@ -80,7 +107,7 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
       value={value}
       onClick={btnClickHandler ? () => btnClickHandler(value) : () => {}}
       style={elStyles}
-      className={styles.KeyboardButton}
+      className={`${styles.KeyboardButton}${isDraggable ? ` ${styles.shake}` : ''}`}
       data-testid="KeyboardButton"
       onMouseDown={isDraggable ? (e) => moveStart(e) : undefined}
       onTouchStart={isDraggable ? (e) => moveStart(e) : undefined}
@@ -96,4 +123,4 @@ const KeyboardButton = ({ value, btnClickHandler }: KeyboardButtonProps) => {
   );
 };
 
-export default KeyboardButton;
+export default React.memo(KeyboardButton);
