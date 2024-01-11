@@ -175,7 +175,7 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
         );
       }
     },
-    [isDraggable]
+    [isDraggable, audioKey]
   );
 
   const onNextCatBtnClicked = () => {
