@@ -1,6 +1,6 @@
 'use client';
 
-import React, { MouseEvent, Touch, TouchEvent, useEffect, useReducer, useState } from 'react';
+import React, { Touch, TouchEvent, useEffect, useReducer, useState } from 'react';
 import styles from './KeyboardButton.module.scss';
 import { useDragProvider } from '@/libs/context/DragProvider';
 import { isOverDropZoneFn } from '@/libs/exercises/math';
@@ -39,6 +39,9 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);
   const [elStyles, setElStyles] = useState({});
   const [classNames, addShakeClass] = useReducer(addShakeClassReducer, [styles.KeyboardButton]);
+
+  const [elHalfLength, setElHalfLength] = useState({ halfWidth: 0, halfHeight: 0 });
+
   const { setDraggedValue, setIsOverDropZone, isOverDropZone, dropZoneRect, setIsDragging } =
     useDragProvider();
 
@@ -55,14 +58,14 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
     addShakeClass(isDraggable ? true : false);
   }, [isDraggable]);
 
-  const setMovingElemPosition = (e: MouseEvent | Touch) => {
+  const setMovingElemPosition = (e: Touch) => {
     if (!movingEl) return;
     setElStyles((oldStyles) => ({
       ...oldStyles,
-      position: 'fixed',
-      top: `${e.clientY - movingEl.clientHeight / 2}px`,
-      left: `${e.clientX - movingEl.clientWidth / 2}px`,
-      opacity: isOverDropZone ? 0 : 1,
+      position: 'absolute',
+      top: `${e.clientY - elHalfLength.halfHeight}px`,
+      left: `${e.clientX - elHalfLength.halfWidth}px`,
+      opacity: isOverDropZone ? 0.2 : 1,
     }));
 
     const movingElRect = movingEl.getBoundingClientRect();
@@ -71,12 +74,13 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
     setIsDragging(true);
   };
 
-  const moveStart = (e: MouseEvent | TouchEvent) => {
+  const moveStart = (e: TouchEvent) => {
     const el = e.target as HTMLElement;
     if (!el) return;
 
     addShakeClass(false);
 
+    setElHalfLength({ halfWidth: el.clientWidth / 2, halfHeight: el.clientHeight / 2 });
     setElStyles((oldStyles) => ({
       ...oldStyles,
       zIndex: `${100}`,
