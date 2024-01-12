@@ -32,6 +32,7 @@ export enum EMessageNames {
   'BTN_MATH' = 'btnMath',
   'TITLE_HOME_PAGE' = 'titleHomePage',
   'TITLE_REPORT' = 'Report',
+  'EXERCISES' = 'exercises',
 }
 
 export const titleMap: TTitleMap = new Map([
@@ -64,6 +65,7 @@ export const titleMap: TTitleMap = new Map([
   [EMessageNames.BTN_MATH, { [ELang.en]: 'Maths', [ELang.ua]: 'Математика' }],
   [EMessageNames.TITLE_HOME_PAGE, { [ELang.en]: 'Home Page', [ELang.ua]: 'Домашня Сторінка' }],
   [EMessageNames.TITLE_REPORT, { [ELang.en]: 'Report', [ELang.ua]: 'Звіт' }],
+  [EMessageNames.EXERCISES, { [ELang.en]: 'Exercises', [ELang.ua]: 'Завдань' }],
 ]);
 
 export enum EPageTitles {

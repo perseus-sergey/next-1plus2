@@ -25,6 +25,7 @@ const CatComplete = ({
   mistakes,
   mistakesStr,
   category,
+  exsQuant,
 }: ICatComplete) => {
   const { language } = useLangProvider();
 
@@ -48,6 +49,9 @@ const CatComplete = ({
           <p>
             {getTitleFromMap(EMessageNames.CATEGORY, language)}:{' '}
             {capitalizedWord(getCatFromMap(category, language).title)}
+          </p>
+          <p>
+            {getTitleFromMap(EMessageNames.EXERCISES, language)}: {exsQuant}
           </p>
           <p>
             {getTitleFromMap(EMessageNames.MISTAKES, language)}: {mistakes.length}
