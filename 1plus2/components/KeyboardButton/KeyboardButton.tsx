@@ -4,6 +4,7 @@ import React, { MouseEvent, Touch, TouchEvent, useEffect, useReducer, useState }
 import styles from './KeyboardButton.module.scss';
 import { useDragProvider } from '@/libs/context/DragProvider';
 import { isOverDropZoneFn } from '@/libs/exercises/math';
+import { addRemoveClassName } from '@/libs/utils';
 
 interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
@@ -32,7 +33,7 @@ const generateRandomColor = (): string[] => {
 };
 
 const addShakeClassReducer = (classNames: string[], isAddShake: boolean) =>
-  isAddShake ? [...classNames, styles.shake] : classNames.filter((c) => c !== styles.shake);
+  addRemoveClassName(classNames, styles.shake, isAddShake);
 
 const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: KeyboardButtonProps) => {
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);

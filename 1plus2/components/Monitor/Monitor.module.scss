@@ -2,7 +2,6 @@ $media_width_small: 320px;
 $media_width_medium: 600px;
 $media_height_medium: 450px;
 
-
 .Monitor {
   display: flex;
   flex-direction: column;
@@ -25,7 +24,7 @@ $media_height_medium: 450px;
   font-size: 1.3rem;
   padding: 0.3rem;
   text-shadow: 1px 1px 1px #000000;
-  
+
   @media screen and (max-width: $media_width_medium), (max-height: $media_height_medium) {
     font-size: 1rem;
   }

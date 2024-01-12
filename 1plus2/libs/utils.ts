@@ -28,3 +28,6 @@ export const capitalizedWord = (word: string) =>
   word.replace(/^(.)/, (match) => match.toUpperCase());
 
 export const sleep = (ms = 1000) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const addRemoveClassName = (oldArr: string[], className: string, isAdd: boolean) =>
+  isAdd ? [...oldArr, className] : oldArr.filter((cl) => cl !== className);

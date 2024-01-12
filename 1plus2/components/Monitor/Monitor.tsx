@@ -3,13 +3,19 @@ import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
 import { useDragProvider } from '@/libs/context/DragProvider';
-import { useRect } from '@/libs/hooks/useRect';
+import { addRemoveClassName } from '@/libs/utils';
+
+const addSmallExsClassReducer = (oldArr: string[], isAdd: boolean) =>
+  addRemoveClassName(oldArr, styles.smallExercise, isAdd);
+
+const addBigColumnClassReducer = (oldArr: string[], isAdd: boolean) =>
+  addRemoveClassName(oldArr, styles.bigColumn, isAdd);
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
@@ -32,34 +38,34 @@ const Monitor = ({
   isColumn = false,
   isDelBtnActive = true,
 }: MonitorProps) => {
-  const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
-  const [columnClassName, setColumnClassName] = useState('');
+  const [exsClassNames, addSmallExsClass] = useReducer(addSmallExsClassReducer, [
+    styles.displayExsButton,
+  ]);
+  const [columnClassNames, addBigColumnClass] = useReducer(addBigColumnClassReducer, []);
   const { language } = useLangProvider();
   const { setIsColumn, setDropZoneRect, draggedValue } = useDragProvider();
-  // const [rect, reference] = useRect('resize');
+
   const reference = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (draggedValue === '') return;
-
     const el = reference.current;
     if (!el) return;
-
     setDropZoneRect(el.getBoundingClientRect());
   }, [setDropZoneRect, draggedValue]);
 
   const exerciseClick = () => {
-    if (columnClassName === styles.bigColumn) {
-      setColumnClassName('');
-      setExerciseClassNames(exerciseClassNames.filter((cl) => cl !== styles.smallExercise));
+    if (columnClassNames.includes(styles.bigColumn)) {
+      addBigColumnClass(false);
+      addSmallExsClass(false);
       setIsColumn(false);
     }
   };
 
   const columnClick = () => {
-    if (!columnClassName) {
-      setColumnClassName(styles.bigColumn);
-      setExerciseClassNames([...exerciseClassNames, styles.smallExercise]);
+    if (!columnClassNames.includes(styles.bigColumn)) {
+      addBigColumnClass(true);
+      addSmallExsClass(true);
       setIsColumn(true);
     }
   };
@@ -86,7 +92,7 @@ const Monitor = ({
                   clickHandler={columnClick}
                   exerciseParts={exerciseParts}
                   userAnswer={userAnswer}
-                  className={columnClassName}
+                  className={columnClassNames.join(' ')}
                 />
               )}
 
@@ -95,10 +101,10 @@ const Monitor = ({
                 type="button"
                 className={
                   isRightAnswer === EIsRightAnswer.BAD
-                    ? [...exerciseClassNames, styles.badAnswer].join(' ')
+                    ? [...exsClassNames, styles.badAnswer].join(' ')
                     : isRightAnswer === EIsRightAnswer.RIGHT
-                      ? [...exerciseClassNames, styles.properAnswer].join(' ')
-                      : exerciseClassNames.join(' ')
+                      ? [...exsClassNames, styles.properAnswer].join(' ')
+                      : exsClassNames.join(' ')
                 }
               >
                 {exerciseParts.map(({ value, hint, isQuestionPart }, indx) => (
