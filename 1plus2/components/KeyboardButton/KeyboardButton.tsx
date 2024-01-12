@@ -63,8 +63,8 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
     setElStyles((oldStyles) => ({
       ...oldStyles,
       position: 'absolute',
-      top: `${e.clientY - elHalfLength.halfHeight}px`,
-      left: `${e.clientX - elHalfLength.halfWidth}px`,
+      top: `${e.pageY - elHalfLength.halfHeight}px`,
+      left: `${e.pageX - elHalfLength.halfWidth}px`,
       opacity: isOverDropZone ? 0.2 : 1,
     }));
 
@@ -80,7 +80,7 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
 
     addShakeClass(false);
 
-    setElHalfLength({ halfWidth: el.clientWidth / 2, halfHeight: el.clientHeight / 2 });
+    setElHalfLength({ halfWidth: el.offsetWidth / 2, halfHeight: el.offsetHeight / 2 });
     setElStyles((oldStyles) => ({
       ...oldStyles,
       zIndex: `${100}`,

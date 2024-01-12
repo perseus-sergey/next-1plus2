@@ -43,7 +43,7 @@ const Monitor = ({
   ]);
   const [columnClassNames, addBigColumnClass] = useReducer(addBigColumnClassReducer, []);
   const { language } = useLangProvider();
-  const { setIsColumn, setDropZoneRect, draggedValue, dropZoneRect } = useDragProvider();
+  const { setIsColumn, setDropZoneRect, draggedValue } = useDragProvider();
 
   const reference = useRef<HTMLDivElement>(null);
 
@@ -51,9 +51,7 @@ const Monitor = ({
     if (draggedValue === '') return;
     const el = reference.current;
     if (!el) return;
-    const rec = el.getBoundingClientRect();
-    console.log('🚀 ~ file: Monitor.tsx:55 ~ useEffect ~ rec:', rec.bottom);
-    setDropZoneRect(rec);
+    setDropZoneRect(el.getBoundingClientRect());
   }, [setDropZoneRect, draggedValue]);
 
   const exerciseClick = () => {
@@ -74,7 +72,6 @@ const Monitor = ({
 
   return (
     <section className={styles.Monitor} data-testid="Monitor">
-      {dropZoneRect?.bottom}
       <div className={styles.monitorHeader}>
         <span className={styles.exsQuant}>{`${getTitleFromMap(
           EMessageNames.LEFT_EXS_NUM_MSG,
