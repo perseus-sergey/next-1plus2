@@ -144,4 +144,4 @@ const Monitor = ({
   );
 };
 
-export default React.memo(Monitor);
+export default Monitor;
