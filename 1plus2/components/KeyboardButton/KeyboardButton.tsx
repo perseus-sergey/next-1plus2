@@ -31,14 +31,13 @@ const generateRandomColor = (): string[] => {
   return [keyColorStyles[colorIndx].fontColor, keyColorStyles[bgColorIndx].bgColor];
 };
 
+const addShakeClassReducer = (classNames: string[], isAddShake: boolean) =>
+  isAddShake ? [...classNames, styles.shake] : classNames.filter((c) => c !== styles.shake);
+
 const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: KeyboardButtonProps) => {
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);
   const [elStyles, setElStyles] = useState({});
-  const [classNames, addShakeClass] = useReducer(
-    (classNames: string[], isAddShake: boolean) =>
-      isAddShake ? [...classNames, styles.shake] : classNames.filter((c) => c !== styles.shake),
-    [styles.KeyboardButton]
-  );
+  const [classNames, addShakeClass] = useReducer(addShakeClassReducer, [styles.KeyboardButton]);
   const { setDraggedValue, setIsOverDropZone, isOverDropZone, dropZoneRect, setIsDragging } =
     useDragProvider();
 

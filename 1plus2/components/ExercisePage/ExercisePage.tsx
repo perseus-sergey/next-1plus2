@@ -23,7 +23,6 @@ import { useMySound } from '@/libs/hooks/useSound';
 import CatComplete from '../CatComplete/CatComplete';
 import { useRouter } from 'next/navigation';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
-import { ELevelsActionKind, levelsReducer } from '@/libs/reducers/levelReducer';
 import { PlayFunction } from 'use-sound/dist/types';
 import EndLevel from '../EndLevel/EndLevel';
 import { useLangProvider } from '@/libs/context/LangProvider';
@@ -59,14 +58,17 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
   const { language: lang } = useLangProvider();
   const { isColumn, draggedValue, isDragging, isOverDropZone } = useDragProvider();
 
-  const [levelsObj, changeLevelsArray] = useReducer(levelsReducer, { levels });
+  const [currentLevels, shiftLevelsArray] = useReducer(
+    (oldArr: EExerciseCategories[]) => oldArr.slice(1),
+    levels
+  );
 
   const [minusPlus, askElemNumbers, hint] = useExerciseParams(currentCat, exerciseArray[0]);
 
   const router = useRouter();
 
   useEffect(() => {
-    const currCat = isLevel ? levelsObj.levels[0] : cat;
+    const currCat = isLevel ? currentLevels[0] : cat;
 
     setExsParams(categoriesMap.get(EExerciseCategories[currCat]));
     setCurrentCat(currCat);
@@ -187,10 +189,10 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
     } else {
       if (!isLevel) return router.push(`/${lang}/math`);
 
-      changeLevelsArray({ type: ELevelsActionKind.SHIFT_LEVELS });
-      setCurrentCat(levelsObj.levels[1]);
-      setExsParams(categoriesMap.get(EExerciseCategories[levelsObj.levels[1]]));
-      setExerciseArray(makeExerciseArray(levelsObj.levels[1], chosenMaxNum));
+      shiftLevelsArray();
+      setCurrentCat(currentLevels[1]);
+      setExsParams(categoriesMap.get(EExerciseCategories[currentLevels[1]]));
+      setExerciseArray(makeExerciseArray(currentLevels[1], chosenMaxNum));
     }
     setIsCatFinish(false);
     setMistakes([]);
