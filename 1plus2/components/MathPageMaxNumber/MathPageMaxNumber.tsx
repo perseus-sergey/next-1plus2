@@ -9,17 +9,18 @@ import Link from 'next/link';
 import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
 
 const MathPageMaxNumber = ({ params }: ICatNamePageProps) => {
-  const catObj = categoriesMap.get(params.cat);
+  const { cat, lang } = params;
+  const catObj = categoriesMap.get(cat);
 
-  if (!catObj) return redirect(`/${params.lang}/math/category`);
+  if (!catObj) return redirect(`/${lang}/math/category`);
   const getHref = (value: number) =>
-    params.cat === EExerciseCategories['level']
-      ? `/${params.lang}/math/level/${value}`
-      : `/${params.lang}/math/category/${params.cat}/${value}`;
+    cat === EExerciseCategories['level']
+      ? `/${lang}/math/level/${value}`
+      : `/${lang}/math/category/${cat}/${value}`;
 
   return (
     <section className="keyboard" data-testid="MathPageMaxNumber">
-      <Title name={getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, params.lang)} />
+      <Title name={getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, lang)} />
 
       <div className="keyboard-line">
         {createMaxNumArray(catObj.exercise).map((value) => (

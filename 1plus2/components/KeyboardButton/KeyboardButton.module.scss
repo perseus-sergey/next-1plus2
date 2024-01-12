@@ -56,4 +56,21 @@ $keyBgColorDefault: $keyBgColorBlue;
   @media screen and (orientation: portrait) {
     font-size: 9vw;
   }
+
+  &.shake {
+    animation: jumping 0.2s ease-in-out infinite;
+
+    @keyframes jumping {
+      0%,
+      100% {
+        transform: none;
+      }
+      33% {
+        transform: translateY(-1px) rotate(-2deg);
+      }
+      66% {
+        transform: translateY(1px) rotate(2deg);
+      }
+    }
+  }
 }

@@ -111,6 +111,12 @@ export const makeExerciseParts = (
   },
 ];
 
+export const isOverDropZoneFn = (dropZoneRect: DOMRect, draggedRect: DOMRect) =>
+  draggedRect.top < dropZoneRect.bottom &&
+  draggedRect.right > dropZoneRect.left &&
+  draggedRect.bottom > dropZoneRect.top &&
+  draggedRect.left < dropZoneRect.right;
+
 export const makeExerciseArray = (
   category: EExerciseCategories,
   maxNum = 100,

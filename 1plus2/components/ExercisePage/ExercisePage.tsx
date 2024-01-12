@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 // import styles from './ExercisePage.module.scss';
-import { ELang } from '@/libs/langMessages';
 import {
   IExsPart,
   NUMBER_OF_EXERCISES,
@@ -10,25 +9,24 @@ import {
   makeExerciseArray,
   makeExerciseParts,
 } from '@/libs/exercises/math';
-import MathLevelProvider from '@/libs/context/MathLevelProvider';
 import Computer from '../Computer/Computer';
 import {
   EExerciseCategories,
   IExerciseParams,
   QUESTION_MARK,
   categoriesMap,
-  keyboardInEqualKeys,
+  keyboardInequalKeys,
 } from '@/libs/exercises/math.model';
-import LanguageProvider from '@/libs/context/LangProvider';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';
 import { useMySound } from '@/libs/hooks/useSound';
 import CatComplete from '../CatComplete/CatComplete';
 import { useRouter } from 'next/navigation';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
-import { ELevelsActionKind, levelsReducer } from '@/libs/reducers/levelReducer';
 import { PlayFunction } from 'use-sound/dist/types';
 import EndLevel from '../EndLevel/EndLevel';
+import { useLangProvider } from '@/libs/context/LangProvider';
+import { useDragProvider } from '@/libs/context/DragProvider';
 
 export enum EIsRightAnswer {
   '_',
@@ -37,13 +35,12 @@ export enum EIsRightAnswer {
 }
 
 export interface IExerciseComponentProps {
-  lang: ELang;
   chosenMaxNum: number;
   cat: EExerciseCategories;
   levels?: EExerciseCategories[];
 }
 
-const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseComponentProps) => {
+const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProps) => {
   const [currentCat, setCurrentCat] = useState(EExerciseCategories['equality']);
   const [exerciseArray, setExerciseArray] = useState<(string | number)[][]>([[]]);
   const [exsArrayLength, setExsArrayLength] = useState(NUMBER_OF_EXERCISES);
@@ -58,14 +55,20 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
   const [mistakes, setMistakes] = useState<(number | string)[][]>([]);
   const [mistakesStr, setMistakesStr] = useState<string[]>([]);
 
-  const [levelsObj, changeLevelsArray] = useReducer(levelsReducer, { levels });
+  const { language: lang } = useLangProvider();
+  const { isColumn, draggedValue, isDragging, isOverDropZone } = useDragProvider();
+
+  const [currentLevels, shiftLevelsArray] = useReducer(
+    (oldArr: EExerciseCategories[]) => oldArr.slice(1),
+    levels
+  );
 
   const [minusPlus, askElemNumbers, hint] = useExerciseParams(currentCat, exerciseArray[0]);
 
   const router = useRouter();
 
   useEffect(() => {
-    const currCat = isLevel ? levelsObj.levels[0] : cat;
+    const currCat = isLevel ? currentLevels[0] : cat;
 
     setExsParams(categoriesMap.get(EExerciseCategories[currCat]));
     setCurrentCat(currCat);
@@ -86,6 +89,11 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
       )
     );
   }, [currentCat, exerciseArray, minusPlus, askElemNumbers, hint, exsParams?.equalMark]);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    keyboardBtnClickHandler(draggedValue, !isOverDropZone);
+  }, [isOverDropZone]);
 
   const { audioDel, audioKey, audioRightAnsw, audioWrongAnsw, audioCatFinish, audioLevelFinish } =
     useMySound();
@@ -148,14 +156,31 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     setIsRightAnswer(EIsRightAnswer.BAD);
   };
 
-  const keyboardBtnClickHandler = (value: string) => {
-    playSound(audioKey);
-    setAnswerElementValue(
-      answerElementValue === QUESTION_MARK || keyboardInEqualKeys.includes(answerElementValue)
-        ? value
-        : `${answerElementValue}${value}`
-    );
-  };
+  const keyboardBtnClickHandler = useCallback(
+    (value: string, isRemove = false) => {
+      if (!value) return;
+
+      if (isRemove) {
+        setAnswerElementValue((oldVal) =>
+          oldVal === QUESTION_MARK || oldVal.length < 2
+            ? QUESTION_MARK
+            : isColumn
+              ? oldVal.slice(1)
+              : oldVal.slice(0, oldVal.length - 1)
+        );
+      } else {
+        playSound(audioKey);
+        setAnswerElementValue((oldVal) =>
+          oldVal === QUESTION_MARK || keyboardInequalKeys.includes(oldVal)
+            ? value
+            : isColumn
+              ? `${value}${oldVal}`
+              : `${oldVal}${value}`
+        );
+      }
+    },
+    [isColumn, audioKey]
+  );
 
   const onNextCatBtnClicked = () => {
     if (mistakes.length) {
@@ -164,10 +189,10 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     } else {
       if (!isLevel) return router.push(`/${lang}/math`);
 
-      changeLevelsArray({ type: ELevelsActionKind.SHIFT_LEVELS });
-      setCurrentCat(levelsObj.levels[1]);
-      setExsParams(categoriesMap.get(EExerciseCategories[levelsObj.levels[1]]));
-      setExerciseArray(makeExerciseArray(levelsObj.levels[1], chosenMaxNum));
+      shiftLevelsArray();
+      setCurrentCat(currentLevels[1]);
+      setExsParams(categoriesMap.get(EExerciseCategories[currentLevels[1]]));
+      setExerciseArray(makeExerciseArray(currentLevels[1], chosenMaxNum));
     }
     setIsCatFinish(false);
     setMistakes([]);
@@ -211,23 +236,19 @@ const ExercisePage = ({ cat, chosenMaxNum, lang, levels = [] }: IExerciseCompone
     );
 
   return (
-    <LanguageProvider language={lang}>
-      <MathLevelProvider levels={levelsObj.levels} isLevel={isLevel}>
-        <Computer
-          exerciseParts={exerciseParts}
-          answerElementValue={answerElementValue}
-          isRightAnswer={isRightAnswer}
-          clearBtnHandler={clearBtnHandler}
-          keyboardBtnClickHandler={keyboardBtnClickHandler}
-          enterClickHandler={enterClickHandler}
-          isEnterDisabled={isEnterDisabled}
-          mistakesLength={mistakes.length}
-          exercisesLength={exerciseArray.length}
-          category={currentCat}
-          exsParams={exsParams}
-        />
-      </MathLevelProvider>
-    </LanguageProvider>
+    <Computer
+      exerciseParts={exerciseParts}
+      answerElementValue={answerElementValue}
+      isRightAnswer={isRightAnswer}
+      clearBtnHandler={clearBtnHandler}
+      keyboardBtnClickHandler={keyboardBtnClickHandler}
+      enterClickHandler={enterClickHandler}
+      isEnterDisabled={isEnterDisabled}
+      mistakesLength={mistakes.length}
+      exercisesLength={exerciseArray.length}
+      category={currentCat}
+      exsParams={exsParams}
+    />
   );
 };
 

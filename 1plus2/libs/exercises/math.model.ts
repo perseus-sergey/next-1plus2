@@ -1,7 +1,7 @@
 import { ELang } from '../langMessages';
 
 export const keyboardNumKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-export const keyboardInEqualKeys = ['<', '=', '>'];
+export const keyboardInequalKeys = ['<', '=', '>'];
 export type TUnequalMark = '>' | '<' | '=' | '';
 export type TMinusPlus = '-' | '+' | '';
 
@@ -87,7 +87,7 @@ export const categoriesMap: TCatMap = new Map([
       [ELang.ua]: { title: 'Нерівність', description: '< = >' },
       exercise: { start: 10, max: 100, step: 10 },
       equalMark: '',
-      keyboardKeys: keyboardInEqualKeys,
+      keyboardKeys: keyboardInequalKeys,
     },
   ],
   [

@@ -1,3 +1,4 @@
+import React from 'react';
 import KeyboardButton from '../KeyboardButton/KeyboardButton';
 import TextButton from '../TextButton/TextButton';
 
@@ -23,6 +24,7 @@ const Keyboard = ({
           key={keyboardKey}
           value={keyboardKey}
           btnClickHandler={keyboardBtnClickHandler}
+          isDraggable={true}
         />
       ))}
     </div>
@@ -35,4 +37,4 @@ const Keyboard = ({
   </section>
 );
 
-export default Keyboard;
+export default React.memo(Keyboard);
