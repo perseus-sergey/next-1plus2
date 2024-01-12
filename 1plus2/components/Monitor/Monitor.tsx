@@ -3,7 +3,7 @@ import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
@@ -35,17 +35,18 @@ const Monitor = ({
   const [exerciseClassNames, setExerciseClassNames] = useState([styles.displayExsButton]);
   const [columnClassName, setColumnClassName] = useState('');
   const { language } = useLangProvider();
-  const { setIsColumn, setDropZoneRect } = useDragProvider();
-  const [rect, reference] = useRect('resize');
-
-  const measuredRectRef = useCallback(() => {
-    if (!rect) return;
-    setDropZoneRect(rect);
-  }, [setDropZoneRect, rect]);
+  const { setIsColumn, setDropZoneRect, draggedValue } = useDragProvider();
+  // const [rect, reference] = useRect('resize');
+  const reference = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    measuredRectRef();
-  }, [measuredRectRef]);
+    if (draggedValue === '') return;
+
+    const el = reference.current;
+    if (!el) return;
+
+    setDropZoneRect(el.getBoundingClientRect());
+  }, [setDropZoneRect, draggedValue]);
 
   const exerciseClick = () => {
     if (columnClassName === styles.bigColumn) {

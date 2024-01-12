@@ -1,6 +1,6 @@
 'use client';
 
-import React, { MouseEvent, Touch, TouchEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, Touch, TouchEvent, useEffect, useReducer, useState } from 'react';
 import styles from './KeyboardButton.module.scss';
 import { useDragProvider } from '@/libs/context/DragProvider';
 import { isOverDropZoneFn } from '@/libs/exercises/math';
@@ -34,6 +34,11 @@ const generateRandomColor = (): string[] => {
 const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: KeyboardButtonProps) => {
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);
   const [elStyles, setElStyles] = useState({});
+  const [classNames, addShakeClass] = useReducer(
+    (classNames: string[], isAddShake: boolean) =>
+      isAddShake ? [...classNames, styles.shake] : classNames.filter((c) => c !== styles.shake),
+    [styles.KeyboardButton]
+  );
   const { setDraggedValue, setIsOverDropZone, isOverDropZone, dropZoneRect, setIsDragging } =
     useDragProvider();
 
@@ -45,6 +50,10 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
       backgroundImage: bgColor,
     }));
   }, []);
+
+  useEffect(() => {
+    addShakeClass(isDraggable ? true : false);
+  }, [isDraggable]);
 
   const setMovingElemPosition = (e: MouseEvent | Touch) => {
     if (!movingEl) return;
@@ -66,6 +75,8 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
     const el = e.target as HTMLElement;
     if (!el) return;
 
+    addShakeClass(false);
+
     setElStyles((oldStyles) => ({
       ...oldStyles,
       zIndex: `${100}`,
@@ -78,6 +89,8 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
 
   const moveEnd = () => {
     if (!movingEl) return;
+
+    addShakeClass(true);
     setElStyles((oldStyles) => ({
       ...oldStyles,
       left: '',
@@ -100,7 +113,7 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
       value={value}
       onClick={btnClickHandler ? () => btnClickHandler(value) : () => {}}
       style={elStyles}
-      className={`${styles.KeyboardButton}${isDraggable ? ` ${styles.shake}` : ''}`}
+      className={classNames.join(' ')}
       data-testid="KeyboardButton"
       onTouchStart={isDraggable ? (e) => moveStart(e) : undefined}
       onTouchMove={isDraggable ? (e) => touchMove(e) : undefined}
