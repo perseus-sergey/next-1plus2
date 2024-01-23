@@ -1,6 +1,5 @@
 import { deepUniqueArraySize } from '@/libs/utils';
-import { makeExerciseArray } from '../math';
-import { EExerciseCategories, categoriesMap } from '../math.model';
+import { EExerciseCategories, categoriesMap, makeExerciseArray } from '../math.model';
 
 const cat = EExerciseCategories['sequence'];
 const attempts = 100;

@@ -1,14 +1,6 @@
 import { TMathHint } from '../hooks/useExerciseParams';
 import { ELang, EMessageNames } from '../langMessages';
-import { setArrCompos } from './composition/composition';
-import setArrEqual from './equal/equal';
-import setArrFive from './five/five';
-import { setArrInequal } from './inequal/inequal';
-import { EExerciseCategories, TCatObject, TMinusPlus, categoriesMap } from './math.model';
-import { setArrOverTen } from './overTen/overTen';
-import setArrPair from './pairs/pairs';
-import setArrSequence from './sequence/sequence';
-import { setArrTen } from './ten/ten';
+import { EExerciseCategories, EMinusPlus, TCatObject, categoriesMap } from './math.model';
 
 export const NUMBER_OF_EXERCISES = 10;
 export const HARD_LEVELS_IN_ARRAY = 2;
@@ -79,7 +71,7 @@ export interface IExsPart {
 export const makeExerciseParts = (
   askElemNumbers: number[],
   exercise: (number | string)[],
-  minusPlus: TMinusPlus,
+  minusPlus: EMinusPlus,
   equalMark: string | undefined,
   isInequalCat: boolean,
   { hintN1, hintMinusPlus, hintN2, hintEqual, hintResponse }: TMathHint
@@ -116,33 +108,3 @@ export const isOverDropZoneFn = (dropZoneRect: DOMRect, draggedRect: DOMRect) =>
   draggedRect.right > dropZoneRect.left &&
   draggedRect.bottom > dropZoneRect.top &&
   draggedRect.left < dropZoneRect.right;
-
-export const makeExerciseArray = (
-  category: EExerciseCategories,
-  maxNum = 100,
-  numOfExs = NUMBER_OF_EXERCISES
-): (string | number)[][] => {
-  switch (category) {
-    case EExerciseCategories['equality']:
-      return setArrEqual(maxNum, numOfExs);
-    case EExerciseCategories['sequence']:
-      return setArrSequence(maxNum, numOfExs);
-    case EExerciseCategories['pairs']:
-      return setArrPair(maxNum, numOfExs);
-    case EExerciseCategories['link-equality']:
-      return setArrEqual(maxNum, numOfExs);
-    case EExerciseCategories['inequality']:
-      return setArrInequal(maxNum, numOfExs);
-    case EExerciseCategories['equal-ten']:
-      return setArrTen(maxNum, numOfExs);
-    case EExerciseCategories['composition']:
-      return setArrCompos(maxNum, numOfExs);
-    case EExerciseCategories['equal-five']:
-      return setArrFive(maxNum, numOfExs);
-    case EExerciseCategories['equal-over-ten']:
-      return setArrOverTen(maxNum, numOfExs);
-
-    default:
-      return setArrEqual(maxNum, numOfExs);
-  }
-};

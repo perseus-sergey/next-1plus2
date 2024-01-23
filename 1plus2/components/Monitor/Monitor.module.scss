@@ -3,6 +3,7 @@ $media_width_medium: 600px;
 $media_height_medium: 450px;
 
 .Monitor {
+  height: fit-content;
   display: flex;
   flex-direction: column;
   position: relative;

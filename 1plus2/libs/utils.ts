@@ -1,4 +1,5 @@
 export const createArray = (length: number) => [...Array(length)];
+export const createNumArray = (length: number) => [...Array(length).keys()];
 
 export const arrayShift = <T>(array: T[][]): T[][] => {
   const [, ...rest] = array;

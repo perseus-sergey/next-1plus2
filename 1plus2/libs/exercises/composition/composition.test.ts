@@ -1,6 +1,5 @@
 import { deepUniqueArraySize } from '@/libs/utils';
-import { makeExerciseArray } from '../math';
-import { EExerciseCategories, categoriesMap } from '../math.model';
+import { EExerciseCategories, categoriesMap, makeExerciseArray } from '../math.model';
 
 describe('setArrCompos', () => {
   const cat = EExerciseCategories['composition'];

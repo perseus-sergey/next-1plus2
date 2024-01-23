@@ -1,9 +1,25 @@
 import { ELang } from '../langMessages';
+import { setArrCompos } from './composition/composition';
+import setArrEqual from './equal/equal';
+import setArrFive from './five/five';
+import { setArrInequal } from './inequal/inequal';
+import { NUMBER_OF_EXERCISES } from './math';
+import { setArrDivision, setArrMultiply } from './multiply/multiply';
+import { setArrOverTen } from './overTen/overTen';
+import setArrPair from './pairs/pairs';
+import setArrSequence from './sequence/sequence';
+import { setArrTen } from './ten/ten';
 
 export const keyboardNumKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 export const keyboardInequalKeys = ['<', '=', '>'];
 export type TUnequalMark = '>' | '<' | '=' | '';
-export type TMinusPlus = '-' | '+' | '';
+export enum EMinusPlus {
+  MULTIPLY = '×',
+  DIVISION = '/',
+  MINUS = '-',
+  PLUS = '+',
+  EMPTY = '',
+}
 
 export const QUESTION_MARK = '?';
 
@@ -21,8 +37,6 @@ export interface IExerciseParams {
   isColumn?: boolean;
 }
 
-type TCatMap = Map<EExerciseCategories, IExerciseParams>;
-
 export enum EExerciseCategories {
   'sequence' = 'sequence',
   'equality' = 'equality',
@@ -33,8 +47,12 @@ export enum EExerciseCategories {
   'composition' = 'composition',
   'equal-five' = 'equal-five',
   'equal-over-ten' = 'equal-over-ten',
+  'multiply' = 'multiply',
+  'division' = 'division',
   'level' = 'level',
 }
+
+type TCatMap = Map<EExerciseCategories, IExerciseParams>;
 
 export const categoriesMap: TCatMap = new Map([
   [
@@ -135,6 +153,28 @@ export const categoriesMap: TCatMap = new Map([
     },
   ],
   [
+    EExerciseCategories['multiply'],
+    {
+      [ELang.en]: { title: 'Multiply', description: '2 x 3' },
+      [ELang.ua]: { title: 'Множення', description: '2 x 3' },
+      exercise: { start: 2, max: 10, step: 1 },
+      equalMark: '=',
+      keyboardKeys: keyboardNumKeys,
+      isColumn: false,
+    },
+  ],
+  [
+    EExerciseCategories['division'],
+    {
+      [ELang.en]: { title: 'Division', description: '4 / 2' },
+      [ELang.ua]: { title: 'Ділення', description: '4 / 2' },
+      exercise: { start: 2, max: 10, step: 1 },
+      equalMark: '=',
+      keyboardKeys: keyboardNumKeys,
+      isColumn: false,
+    },
+  ],
+  [
     EExerciseCategories['level'],
     {
       [ELang.en]: { title: 'Levels', description: 'Levels' },
@@ -146,3 +186,37 @@ export const categoriesMap: TCatMap = new Map([
     },
   ],
 ]);
+
+export const makeExerciseArray = (
+  category: EExerciseCategories,
+  maxNum = 100,
+  numOfExs = NUMBER_OF_EXERCISES
+): (string | number)[][] => {
+  switch (category) {
+    case EExerciseCategories['equality']:
+      return setArrEqual(maxNum, numOfExs);
+    case EExerciseCategories['sequence']:
+      return setArrSequence(maxNum, numOfExs);
+    case EExerciseCategories['pairs']:
+      return setArrPair(maxNum, numOfExs);
+    case EExerciseCategories['link-equality']:
+      return setArrEqual(maxNum, numOfExs);
+    case EExerciseCategories['inequality']:
+      return setArrInequal(maxNum, numOfExs);
+    case EExerciseCategories['equal-ten']:
+      return setArrTen(maxNum, numOfExs);
+    case EExerciseCategories['composition']:
+      return setArrCompos(maxNum, numOfExs);
+    case EExerciseCategories['equal-five']:
+      return setArrFive(maxNum, numOfExs);
+    case EExerciseCategories['equal-over-ten']:
+      return setArrOverTen(maxNum, numOfExs);
+    case EExerciseCategories['multiply']:
+      return setArrMultiply(maxNum, numOfExs);
+    case EExerciseCategories['division']:
+      return setArrDivision(maxNum, numOfExs);
+
+    default:
+      return setArrEqual(maxNum, numOfExs);
+  }
+};

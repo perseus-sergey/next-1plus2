@@ -12,4 +12,8 @@
   @media screen and (orientation: portrait) {
     gap: 15vw;
   }
+
+  @media (height < 500px) and (width > 500px) {
+    flex-direction: row;;
+  }
 }
