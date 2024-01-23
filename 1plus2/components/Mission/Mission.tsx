@@ -11,10 +11,10 @@ const Mission = ({ lang }: MissionProps) => {
   return (
     <div className={styles.links}>
       <Link href={`/${lang}/math/level`}>
-        <TextButton>{getTitleFromMap(EMessageNames.BTN_LEVELS, lang)}</TextButton>
+        <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_LEVELS, lang)}</TextButton>
       </Link>
       <Link href={`/${lang}/math/category`}>
-        <TextButton>{getTitleFromMap(EMessageNames.BTN_CAT, lang)}</TextButton>
+        <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_CAT, lang)}</TextButton>
       </Link>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { EExerciseCategories, TMinusPlus } from '../exercises/math.model';
+import { EExerciseCategories, EMinusPlus } from '../exercises/math.model';
 
-const mathHintEmpty = {
+const EMPTY_HINT = {
   hintN1: '',
   hintMinusPlus: '',
   hintN2: '',
@@ -9,7 +9,7 @@ const mathHintEmpty = {
   hintResponse: '',
 };
 
-export type TMathHint = typeof mathHintEmpty;
+export type TMathHint = typeof EMPTY_HINT;
 
 const makeHintPart = (val: number | string) => {
   const num = Number(val);
@@ -19,14 +19,14 @@ const makeHintPart = (val: number | string) => {
 };
 
 const getHintDefault = (exercise: (string | number)[]): TMathHint => ({
-  ...mathHintEmpty,
+  ...EMPTY_HINT,
   hintN1: +exercise[0] ? makeHintPart(+exercise[0]) : '',
   hintN2: +exercise[1] ? makeHintPart(Math.abs(+exercise[1])) : '',
   hintResponse: +exercise[2] ? makeHintPart(+exercise[2]) : '',
 });
 
 const getHintInequal = (exercise: (string | number)[]): TMathHint => ({
-  ...mathHintEmpty,
+  ...EMPTY_HINT,
   hintN1: +exercise[0] ? makeHintPart(+exercise[0]) : '',
   hintN2: +exercise[1] ? makeHintPart(Math.abs(+exercise[1])) : '',
   hintEqual: +exercise[2] ? makeHintPart(+exercise[2]) : '',
@@ -62,7 +62,7 @@ const getHintOverTen = (n1: number, n2: number): TMathHint => {
           : `${showWholeN2} - ${n2mod % 10}`;
     }
   }
-  return { ...mathHintEmpty, hintN1, hintN2, hintMinusPlus };
+  return { ...EMPTY_HINT, hintN1, hintN2, hintMinusPlus };
 };
 
 const getExsLinkParams = (exercise: (number | string)[]): [TMathHint, number] => {
@@ -74,7 +74,7 @@ const getExsLinkParams = (exercise: (number | string)[]): [TMathHint, number] =>
     ? (hintN1 = `${makeHintPart(exercise[0])}`)
     : (hintN2 = `${makeHintPart(Math.abs(+exercise[1]))}`);
 
-  return [{ ...mathHintEmpty, hintN1, hintN2, hintResponse: `${makeHintPart(exercise[2])}` }, r];
+  return [{ ...EMPTY_HINT, hintN1, hintN2, hintResponse: `${makeHintPart(exercise[2])}` }, r];
 };
 
 const getExsSequenceParams = (exercise: (number | string)[]): [TMathHint, number] => {
@@ -94,19 +94,23 @@ const getExsSequenceParams = (exercise: (number | string)[]): [TMathHint, number
     hintN2 = `${makeHintPart(exercise[1])}`;
   }
 
-  return [{ ...mathHintEmpty, hintN1, hintN2, hintResponse }, r];
+  return [{ ...EMPTY_HINT, hintN1, hintN2, hintResponse }, r];
 };
 
 export const useExerciseParams = (
   cat: EExerciseCategories,
   currentExercise: (string | number)[]
-): [TMinusPlus, number[], TMathHint] => {
-  const [minusPlus, setMinusPlus] = useState<TMinusPlus>('');
+): [EMinusPlus, number[], TMathHint] => {
+  const [minusPlus, setMinusPlus] = useState<EMinusPlus>(EMinusPlus.EMPTY);
   const [askElemNumbers, setAskElemNumbers] = useState<number[]>([2]);
-  const [hint, setHint] = useState<TMathHint>(mathHintEmpty);
+  const [hint, setHint] = useState<TMathHint>(EMPTY_HINT);
 
-  const getMinusPlus = (part1: number | string | undefined) =>
-    part1 === undefined || isNaN(+part1) ? '' : +part1 >= 0 ? '+' : '-';
+  const getMinusPlus = (part1: number | string | undefined): EMinusPlus =>
+    part1 === undefined || isNaN(+part1)
+      ? EMinusPlus.EMPTY
+      : +part1 >= 0
+        ? EMinusPlus.PLUS
+        : EMinusPlus.MINUS;
 
   const setExerciseParams = useCallback(() => {
     const [part0, part1] = currentExercise;
@@ -115,10 +119,10 @@ export const useExerciseParams = (
       const [OMathHint, r] = getExsSequenceParams(currentExercise);
 
       setHint(OMathHint);
-      setMinusPlus('');
+      setMinusPlus(EMinusPlus.EMPTY);
       setAskElemNumbers([r]);
     } else if (cat === EExerciseCategories['pairs']) {
-      setMinusPlus('+');
+      setMinusPlus(EMinusPlus.PLUS);
       setAskElemNumbers(Math.floor(Math.random() * 2) ? [2] : [0, 1]);
       setHint(getHintDefault(currentExercise));
     } else if (cat === EExerciseCategories['link-equality']) {
@@ -129,16 +133,24 @@ export const useExerciseParams = (
       setMinusPlus(getMinusPlus(part1));
     } else if (cat === EExerciseCategories['inequality']) {
       setAskElemNumbers([2]);
-      setMinusPlus(part0 === '' ? '' : getMinusPlus(part1));
+      setMinusPlus(part0 === EMinusPlus.EMPTY ? EMinusPlus.EMPTY : getMinusPlus(part1));
       setHint(getHintInequal(currentExercise));
     } else if (cat === EExerciseCategories['composition']) {
-      setHint(mathHintEmpty);
+      setHint(EMPTY_HINT);
       setMinusPlus(getMinusPlus(part1));
       setAskElemNumbers(Math.floor(Math.random() * 2) ? [1] : [0]);
     } else if (cat === EExerciseCategories['equal-over-ten']) {
       setAskElemNumbers([2]);
       setHint(getHintOverTen(+part0, +part1));
       setMinusPlus(getMinusPlus(part1));
+    } else if (cat === EExerciseCategories['multiply']) {
+      setAskElemNumbers([2]);
+      setHint(EMPTY_HINT);
+      setMinusPlus(EMinusPlus.MULTIPLY);
+    } else if (cat === EExerciseCategories['division']) {
+      setAskElemNumbers([2]);
+      setHint(EMPTY_HINT);
+      setMinusPlus(EMinusPlus.DIVISION);
     } else {
       setAskElemNumbers([2]);
       setMinusPlus(getMinusPlus(part1));

@@ -6,7 +6,6 @@ import {
   IExsPart,
   NUMBER_OF_EXERCISES,
   getCatComplTitles,
-  makeExerciseArray,
   makeExerciseParts,
 } from '@/libs/exercises/math';
 import Computer from '../Computer/Computer';
@@ -16,6 +15,7 @@ import {
   QUESTION_MARK,
   categoriesMap,
   keyboardInequalKeys,
+  makeExerciseArray,
 } from '@/libs/exercises/math.model';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';

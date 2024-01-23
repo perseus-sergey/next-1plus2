@@ -1,6 +1,7 @@
 // import styles from './WrongSegment.module.scss';
 import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
+import { Title } from '../Title/Title';
 
 type TWrongSegmentProps = {
   wrongMessage: string;
@@ -10,9 +11,9 @@ type TWrongSegmentProps = {
 
 const WrongSegment = ({ wrongMessage, redirectPath, btnTitle }: TWrongSegmentProps) => (
   <>
-    <h1>{wrongMessage}</h1>
+    <Title name={wrongMessage} />
     <Link href={redirectPath}>
-      <TextButton>{btnTitle}</TextButton>
+      <TextButton isLink>{btnTitle}</TextButton>
     </Link>
   </>
 );
