@@ -44,6 +44,8 @@ export const getLevelsByMaxNum = (maxNum: number) => {
       return [...categoriesMap.keys()].filter(
         (c) =>
           c !== EExerciseCategories['level'] &&
+          c !== EExerciseCategories['division'] &&
+          c !== EExerciseCategories['multiply'] &&
           c !== EExerciseCategories['equal-over-ten'] &&
           c !== EExerciseCategories['equal-five'] &&
           c !== EExerciseCategories['equal-ten']
@@ -52,12 +54,18 @@ export const getLevelsByMaxNum = (maxNum: number) => {
       return [...categoriesMap.keys()].filter(
         (c) =>
           c !== EExerciseCategories['level'] &&
+          c !== EExerciseCategories['division'] &&
+          c !== EExerciseCategories['multiply'] &&
           c !== EExerciseCategories['equal-over-ten'] &&
           c !== EExerciseCategories['equal-ten']
       );
     default:
       return [...categoriesMap.keys()].filter(
-        (c) => c !== EExerciseCategories['level'] && c !== EExerciseCategories['composition']
+        (c) =>
+          c !== EExerciseCategories['level'] &&
+          c !== EExerciseCategories['division'] &&
+          c !== EExerciseCategories['multiply'] &&
+          c !== EExerciseCategories['composition']
       );
   }
 };
