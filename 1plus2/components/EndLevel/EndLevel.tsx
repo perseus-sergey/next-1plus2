@@ -11,7 +11,7 @@ const EndLevel = ({ language, maxNumb }: { language: ELang; maxNumb: number }) =
       name={`${maxNumb} ${getTitleFromMap(EMessageNames.SHOW_END_LEVEL, language)}`}
     />
     <Link className={styles.endLevelBtn} href={`/${language}/math`}>
-      <TextButton>{getTitleFromMap(EMessageNames.CONTINUE, language)}</TextButton>
+      <TextButton isLink>{getTitleFromMap(EMessageNames.CONTINUE, language)}</TextButton>
     </Link>
   </>
 );

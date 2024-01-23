@@ -1,5 +1,6 @@
 import styles from './ErrorPage.module.scss';
 import TextButton from '../TextButton/TextButton';
+import { Title } from '../Title/Title';
 
 interface IErrorPageProps {
   error: Error & { digest?: string };
@@ -8,7 +9,7 @@ interface IErrorPageProps {
 
 const ErrorPage = ({ error, resetFn }: IErrorPageProps) => (
   <section className={styles.ErrorPage}>
-    <h1>Warning! Something went wrong!</h1>
+    <Title name="Warning! Something went wrong!" />
     <h2>{error.message}</h2>
     <TextButton onClick={() => resetFn()}>Try again</TextButton>
   </section>

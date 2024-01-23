@@ -18,7 +18,7 @@ const MathCategories = (props: ICatPageProps) => {
           .filter((c) => c !== EExerciseCategories['level'])
           .map((catSlug) => (
             <Link href={`/${lang}/math/category/${catSlug}`} key={catSlug}>
-              <TextButton>{getCatFromMap(catSlug, lang).description}</TextButton>
+              <TextButton isLink>{getCatFromMap(catSlug, lang).description}</TextButton>
             </Link>
           ))}
       </div>

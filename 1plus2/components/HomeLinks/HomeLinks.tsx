@@ -9,10 +9,10 @@ interface HomeLinksProps {}
 const HomeLinks: FC<HomeLinksProps> = () => (
   <div className={styles.links}>
     <Link href={`/${ELang['ua']}/math`}>
-      <TextButton>{getTitleFromMap(EMessageNames.BTN_MATH, ELang.ua)}</TextButton>
+      <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_MATH, ELang.ua)}</TextButton>
     </Link>
     <Link href={`/${ELang['en']}/math`}>
-      <TextButton>{getTitleFromMap(EMessageNames.BTN_MATH, ELang.en)}</TextButton>
+      <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_MATH, ELang.en)}</TextButton>
     </Link>
   </div>
 );
