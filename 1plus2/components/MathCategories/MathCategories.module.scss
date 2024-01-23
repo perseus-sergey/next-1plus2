@@ -1,8 +1,8 @@
 .MathCategories {
   display: flex;
   column-gap: 5vw;
-  row-gap: 15vh;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 2rem 1rem 1rem;
+  align-content: space-around;
+  height: 70vh;
 }
