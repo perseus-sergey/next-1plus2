@@ -43,10 +43,6 @@ $keyBgColorDefault: $keyBgColorBlue;
   cursor: pointer;
   background-image: linear-gradient(rgb(255 58 126), rgb(251 0 86));
   @include fontColor(rgb(60, 138, 221));
-  // color: rgb(60, 138, 221);
-  // text-shadow:
-  //   0.05em 0.05em 0 #40287c,
-  //   0.03em -0.02em 0.02em #fff;
   font-family: var(--font-lobster);
   font-size: 5.5vw;
   border-radius: 50%;

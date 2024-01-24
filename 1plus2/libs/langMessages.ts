@@ -71,6 +71,7 @@ export const titleMap: TTitleMap = new Map([
 export enum EPageTitles {
   'MAIN' = 'main',
   'MATH' = 'math',
+  'CAT' = 'cat',
 }
 
 export enum EMetaTypes {
@@ -128,6 +129,23 @@ export const metaMap: TMetaMap = new Map([
           'children mathematics, level, learn, count, add, subtract, comparison, more, less, equal.',
         [ELang.ua]:
           'дитяча математика, рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
+      },
+    },
+  ],
+  [
+    EPageTitles.CAT,
+    {
+      [EMetaTypes.TITLE]: {
+        [ELang.en]: '1+2',
+        [ELang.ua]: '1+2',
+      },
+      [EMetaTypes.DESCRIPTION]: {
+        [ELang.en]: "Fun children's mathematics, initial level",
+        [ELang.ua]: 'Весела дитяча математика, початковий рівень',
+      },
+      [EMetaTypes.KEYWORDS]: {
+        [ELang.en]: 'children mathematics, level, learn, count',
+        [ELang.ua]: 'дитяча математика, рівень, вчимося рахувати',
       },
     },
   ],
