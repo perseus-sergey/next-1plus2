@@ -144,7 +144,8 @@ export const useExerciseParams = (
       setHint(getHintOverTen(+part0, +part1));
       setMinusPlus(getMinusPlus(part1));
     } else if (cat === EExerciseCategories['multiply']) {
-      setAskElemNumbers([2]);
+      setAskElemNumbers([Math.floor(Math.random() * 2) + 1]);
+      // setAskElemNumbers([2]);
       setHint(EMPTY_HINT);
       setMinusPlus(EMinusPlus.MULTIPLY);
     } else if (cat === EExerciseCategories['division']) {
