@@ -38,7 +38,8 @@ const addShakeClassReducer = (classNames: string[], isAddShake: boolean) =>
 const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: KeyboardButtonProps) => {
   const [movingEl, setMovingEl] = useState<HTMLElement | null>(null);
   const [elStyles, setElStyles] = useState({});
-  const [classNames, addShakeClass] = useReducer(addShakeClassReducer, [styles.KeyboardButton]);
+  const [classNames] = useReducer(addShakeClassReducer, [styles.KeyboardButton]);
+  // const [classNames, addShakeClass] = useReducer(addShakeClassReducer, [styles.KeyboardButton]);
 
   const [elHalfLength, setElHalfLength] = useState({ halfWidth: 0, halfHeight: 0 });
 
@@ -54,9 +55,9 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
     }));
   }, []);
 
-  useEffect(() => {
-    addShakeClass(isDraggable ? true : false);
-  }, [isDraggable]);
+  // useEffect(() => {
+  //   addShakeClass(isDraggable ? true : false);
+  // }, [isDraggable]);
 
   const setMovingElemPosition = (e: Touch) => {
     if (!movingEl) return;
@@ -78,7 +79,7 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
     const el = e.target as HTMLElement;
     if (!el) return;
 
-    addShakeClass(false);
+    // addShakeClass(false);
 
     setElHalfLength({ halfWidth: el.offsetWidth / 2, halfHeight: el.offsetHeight / 2 });
     setElStyles((oldStyles) => ({
@@ -94,7 +95,7 @@ const KeyboardButton = ({ value, btnClickHandler, isDraggable = false }: Keyboar
   const moveEnd = () => {
     if (!movingEl) return;
 
-    addShakeClass(true);
+    // addShakeClass(true);
     setElStyles((oldStyles) => ({
       ...oldStyles,
       left: '',
