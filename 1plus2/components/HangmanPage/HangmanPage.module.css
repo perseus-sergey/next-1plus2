@@ -1,0 +1,167 @@
+.game {
+  display: flex;
+  gap: 10px;
+  text-align: center;
+  background: #393939;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: white;
+  flex-direction: column;
+  max-width: 100%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.hangman {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.hangmanImage {
+  width: 100%;
+  max-width: 200px;
+  margin-bottom: 20px;
+}
+
+.wordDisplay {
+  display: flex;
+  font-size: 28px;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hint {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+
+.keyboard button {
+  background-color: #4b4a4a;
+  color: #ffffff;
+  border: none;
+  margin: 5px;
+  padding: 10px 15px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  flex: 1 0 21%; /* Allow buttons to wrap and fill available space */
+  max-width: 50px; /* Ensure buttons don't get too large on bigger screens */
+}
+
+.keyboard button:hover {
+  background-color: initial;
+}
+
+.keyboard button.correct {
+  background-color: #28a745;
+  color: white;
+}
+
+.keyboard button.incorrect {
+  background-color: #ff0000;
+  color: white;
+}
+
+.keyboard button:disabled {
+  cursor: not-allowed;
+}
+
+.guesses {
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background-color: #464646;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+  width: 400px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.modalButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.modalButton:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .game {
+    padding: 10px;
+  }
+
+  .wordDisplay {
+    font-size: 20px;
+  }
+
+  .hint {
+    font-size: 18px;
+  }
+
+  .keyboard button {
+    padding: 8px 12px;
+    font-size: 18px;
+    max-width: 40px;
+  }
+
+  .modalContent {
+    width: 90%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .keyboard button {
+    padding: 6px 10px;
+    font-size: 16px;
+    max-width: 30px;
+  }
+
+  .wordDisplay,
+  .hangman,
+  .hint {
+    margin-bottom: 0;
+  }
+}

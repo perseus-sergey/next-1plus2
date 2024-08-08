@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --media-width-small: 320px;
   --media-width-medium: 600px;
@@ -98,7 +102,8 @@ body {
   color: #fef9f9;
   background-color: #2b3755;
   background-image: var(--background-img);
-  overflow: hidden;
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
 a {
