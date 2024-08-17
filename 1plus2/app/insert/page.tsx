@@ -1,5 +1,5 @@
+import { poolQuery } from '@/libs/db/pg';
 import { wordList } from '@/libs/hangman/words';
-import { QueryResult, QueryResultRow, sql } from '@vercel/postgres';
 
 export default async () => {
   // let res: QueryResult<QueryResultRow>;
@@ -15,11 +15,21 @@ export default async () => {
   // const word1 = 'rainforest';
   // const values = wordList.map(({ word, hint }) => `('${word}', '${hint}')`).join(',');
 
-  const { rows } = await sql`
-      SELECT hint, word FROM words
-      ORDER BY RANDOM()
-      LIMIT 1;
-    `;
+  const req = `
+  SELECT hint, word FROM words
+  ORDER BY RANDOM()
+  LIMIT 1;
+`;
+
+  // Виконання SQL-запиту, просто використовуючи рядок запиту
+  const rows = await poolQuery(req);
+  // const { rows } = await sql([req]);
+
+  // const { rows } = await sql`;
+  //     SELECT hint, word FROM words
+  //     ORDER BY RANDOM()
+  //     LIMIT 1;
+  //   `;
   const { hint, word } = rows[0];
   // res = await sql`
   //   INSERT INTO words (word, hint) VALUES (${hint1}, ${word1});

@@ -3,16 +3,8 @@
 import { useState, useEffect } from 'react';
 import styles from './HangmanPage.module.css';
 import Image from 'next/image';
+// import { sql } from '@vercel/postgres';
 
-import { poolQuery } from '@/libs/db/pg';
-
-const fetchRandomWord = async () => {
-  return poolQuery(`
-      SELECT hint, word FROM words
-      ORDER BY RANDOM()
-      LIMIT 1;
-    `);
-};
 // const fetchRandomWord = async () => {
 //   console.log('🚀 ~ fetchRandomWord ~ rows:'); //
 //   try {
@@ -30,6 +22,11 @@ const fetchRandomWord = async () => {
 //   }
 // };
 
+const fetchRandomWord = async () => {
+  console.log('🚀 ~ fetchRandomWord ~ rows:'); //
+  return { word: 'default', hint: 'default hint' };
+};
+
 function HangmanPage() {
   const [currentWord, setCurrentWord] = useState('');
   const [currentHint, setCurrentHint] = useState('');
@@ -41,19 +38,16 @@ function HangmanPage() {
   const [isLoseModalOpen, setIsLoseModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
-  useEffect(() => {
-    startGame();
-  }, []);
-
+  // Функція для старту гри
   const startGame = async () => {
-    // const randomIndex = Math.floor(Math.random() * wordList.length);
-    // const selectedWord = wordList[randomIndex];
-    const selectedWord = await fetchRandomWord();
-    console.log('🚀 ~ startGame ~ selectedWord:', selectedWord);
-    if (selectedWord instanceof Error) return;
+    console.log('🚀 ~ startGame');
+    const fetchRandomWordRes = await fetchRandomWord();
+    if (fetchRandomWordRes instanceof Error) return;
 
-    setCurrentWord(selectedWord[0].word.toLowerCase());
-    setCurrentHint(selectedWord[0].hint);
+    const { word, hint } = fetchRandomWordRes;
+
+    setCurrentWord(word.toLowerCase());
+    setCurrentHint(hint);
     setGuessedLetters([]);
     setCorrectLetters([]);
     setIncorrectLetters([]);
@@ -61,6 +55,16 @@ function HangmanPage() {
     setIsWinModalOpen(false);
     setIsLoseModalOpen(false);
   };
+
+  console.log('🚀 ~ root');
+  useEffect(() => {
+    console.log('🚀 ~ useEffect');
+    const initGame = async () => {
+      await startGame();
+    };
+
+    initGame();
+  }, []);
 
   const handleGuess = (letter: string) => {
     if (guessedLetters.includes(letter) || wrongGuesses >= 6) return;
@@ -99,9 +103,9 @@ function HangmanPage() {
     setIsLoseModalOpen(false);
   };
 
-  const handleStartAgain = () => {
+  const handleStartAgain = async () => {
     closeModal();
-    startGame();
+    await startGame();
   };
 
   useEffect(() => {
@@ -117,7 +121,7 @@ function HangmanPage() {
     };
   }, [guessedLetters, wrongGuesses, currentWord]);
 
-  return (
+  return currentWord ? (
     <div>
       <div className={styles.hangman}>
         <Image
@@ -204,6 +208,8 @@ function HangmanPage() {
         </div>
       )}
     </div>
+  ) : (
+    <p>Loading...</p>
   );
 }
 
