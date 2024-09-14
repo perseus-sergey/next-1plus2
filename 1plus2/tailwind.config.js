@@ -9,7 +9,17 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        aqua: 'aqua', // Додає кастомний колір 'aqua'
+      },
+      // Якщо ви хочете використовувати прозорість, вам потрібно налаштувати кольори з alpha
+      backgroundColor: (theme) => ({
+        ...theme('colors'),
+        'aqua-opacity': 'rgba(0, 255, 255, 0.5)', // Додає кастомний фон з прозорістю
+      }),
+    },
   },
+  variants: {},
   plugins: [],
 };

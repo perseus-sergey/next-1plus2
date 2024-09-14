@@ -1,36 +1,30 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import styles from './HangmanPage.module.css';
+import styles from './HangmanPage.module.scss';
+import footer from './globals.scss';
 import Image from 'next/image';
-
 import { poolQuery } from '@/libs/db/pg';
+import { ELang } from '@/libs/langMessages';
 
-const fetchRandomWord = async () => {
+const fetchRandomWord = async (lang: string) => {
+  const columnWord = lang === 'ua' ? 'word_ua' : 'word';
+  const columnHint = lang === 'ua' ? 'hint_ua' : 'hint';
+
   return poolQuery(`
-      SELECT hint, word FROM words
-      ORDER BY RANDOM()
-      LIMIT 1;
-    `);
+    SELECT ${columnHint} AS hint, ${columnWord} AS word
+    FROM words
+    ORDER BY RANDOM()
+    LIMIT 1;
+  `);
 };
-// const fetchRandomWord = async () => {
-//   console.log('🚀 ~ fetchRandomWord ~ rows:'); //
-//   try {
-//     const { rows } = await sql`
-//       SELECT hint, word FROM words
-//       ORDER BY RANDOM()
-//       LIMIT 1;
-//     `;
-//     // const { hint, word } = rows[0];
-//     return rows[0];
-//   } catch (error) {
-//     console.error('Error fetching word:', error);
-//     return error instanceof Error ? error : new Error('ERROR: fetching data failed');
-//     // return { word: 'default', hint: 'default hint' };
-//   }
-// };
 
-function HangmanPage() {
+interface IProps {
+  lang: ELang;
+}
+
+function HangmanPage({ lang }: IProps) {
+  // const [language, setLanguage] = useState('en');
   const [currentWord, setCurrentWord] = useState('');
   const [currentHint, setCurrentHint] = useState('');
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
@@ -43,13 +37,10 @@ function HangmanPage() {
 
   useEffect(() => {
     startGame();
-  }, []);
+  }, [lang]);
 
   const startGame = async () => {
-    // const randomIndex = Math.floor(Math.random() * wordList.length);
-    // const selectedWord = wordList[randomIndex];
-    const selectedWord = await fetchRandomWord();
-    console.log('🚀 ~ startGame ~ selectedWord:', selectedWord);
+    const selectedWord = await fetchRandomWord(lang);
     if (selectedWord instanceof Error) return;
 
     setCurrentWord(selectedWord[0].word.toLowerCase());
@@ -70,14 +61,14 @@ function HangmanPage() {
     if (currentWord.includes(letter)) {
       setCorrectLetters((prev) => [...prev, letter]);
       if (currentWord.split('').every((char) => guessedLetters.includes(char) || char === letter)) {
-        showWinModal(`You guessed the word: ${currentWord}`);
+        showWinModal(`${currentWord}`);
       }
     } else {
       setIncorrectLetters((prev) => [...prev, letter]);
       setWrongGuesses((prev) => {
         const newWrongGuesses = prev + 1;
         if (newWrongGuesses === 6) {
-          showLoseModal(`The word was: ${currentWord}`);
+          showLoseModal(`${currentWord}`);
         }
         return newWrongGuesses;
       });
@@ -85,12 +76,15 @@ function HangmanPage() {
   };
 
   const showWinModal = (message: string) => {
-    setModalMessage(message);
+    const winMessage =
+      lang === ELang.ua ? `Ви вгадали слово: ${message}` : `You guessed the word: ${message}`;
+    setModalMessage(winMessage);
     setIsWinModalOpen(true);
   };
 
   const showLoseModal = (message: string) => {
-    setModalMessage(message);
+    const loseMessage = lang === ELang.ua ? `Слово було: ${message}` : `The word was: ${message}`;
+    setModalMessage(loseMessage);
     setIsLoseModalOpen(true);
   };
 
@@ -106,16 +100,29 @@ function HangmanPage() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const letter = event.key.toLowerCase();
-      if (/^[a-z]$/.test(letter)) {
+      let letter = event.key.toLowerCase();
+
+      if (lang === 'ua' && /^[a-z]$/.test(letter)) {
+        letter = convertToCorrectLayout(letter);
+      } else if (lang === ELang.en && /^[а-щьюяґєії]$/.test(letter)) {
+        letter = convertToCorrectLayout(letter);
+      }
+
+      const englishChars = /^[a-z]$/;
+      const ukrainianChars = /^[а-щьюяґєії]$/;
+
+      if (lang === ELang.en && englishChars.test(letter)) {
+        handleGuess(letter);
+      } else if (lang === ELang.ua && ukrainianChars.test(letter)) {
         handleGuess(letter);
       }
     };
+
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [guessedLetters, wrongGuesses, currentWord]);
+  }, [guessedLetters, wrongGuesses, currentWord, lang]);
 
   return (
     <div>
@@ -129,6 +136,7 @@ function HangmanPage() {
         />
       </div>
       <div className={styles.game}>
+        <div className={styles.guesses}>{`${wrongGuesses} / 6`}</div>
         <div className={styles.wordDisplay}>
           {currentWord.split('').map((letter, index) => (
             <span key={index} className="inline-block w-6 text-center">
@@ -137,11 +145,11 @@ function HangmanPage() {
           ))}
         </div>
         <div className={styles.hint}>
-          <b>Hint:</b> {currentHint}
+          <b>{lang === ELang.ua ? 'Підказка:' : 'Hint:'}</b> {currentHint}
         </div>
       </div>
       <div className={styles.keyboard}>
-        {'abcdefghijklm'.split('').map((letter) => {
+        {(lang === ELang.ua ? 'абвгґдеєжзиіїйклмн' : 'abcdefghijklm').split('').map((letter) => {
           const isCorrect = correctLetters.includes(letter);
           const isIncorrect = incorrectLetters.includes(letter);
           const buttonClass = isCorrect ? styles.correct : isIncorrect ? styles.incorrect : '';
@@ -159,7 +167,7 @@ function HangmanPage() {
         })}
       </div>
       <div className={styles.keyboard}>
-        {'nopqrstuvwxyz'.split('').map((letter) => {
+        {(lang === ELang.ua ? 'опрстуфхцчшщьюя' : 'nopqrstuvwxyz').split('').map((letter) => {
           const isCorrect = correctLetters.includes(letter);
           const isIncorrect = incorrectLetters.includes(letter);
           const buttonClass = isCorrect ? styles.correct : isIncorrect ? styles.incorrect : '';
@@ -176,15 +184,14 @@ function HangmanPage() {
           );
         })}
       </div>
-      <div className={styles.guesses}>{`${wrongGuesses} / 6`}</div>
       {isWinModalOpen && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modalContent}>
-            <h2>Congratulations, you won!</h2>
+            <h2>{lang === ELang.ua ? 'Вітаємо, ви виграли!' : 'Congratulations, you won!'}</h2>
             <p>{modalMessage}</p>
             <div className={styles.buttonContainer}>
               <button onClick={handleStartAgain} className={styles.modalButton}>
-                Play again
+                {lang === ELang.ua ? 'Продовжувати грати' : 'Continue playing'}
               </button>
             </div>
           </div>
@@ -193,16 +200,29 @@ function HangmanPage() {
       {isLoseModalOpen && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modalContent}>
-            <h2>You lost</h2>
+            <h2>{lang === ELang.ua ? 'Ви програли' : 'You lost'}</h2>
             <p>{modalMessage}</p>
             <div className={styles.buttonContainer}>
               <button onClick={handleStartAgain} className={styles.modalButton}>
-                Start again
+                {lang === ELang.ua ? 'почати знову' : 'Start again'}
               </button>
             </div>
           </div>
         </div>
       )}
+      <footer className="footer">
+        {lang === ELang.ua ? (
+          <div className="rounded-[0.40rem] bg-aqua/40 p-[0.24rem] text-black">
+            <p>
+              <kbd className="text-darkble bg-gray-200 rounded px-1">Ctrl</kbd> +{' '}
+              <kbd className="text-darkble bg-gray-200 rounded px-1">Пробіл</kbd> або{' '}
+              <kbd className="text-darkble bg-gray-200 rounded px-1">Alt</kbd> +{' '}
+              <kbd className="text-darkble bg-gray-200 rounded px-1">Shift</kbd> для зміни мови на
+              клавіатурі
+            </p>
+          </div>
+        ) : null}
+      </footer>
     </div>
   );
 }

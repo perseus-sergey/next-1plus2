@@ -67,7 +67,7 @@ export const titleMap: TTitleMap = new Map([
   [EMessageNames.TITLE_HOME_PAGE, { [ELang.en]: 'Home Page', [ELang.ua]: 'Домашня Сторінка' }],
   [EMessageNames.TITLE_REPORT, { [ELang.en]: 'Report', [ELang.ua]: 'Звіт' }],
   [EMessageNames.EXERCISES, { [ELang.en]: 'Exercises', [ELang.ua]: 'Завдань' }],
-  [EMessageNames.HANGMAN, { [ELang.en]: 'Hang-man', [ELang.ua]: 'Кат' }],
+  [EMessageNames.HANGMAN, { [ELang.en]: 'Hangman', [ELang.ua]: 'Кат' }],
 ]);
 
 export enum EPageTitles {

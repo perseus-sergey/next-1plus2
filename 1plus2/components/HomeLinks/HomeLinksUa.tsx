@@ -4,17 +4,15 @@ import Link from 'next/link';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import TextButton from '../TextButton/TextButton';
 
-interface HomeLinksProps {}
-
-const HomeLinks: FC<HomeLinksProps> = () => (
+const HomeLinksUa: FC = () => (
   <div className={styles.links}>
-    <Link href={`/${ELang['ua']}/math`}>
+    <Link href={`/${ELang.ua}/math`}>
       <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_MATH, ELang.ua)}</TextButton>
     </Link>
-    <Link href={`/${ELang['en']}/math`}>
-      <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_MATH, ELang.en)}</TextButton>
+    <Link href={`/${ELang.ua}/hangman`}>
+      <TextButton isLink>Кат</TextButton>
     </Link>
   </div>
 );
 
-export default HomeLinks;
+export default HomeLinksUa;

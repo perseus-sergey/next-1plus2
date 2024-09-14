@@ -104,6 +104,9 @@ body {
   background-image: var(--background-img);
   overflow-y: auto;
   max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 a {
@@ -123,12 +126,12 @@ a {
 }
 
 .main {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 0 1rem;
-  min-height: 70vh;
 }
 
 .section-title {
@@ -205,4 +208,12 @@ a {
     padding: 0.5em 1em;
     font-size: 1.2em;
   }
+}
+
+.header {
+  @apply flex justify-between sticky top-0 w-full p-4 z-50;
+}
+
+.footer {
+  @apply w-full h-full py-5 mt-auto;
 }
