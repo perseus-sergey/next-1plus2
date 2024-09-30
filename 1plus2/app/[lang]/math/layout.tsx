@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
 import { ELang, EMetaTypes, EPageTitles, metaMap } from '@/libs/langMessages';
-import { IMathPageProps } from '../layout';
 
-export const generateMetadata = ({ params }: IMathPageProps): Metadata => ({
-  title: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.TITLE][params.lang],
-  description: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.DESCRIPTION][params.lang],
-  keywords: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.KEYWORDS][params.lang],
+export const generateMetadata = ({ params: { lang } }: { params: { lang: ELang } }): Metadata => ({
+  title: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.TITLE][lang],
+  description: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.DESCRIPTION][lang],
+  keywords: metaMap.get(EPageTitles.MATH)?.[EMetaTypes.KEYWORDS][lang],
   alternates: {
-    canonical: `${params.lang}/math`,
+    canonical: `${lang}/math`,
   },
 });
 

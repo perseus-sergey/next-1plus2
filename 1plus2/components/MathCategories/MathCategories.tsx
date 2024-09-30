@@ -1,4 +1,4 @@
-import { ICatPageProps } from '@/app/[lang]/math/category/page';
+import { ICatPageProps } from '@/app/math/category/page';
 import TextButton from '../TextButton/TextButton';
 import { Title } from '../Title/Title';
 import styles from './MathCategories.module.scss';

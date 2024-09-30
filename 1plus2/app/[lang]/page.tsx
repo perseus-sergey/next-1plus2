@@ -1,5 +1,4 @@
-import HomeLinksEng from '@/components/HomeLinks/HomeLinksEng';
-import HomeLinksUa from '@/components/HomeLinks/HomeLinksUa';
+import HomeLinks from '@/components/HomeLinks/HomeLinks';
 import { Title } from '@/components/Title/Title';
 import { ELang } from '@/libs/langMessages';
 
@@ -12,8 +11,8 @@ const MathPage = ({ params }: IMathPageProps) => {
 
   return (
     <>
-      <Title name="" />
-      {lang === ELang.en ? <HomeLinksEng /> : <HomeLinksUa />}
+      <Title name={lang === ELang.ua ? 'Домашня Сторінка' : 'Home Page'} />
+      <HomeLinks lang={lang} />
     </>
   );
 };

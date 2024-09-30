@@ -1,4 +1,4 @@
-import { ICatNamePageProps } from '@/app/[lang]/math/category/[cat]/page';
+import { ICatNamePageProps } from '@/app/math/category/[cat]/page';
 // import styles from './MathPageMaxNumber.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import KeyboardButton from '../KeyboardButton/KeyboardButton';

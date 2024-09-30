@@ -1,17 +1,15 @@
-import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { Title } from '@/components/Title/Title';
-import HomeLinksEng from '@/components/HomeLinks/HomeLinksEng';
-// import Link from 'next/link';
-// import TextButton from '@/components/TextButton/TextButton';
+import { ELang } from '@/libs/langMessages';
+import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
+import HomeLinks from '@/components/HomeLinks/HomeLinks';
 
-const Home = () => (
-  <>
-    <Title name={getTitleFromMap(EMessageNames.TITLE_HOME_PAGE)} />
-    <HomeLinksEng />
-    {/* <Link href={`/${ELang['en']}/hangman`}>
-      <TextButton isLink>{getTitleFromMap(EMessageNames.HANGMAN, ELang.en)}</TextButton>
-    </Link> */}
-  </>
-);
+const MathPage = () => {
+  return (
+    <>
+      <Title name={getTitleFromMap(EMessageNames.TITLE_HOME_PAGE)} />
+      <HomeLinks lang={ELang.en} />
+    </>
+  );
+};
 
-export default Home;
+export default MathPage;
