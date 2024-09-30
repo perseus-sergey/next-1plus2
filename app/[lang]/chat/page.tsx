@@ -4,7 +4,6 @@ const GPT = () => {
   return (
     <div>
       <h1>Tarot AI predictions</h1>
-
       {/* <ChatPage /> */}
     </div>
   );
