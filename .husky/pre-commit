@@ -1,0 +1,5 @@
+# .husky/pre-commit
+
+npx tsc --noEmit
+
+npx lint-staged
