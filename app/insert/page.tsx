@@ -1,5 +1,5 @@
 import { poolQuery } from '@/libs/db/pg';
-import { wordList } from '@/libs/hangman/words';
+// import { wordList } from '@/libs/hangman/words';
 
 export default async () => {
   // let res: QueryResult<QueryResultRow>;
@@ -22,7 +22,8 @@ export default async () => {
 `;
 
   // Виконання SQL-запиту, просто використовуючи рядок запиту
-  const rows = await poolQuery(req);
+  const res = await poolQuery(req);
+  if (res instanceof Error) return <p>select error</p>;
   // const { rows } = await sql([req]);
 
   // const { rows } = await sql`;
@@ -30,7 +31,7 @@ export default async () => {
   //     ORDER BY RANDOM()
   //     LIMIT 1;
   //   `;
-  const { hint, word } = rows[0];
+  const { hint, word } = res[0];
   // res = await sql`
   //   INSERT INTO words (word, hint) VALUES (${hint1}, ${word1});
   // `;

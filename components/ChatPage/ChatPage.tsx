@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import styles from './ChatPage.module.scss'; // Перевірте правильність шляху до стилів
+import { ELang } from '@/libs/langMessages';
 
 interface ChatPageProps {
   lang: string;
@@ -14,7 +15,11 @@ const ChatPage: React.FC<ChatPageProps> = ({ lang }) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!question) {
-      setResponse('Please enter a question for your tarot reading.');
+      setResponse(
+        lang === ELang.ua
+          ? 'Будь ласка, введіть питання для вашого ворожіння на Таро.'
+          : 'Please enter a question for your tarot reading.'
+      );
       return;
     }
 

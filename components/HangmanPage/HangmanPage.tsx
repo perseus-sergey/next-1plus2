@@ -2,10 +2,97 @@
 
 import { useState, useEffect } from 'react';
 import styles from './HangmanPage.module.scss';
-import footer from './globals.scss';
 import Image from 'next/image';
 import { poolQuery } from '@/libs/db/pg';
 import { ELang } from '@/libs/langMessages';
+
+const convertToCorrectLayout = (letter: string): string => {
+  // Українська розкладка відповідає англійським літерам за такими ключами
+  const uaToEn: { [key: string]: string } = {
+    а: 'f',
+    б: ',',
+    в: 'd',
+    г: 'u',
+    д: 'l',
+    е: 't',
+    є: "'",
+    ж: ';',
+    з: 'p',
+    и: 'b',
+    і: 's',
+    ї: ']',
+    й: 'q',
+    к: 'r',
+    л: 'k',
+    м: 'v',
+    н: 'y',
+    о: 'j',
+    п: 'g',
+    р: 'h',
+    с: 'c',
+    т: 'n',
+    у: 'e',
+    ф: 'a',
+    х: '[',
+    ц: 'w',
+    ч: 'x',
+    ш: 'i',
+    щ: 'o',
+    ь: 'm',
+    ю: '.',
+    я: 'z',
+    ґ: '`',
+  };
+
+  // Англійська розкладка відповідає українським літерам за такими ключами
+  const enToUa: { [key: string]: string } = {
+    f: 'а',
+    ',': 'б',
+    d: 'в',
+    u: 'г',
+    l: 'д',
+    t: 'е',
+    "'": 'є',
+    ';': 'ж',
+    p: 'з',
+    b: 'и',
+    s: 'і',
+    ']': 'ї',
+    q: 'й',
+    r: 'к',
+    k: 'л',
+    v: 'м',
+    y: 'н',
+    j: 'о',
+    g: 'п',
+    h: 'р',
+    c: 'с',
+    n: 'т',
+    e: 'у',
+    a: 'ф',
+    '[': 'х',
+    w: 'ц',
+    x: 'ч',
+    i: 'ш',
+    o: 'щ',
+    m: 'ь',
+    '.': 'ю',
+    z: 'я',
+    '`': 'ґ',
+  };
+
+  // Якщо введена літера англійська, конвертуємо в українську
+  if (uaToEn[letter]) {
+    return uaToEn[letter];
+  }
+  // Якщо введена літера українська, конвертуємо в англійську
+  if (enToUa[letter]) {
+    return enToUa[letter];
+  }
+
+  // Якщо не знайдено відповідника, повертаємо оригінальну літеру
+  return letter;
+};
 
 const fetchRandomWord = async (lang: string) => {
   const columnWord = lang === 'ua' ? 'word_ua' : 'word';
