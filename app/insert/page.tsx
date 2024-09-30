@@ -12,6 +12,7 @@ export default async () => {
   //   `;
 
   // const hint1 = 'fhjd fjkkdsl';
+  // const hint1 = 'fhjd fjkkdsl';
   // const word1 = 'rainforest';
   // const values = wordList.map(({ word, hint }) => `('${word}', '${hint}')`).join(',');
 
