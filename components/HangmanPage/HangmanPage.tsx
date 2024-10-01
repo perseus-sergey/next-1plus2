@@ -108,7 +108,7 @@ const fetchRandomWord = async (lang: string) => {
 
     return result;
   } catch (error) {
-    console.error('🚀 ~ fetchRandomWord ~ error:', error);
+    console.error('🚀 ~ fetchRandomWord ~ error:', error instanceof Error ? error.message : error);
     throw new Error('Error fetching random word from the database.');
   }
 };
