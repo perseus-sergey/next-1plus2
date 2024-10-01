@@ -209,11 +209,3 @@ a {
     font-size: 1.2em;
   }
 }
-
-.header {
-  @apply flex justify-between sticky top-0 w-full p-4 z-50;
-}
-
-.footer {
-  @apply w-full h-full py-5 mt-auto;
-}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styles from './HangmanPage.module.scss';
 import Image from 'next/image';
 import { ELang } from '@/libs/langMessages';
@@ -128,27 +128,32 @@ function HangmanPage({ lang }: IProps) {
     setIsLoseModalOpen(false);
   };
 
-  const handleGuess = (letter: string) => {
-    if (guessedLetters.includes(letter) || wrongGuesses >= 6) return;
+  const handleGuess = useCallback(
+    (letter: string) => {
+      if (guessedLetters.includes(letter) || wrongGuesses >= 6) return;
 
-    setGuessedLetters((prev) => [...prev, letter]);
+      setGuessedLetters((prev) => [...prev, letter]);
 
-    if (currentWord.includes(letter)) {
-      setCorrectLetters((prev) => [...prev, letter]);
-      if (currentWord.split('').every((char) => guessedLetters.includes(char) || char === letter)) {
-        showWinModal(`${currentWord}`);
-      }
-    } else {
-      setIncorrectLetters((prev) => [...prev, letter]);
-      setWrongGuesses((prev) => {
-        const newWrongGuesses = prev + 1;
-        if (newWrongGuesses === 6) {
-          showLoseModal(`${currentWord}`);
+      if (currentWord.includes(letter)) {
+        setCorrectLetters((prev) => [...prev, letter]);
+        if (
+          currentWord.split('').every((char) => guessedLetters.includes(char) || char === letter)
+        ) {
+          showWinModal(`${currentWord}`);
         }
-        return newWrongGuesses;
-      });
-    }
-  };
+      } else {
+        setIncorrectLetters((prev) => [...prev, letter]);
+        setWrongGuesses((prev) => {
+          const newWrongGuesses = prev + 1;
+          if (newWrongGuesses === 6) {
+            showLoseModal(`${currentWord}`);
+          }
+          return newWrongGuesses;
+        });
+      }
+    },
+    [guessedLetters, wrongGuesses, currentWord]
+  );
 
   const showWinModal = (message: string) => {
     const winMessage =
@@ -183,12 +188,10 @@ function HangmanPage({ lang }: IProps) {
         letter = convertToCorrectLayout(letter);
       }
 
-      const englishChars = /^[a-z]$/;
-      const ukrainianChars = /^[а-щьюяґєії]$/;
-
-      if (lang === ELang.en && englishChars.test(letter)) {
-        handleGuess(letter);
-      } else if (lang === ELang.ua && ukrainianChars.test(letter)) {
+      if (
+        (lang === ELang.en && /^[a-z]$/.test(letter)) ||
+        (lang === ELang.ua && /^[а-щьюяґєії]$/.test(letter))
+      ) {
         handleGuess(letter);
       }
     };
@@ -200,17 +203,17 @@ function HangmanPage({ lang }: IProps) {
   }, [guessedLetters, wrongGuesses, currentWord, lang]);
 
   return (
-    <div>
-      <div className={styles.hangman}>
+    <section className="max-w-screen-lg flex flex-col gap-6">
+      <div
+        className={`${styles.game} max-w-full p-5 flex flex-col gap-2 bg-sky-50/80 shadow-md rounded-xl text-center text-slate-900`}
+      >
         <Image
           src={`/img/hangman${wrongGuesses}.svg`}
           width={250}
           height={250}
           alt="Hangman Image"
-          className={styles.hangmanImage}
+          className="w-full max-w-52 m-auto"
         />
-      </div>
-      <div className={styles.game}>
         <div className={styles.guesses}>{`${wrongGuesses} / 6`}</div>
         <div className={styles.wordDisplay}>
           {currentWord.split('').map((letter, index) => (
@@ -223,25 +226,27 @@ function HangmanPage({ lang }: IProps) {
           <b>{lang === ELang.ua ? 'Підказка:' : 'Hint:'}</b> {currentHint}
         </div>
       </div>
-      <div className={styles.keyboard}>
-        {(lang === ELang.ua ? 'абвгґдеєжзиіїйклмн' : 'abcdefghijklm').split('').map((letter) => {
-          const isCorrect = correctLetters.includes(letter);
-          const isIncorrect = incorrectLetters.includes(letter);
-          const buttonClass = isCorrect ? styles.correct : isIncorrect ? styles.incorrect : '';
+      <div className={`${styles.keyboard} max-w-4xl m-auto flex flex-wrap justify-center gap-1`}>
+        {(lang === ELang.ua ? 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя' : 'abcdefghijklmnopqrstuvwxyz')
+          .split('')
+          .map((letter) => {
+            const isCorrect = correctLetters.includes(letter);
+            const isIncorrect = incorrectLetters.includes(letter);
+            const buttonClass = isCorrect ? styles.correct : isIncorrect ? styles.incorrect : '';
 
-          return (
-            <button
-              key={letter}
-              onClick={() => handleGuess(letter)}
-              disabled={guessedLetters.includes(letter)}
-              className={`${styles.button} ${buttonClass} ${guessedLetters.includes(letter) ? styles.disabled : ''}`}
-            >
-              {letter}
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={letter}
+                onClick={() => handleGuess(letter)}
+                disabled={guessedLetters.includes(letter)}
+                className={`${styles.button} ${buttonClass} ${guessedLetters.includes(letter) ? styles.disabled : ''}`}
+              >
+                {letter}
+              </button>
+            );
+          })}
       </div>
-      <div className={styles.keyboard}>
+      {/* <div className={styles.keyboard}>
         {(lang === ELang.ua ? 'опрстуфхцчшщьюя' : 'nopqrstuvwxyz').split('').map((letter) => {
           const isCorrect = correctLetters.includes(letter);
           const isIncorrect = incorrectLetters.includes(letter);
@@ -258,7 +263,7 @@ function HangmanPage({ lang }: IProps) {
             </button>
           );
         })}
-      </div>
+      </div> */}
       {isWinModalOpen && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modalContent}>
@@ -285,7 +290,7 @@ function HangmanPage({ lang }: IProps) {
           </div>
         </div>
       )}
-      <footer className="footer">
+      {/* <footer className="w-full h-full py-5 mt-auto">
         {lang === ELang.ua ? (
           <div className="rounded-[0.40rem] bg-aqua/40 p-[0.24rem] text-black">
             <p>
@@ -297,8 +302,8 @@ function HangmanPage({ lang }: IProps) {
             </p>
           </div>
         ) : null}
-      </footer>
-    </div>
+      </footer> */}
+    </section>
   );
 }
 

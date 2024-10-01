@@ -1,27 +1,10 @@
-.hangman {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-.hangmanImage {
-  width: 100%;
-  max-width: 200px;
-  margin-bottom: 20px;
-}
+// .hangmanImage {
+//   width: 100%;
+//   max-width: 200px;
+//   margin-bottom: 20px;
+// }
 
 .game {
-  display: flex;
-  gap: 10px;
-  text-align: center;
-  background: #393939;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  color: white;
-  flex-direction: column;
-  max-width: 100%;
-  margin: 0 10rem 1.25rem 10rem;
-
   .wordDisplay {
     display: flex;
     font-size: 28px;
@@ -37,10 +20,10 @@
   }
 }
 .keyboard {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 5px;
+  // display: flex;
+  // flex-wrap: wrap;
+  // justify-content: center;
+  // gap: 5px;
 
   button {
     background-color: #4b4a4a;

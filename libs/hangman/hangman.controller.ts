@@ -1,13 +1,14 @@
 import { poolQuery } from '../db/pg';
+import { ELang } from '../langMessages';
 
 interface IHangmanLesson {
   word: string;
   hint: string;
 }
 
-export const fetchRandomWord = async (lang: string) => {
-  const columnWord = lang === 'ua' ? 'word_ua' : 'word';
-  const columnHint = lang === 'ua' ? 'hint_ua' : 'hint';
+export const fetchRandomWord = async (lang: ELang) => {
+  const columnWord = lang === ELang.ua ? 'word_ua' : 'word';
+  const columnHint = lang === ELang.ua ? 'hint_ua' : 'hint';
 
   const res = await poolQuery<IHangmanLesson[]>(`
       SELECT ${columnHint} AS hint, ${columnWord} AS word

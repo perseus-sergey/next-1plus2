@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={lobsterFont.variable}>
-        <header className="header">
+        <header className="flex justify-between w-full p-4">
           <BreadCrumb homeElement={'Home'} isCapitalizeLinks />
           <LanguageSwitcher />
         </header>
