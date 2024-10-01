@@ -95,15 +95,22 @@ const convertToCorrectLayout = (letter: string): string => {
 };
 
 const fetchRandomWord = async (lang: string) => {
-  const columnWord = lang === 'ua' ? 'word_ua' : 'word';
-  const columnHint = lang === 'ua' ? 'hint_ua' : 'hint';
+  try {
+    const columnWord = lang === 'ua' ? 'word_ua' : 'word';
+    const columnHint = lang === 'ua' ? 'hint_ua' : 'hint';
 
-  return poolQuery(`
-    SELECT ${columnHint} AS hint, ${columnWord} AS word
-    FROM words
-    ORDER BY RANDOM()
-    LIMIT 1;
-  `);
+    const result = await poolQuery(`
+      SELECT ${columnHint} AS hint, ${columnWord} AS word
+      FROM words
+      ORDER BY RANDOM()
+      LIMIT 1;
+    `);
+
+    return result;
+  } catch (error) {
+    console.error('🚀 ~ fetchRandomWord ~ error:', error);
+    throw new Error('Error fetching random word from the database.');
+  }
 };
 
 interface IProps {
