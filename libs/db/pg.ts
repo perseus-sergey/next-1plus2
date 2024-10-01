@@ -8,13 +8,13 @@ const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
 });
 
-export const poolQuery = async (sql: string) => {
+export const poolQuery = async <T>(sql: string) => {
   try {
     const { rows } = await pool.query(sql);
 
-    return rows;
+    return rows as T;
   } catch (error) {
-    console.log('🚀 ~ poolQuery ~ error:', error);
+    console.log('PoolQuery ~ error:', error);
     await pool.end();
     return error instanceof Error ? error : new Error('ERROR: poolQuery processing!');
   }
