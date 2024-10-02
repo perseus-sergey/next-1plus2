@@ -226,6 +226,7 @@ function HangmanPage({ lang }: IProps) {
           <b>{lang === ELang.ua ? 'Підказка:' : 'Hint:'}</b> {currentHint}
         </div>
       </div>
+
       <div className={`${styles.keyboard} max-w-4xl m-auto flex flex-wrap justify-center gap-1`}>
         {(lang === ELang.ua ? 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя' : 'abcdefghijklmnopqrstuvwxyz')
           .split('')
@@ -246,24 +247,7 @@ function HangmanPage({ lang }: IProps) {
             );
           })}
       </div>
-      {/* <div className={styles.keyboard}>
-        {(lang === ELang.ua ? 'опрстуфхцчшщьюя' : 'nopqrstuvwxyz').split('').map((letter) => {
-          const isCorrect = correctLetters.includes(letter);
-          const isIncorrect = incorrectLetters.includes(letter);
-          const buttonClass = isCorrect ? styles.correct : isIncorrect ? styles.incorrect : '';
 
-          return (
-            <button
-              key={letter}
-              onClick={() => handleGuess(letter)}
-              disabled={guessedLetters.includes(letter)}
-              className={`${styles.button} ${buttonClass} ${guessedLetters.includes(letter) ? styles.disabled : ''}`}
-            >
-              {letter}
-            </button>
-          );
-        })}
-      </div> */}
       {isWinModalOpen && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modalContent}>
@@ -277,6 +261,7 @@ function HangmanPage({ lang }: IProps) {
           </div>
         </div>
       )}
+
       {isLoseModalOpen && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modalContent}>
@@ -290,19 +275,6 @@ function HangmanPage({ lang }: IProps) {
           </div>
         </div>
       )}
-      {/* <footer className="w-full h-full py-5 mt-auto">
-        {lang === ELang.ua ? (
-          <div className="rounded-[0.40rem] bg-aqua/40 p-[0.24rem] text-black">
-            <p>
-              <kbd className="text-darkble bg-gray-200 rounded px-1">Ctrl</kbd> +{' '}
-              <kbd className="text-darkble bg-gray-200 rounded px-1">Пробіл</kbd> або{' '}
-              <kbd className="text-darkble bg-gray-200 rounded px-1">Alt</kbd> +{' '}
-              <kbd className="text-darkble bg-gray-200 rounded px-1">Shift</kbd> для зміни мови на
-              клавіатурі
-            </p>
-          </div>
-        ) : null}
-      </footer> */}
     </section>
   );
 }
