@@ -113,7 +113,11 @@ export const RepeaterTestPage = ({
       };
       finishTest();
     } else {
-      setCurrentTask(shuffledArray[0]);
+      const nextTask = async () => {
+        await sleep(); // Затримка перед показом статистики
+        setCurrentTask(shuffledArray[0]);
+      };
+      nextTask();
     }
   }, [shuffledArray]);
 
