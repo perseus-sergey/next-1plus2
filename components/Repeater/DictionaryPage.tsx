@@ -87,30 +87,30 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
             <p className="p-4">
               TOTAL: <span className="text-teal-300 text-xl">{translations.length}</span> phrases
             </p>
-            <table className="table-auto w-full text-slate-50">
+            <table className="table-auto w-full text-slate-50 bg-slate-900/60">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 border border-stone-400">English</th>
-                  <th className="px-4 py-2 border border-stone-400">Ukrainian</th>
-                  <th className="px-4 py-2 border border-stone-400">Delete</th>
+                  <th className="px-4 py-2 border border-stone-500">English</th>
+                  <th className="px-4 py-2 border border-stone-500">Ukrainian</th>
+                  <th className="px-4 py-2 border border-stone-500">Delete</th>
                 </tr>
               </thead>
               <tbody>
                 {translations.map((translation) => (
                   <tr key={translation.id}>
                     <td
-                      className="px-4 py-2 border border-stone-400 cursor-pointer"
+                      className="px-4 py-2 border border-stone-500 cursor-pointer"
                       onClick={() => openModal(translation)}
                     >
                       {translation.english}
                     </td>
                     <td
-                      className="px-4 py-2 border border-stone-400 cursor-pointer"
+                      className="px-4 py-2 border border-stone-500 cursor-pointer"
                       onClick={() => openModal(translation)}
                     >
                       {translation.ukrainian}
                     </td>
-                    <td className="px-4 py-2 border border-stone-400 text-center">
+                    <td className="px-4 py-2 border border-stone-500 text-center">
                       <BaseButton
                         ariaLabel="Delete item from translation table"
                         className="text-red-500 hover:text-red-400 font-bold text-center p-1 rounded-full bg-yellow-50/70 hover:bg-yellow-50/30"
