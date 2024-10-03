@@ -17,6 +17,7 @@
     ]
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@types/pg": "^8.11.6",
     "next": "^14.2.13",
     "pg": "^8.12.0",
