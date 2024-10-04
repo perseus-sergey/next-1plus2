@@ -2,13 +2,8 @@
 
 import { DictionaryPage } from '@/components/Repeater/DictionaryPage';
 import { RepeaterTestPage } from '@/components/Repeater/RepeaterTestPage';
+import { ITranslation } from '@/libs/repeater/repeater.model';
 import { useState } from 'react';
-
-export interface ITranslation {
-  id: number;
-  english: string;
-  ukrainian: string;
-}
 
 const Page = () => {
   const [translations, setTranslations] = useState<ITranslation[]>([]);

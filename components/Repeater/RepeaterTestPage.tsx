@@ -1,12 +1,12 @@
 import styles from '../EndLevel/EndLevel.module.scss';
-import { ITranslation } from '@/app/[lang]/repeater/page';
 import { Title } from '../Title/Title';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { shuffleArray, sleep } from '@/libs/utils';
 import { BaseButton } from '../TextButton/BaseButton';
 import { SeoSVG } from '../Svg/SeoSVG';
 import { useMySound } from '@/libs/hooks/useSound';
 import { PlayFunction } from 'use-sound/dist/types';
+import { ITranslation } from '@/libs/repeater/repeater.model';
 
 interface IProps {
   translations: ITranslation[];
@@ -47,6 +47,35 @@ export const RepeaterTestPage = ({
 
   const playSound = (sound: PlayFunction) => sound();
 
+  const handleCorrectAnswer = useCallback(async () => {
+    playSound(audioRightAnsw);
+    setAnswerStatus(EAnswerStatus.RIGHT);
+    setShuffledArray((prev) => prev.slice(1)); // Видаляємо поточне завдання
+
+    await sleep();
+
+    setAnswerStatus(EAnswerStatus._);
+    setUserAnswer(''); // Очищуємо інпут після правильної відповіді
+  }, [audioRightAnsw, setAnswerStatus, setShuffledArray, sleep, setUserAnswer]);
+
+  // Функція для обробки неправильної відповіді
+  const handleWrongAnswer = useCallback(
+    async (isHint = false) => {
+      if (!currentTask) return;
+
+      playSound(audioWrongAnsw);
+      setAnswerStatus(EAnswerStatus.BAD);
+      if (isHint) setUserAnswer(currentTask.english);
+      setErrorArray((prev) => [...prev, currentTask]); // Додаємо помилку до масиву
+      setShuffledArray((prev) => [...prev, currentTask]); // Додаємо завдання знову до кінця черги
+
+      await sleep();
+
+      setAnswerStatus(EAnswerStatus._);
+    },
+    [audioWrongAnsw, setAnswerStatus, setErrorArray, currentTask, setShuffledArray, sleep]
+  );
+
   const handleSubmit = async () => {
     if (!currentTask) return;
 
@@ -56,31 +85,11 @@ export const RepeaterTestPage = ({
 
     if (inputValue === currentTask.english.toLowerCase()) {
       // Правильна відповідь
-      playSound(audioRightAnsw);
-      setAnswerStatus(EAnswerStatus.RIGHT);
-      setShuffledArray((prev) => prev.slice(1));
+      await handleCorrectAnswer();
     } else {
       // Неправильна відповідь
-      playSound(audioWrongAnsw);
-      setAnswerStatus(EAnswerStatus.BAD);
-      setErrorArray((prev) => [...prev, currentTask]);
-      setShuffledArray((prev) => [...prev, currentTask]);
+      await handleWrongAnswer();
     }
-
-    await sleep();
-
-    setAnswerStatus(EAnswerStatus._);
-    setUserAnswer(''); // Очищуємо інпут
-  };
-
-  // Підказка
-  const handleHint = () => {
-    if (!currentTask) return;
-    playSound(audioWrongAnsw);
-    setUserAnswer(currentTask.english);
-    setErrorArray((prev) => [...prev, currentTask]);
-    // }
-    setShuffledArray((prev) => [...prev, currentTask]);
   };
 
   // Завершення тесту
@@ -183,7 +192,7 @@ export const RepeaterTestPage = ({
                     d="M10 0c5.523 0 10 4.477 10 10s-4.477 10-10 10S0 15.523 0 10S4.477 0 10 0m0 1.395a8.605 8.605 0 1 0 0 17.21a8.605 8.605 0 0 0 0-17.21m2.207 5.442a.682.682 0 0 1 .963.964l-2.195 2.193l2.195 2.193a.682.682 0 0 1-.963.965l-2.197-2.195l-2.195 2.195a.68.68 0 0 1-.88.071l-.084-.072a.68.68 0 0 1 0-.964l2.195-2.193l-2.195-2.193a.682.682 0 1 1 .964-.964L10.01 9.03Z"
                   />
                 </SeoSVG>
-                <span className="text-xs text-rose-200">close</span>
+                <span className="text-xs">close</span>
               </BaseButton>
 
               <p>Tasks left: {shuffledArray.length}</p>
@@ -240,7 +249,7 @@ export const RepeaterTestPage = ({
                 <BaseButton
                   ariaLabel="Show right answer"
                   className="text-yellow-200 hover:text-yellow-100 flex flex-col justify-center items-center"
-                  onClick={handleHint}
+                  onClick={() => handleWrongAnswer(true)}
                 >
                   <SeoSVG strokeWidth={0.2} className="w-8 h-8">
                     <path
@@ -248,7 +257,7 @@ export const RepeaterTestPage = ({
                       d="M9.5 3a7.5 7.5 0 0 0-6.797 10.675a68 68 0 0 0-.681 3.142a.996.996 0 0 0 1.153 1.17c.623-.11 1.978-.36 3.236-.65A7.5 7.5 0 1 0 9.5 3M7.09 7.396c.264-.486.612-.853 1.054-1.089c.434-.232.901-.306 1.356-.306a2.62 2.62 0 0 1 1.632.577c.517.424.868 1.074.868 1.922c0 .975-.689 1.504-1.077 1.802l-.085.066c-.424.333-.588.511-.588.882a.75.75 0 0 1-1.5 0c0-1.134.711-1.708 1.162-2.062c.513-.403.588-.493.588-.688c0-.397-.149-.622-.32-.761A1.1 1.1 0 0 0 9.5 7.5c-.295 0-.498.049-.65.13c-.143.076-.294.21-.44.48a.75.75 0 1 1-1.32-.715M9.5 13a1 1 0 1 1 0 2a1 1 0 0 1 0-2m-.1 6a7.47 7.47 0 0 0 5.1 2c1.1 0 2.145-.237 3.088-.664c1.044.245 2.186.488 2.913.64a1.244 1.244 0 0 0 1.468-1.499c-.163-.703-.419-1.795-.672-2.803A7.503 7.503 0 0 0 16.953 6.41c.35.637.622 1.324.8 2.047A6 6 0 0 1 20.5 13.5c0 .991-.24 1.924-.664 2.747l-.13.253l.07.275c.227.896.466 1.9.641 2.65a117 117 0 0 1-2.739-.609l-.265-.063l-.243.122c-.803.4-1.71.625-2.67.625a6 6 0 0 1-2.919-.757a8.5 8.5 0 0 1-2.18.256"
                     />
                   </SeoSVG>
-                  <span className="text-xs text-rose-200">help</span>
+                  <span className="text-xs">help</span>
                 </BaseButton>
               </div>
             </>

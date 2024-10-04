@@ -1,21 +1,31 @@
 'use server';
 
-import { ETaskType } from '@/components/Repeater/DictionaryPage';
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
+import { ETaskType, promptModel } from './repeater.model';
 
-// limit of inputs type=number
-// add transcription
 // add button remove all phrases
+// shuffle array
+// wrap functions into useCallback
+
+const {
+  maxLevel,
+  maxTaskGeneration,
+  defaultTopic,
+  defaultTaskType,
+  maxWordsInPhrases,
+  maxWordsInSentences,
+  maxWordsInWords,
+} = promptModel;
 
 export const generateAiText = async ({
   level,
   quantity,
-  type,
+  taskType,
   topic,
 }: {
   level: number;
   quantity: number;
-  type: ETaskType;
+  taskType: ETaskType;
   topic: string;
 }) => {
   const generationConfig = {
@@ -45,28 +55,16 @@ export const generateAiText = async ({
     },
   ];
 
-  const prompt = `Level: ${level}; Number of tasks: ${quantity}; Type: ${type}; Topic: ${topic || 'general'}`;
-
-  // const prompt = `Level: 5; Number of tasks: 10; Type: 'Phrases'; Topic: School`;
-
-  try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      generationConfig,
-      safetySettings,
-      systemInstruction: `
-You are an English teacher.
+  const systemInstruction = `You are an English teacher.
 Your task is to generate exercises for students according to the following criteria:
-- Difficulty level: from 1 to 10
-- Number of tasks: from 1 to 70
+- Difficulty level: from 1 (easy) to ${maxLevel} (hard)
+- Number of tasks: from 1 to ${maxTaskGeneration}
 - Type of tasks: ["phrases", "words", "sentences"]
 - Topic
 Each type of task has specific word count requirements:
-  - "words" must contain up to 2 words
-  - "phrases" must contain up to 4 words and should not end with a period
-  - "sentences" must contain up to 11 words
+  - "words" must contain up to ${maxWordsInWords} words
+  - "phrases" must contain up to ${maxWordsInPhrases} words and should not end with a period
+  - "sentences" must contain up to ${maxWordsInSentences} words
 Create complete tasks (do not use "...").
 Each task must include:
 - The English sentence/phrase
@@ -78,7 +76,18 @@ Format the tasks as JSON in the following format:
     ["English phrase", "English transcription", "Український переклад"],
     ["English phrase 2", "English transcription 2", "Український переклад 2"]
   ]
-}`,
+}`;
+  const prompt = `Level: ${Math.min(level, maxLevel)}; Number of tasks: ${Math.min(quantity, maxTaskGeneration)}; Type: ${taskType || defaultTaskType}; Topic: ${topic || defaultTopic}`;
+  // const prompt = `Level: 5; Number of tasks: 10; Type: 'Phrases'; Topic: School`;
+
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-1.5-flash',
+      generationConfig,
+      safetySettings,
+      systemInstruction,
     });
 
     const result = await model.generateContent(prompt);
