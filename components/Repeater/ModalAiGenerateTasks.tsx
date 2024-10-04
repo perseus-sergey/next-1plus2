@@ -118,7 +118,7 @@ export const ModalAiGenerateTasks = ({
   const onSubmit = async (formData: IGenerateAiSettings) => {
     const generatedRes = await generateAiText(formData);
     if (typeof generatedRes === 'string' || typeof generatedRes === 'undefined') {
-      console.log('🚀 ~ onSubmit ~ generatedRes:', generatedRes);
+      console.log('🚀 ~ onSubmit ~ generatedRes:', generatedRes?.slice(11));
     } else {
       setGeneratedData(generatedRes);
     }
