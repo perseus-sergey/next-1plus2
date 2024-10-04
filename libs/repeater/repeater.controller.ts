@@ -101,6 +101,6 @@ Format the tasks as JSON in the following format:
     return lessons || null;
   } catch (error) {
     console.log(error instanceof Error ? error : new Error('Wrong AI generation of JSON parsing'));
-    return process.env.GEMINI_API_KEY;
+    return null;
   }
 };
