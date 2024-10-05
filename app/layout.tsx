@@ -31,11 +31,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={lobsterFont.variable}>
-        <header className="flex justify-between w-full p-4">
+        <header className="flex justify-between w-full p-1 sm:p-4">
           <BreadCrumb homeElement={'Home'} isCapitalizeLinks />
           <LanguageSwitcher />
         </header>
-        <main className="main">{children}</main>
+        <main className="flex-1 flex flex-col justify-around items-center px-1 sm:px-4">
+          {children}
+        </main>
+        {/* <main className="main">{children}</main> */}
         <FlyingDigits />
       </body>
     </html>

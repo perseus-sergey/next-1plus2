@@ -3,7 +3,7 @@
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { ELang } from '@/libs/langMessages';
-import styles from './LanguageSwitcher.module.scss';
+import { BaseButton } from '../TextButton/BaseButton';
 
 const LanguageSwitcher = () => {
   const router = useRouter();
@@ -17,9 +17,15 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <button onClick={handleLanguageChange} className={styles.switcher}>
+    <BaseButton
+      ariaLabel={
+        currentLang === ELang.en ? 'Switch language to Ukrainian' : 'Переключити мову на англійську'
+      }
+      onClick={handleLanguageChange}
+      className="text-white border border-slate-500 rounded-sm p-2 h-fit leading-none"
+    >
       {currentLang === ELang.en ? 'UA' : 'EN'}
-    </button>
+    </BaseButton>
   );
 };
 

@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
-import styles from '../HomeLinks/HomeLinks.module.scss';
 import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 
 interface MissionProps {
@@ -9,7 +8,7 @@ interface MissionProps {
 
 const Mission = ({ lang }: MissionProps) => {
   return (
-    <div className={styles.links}>
+    <div className="flex justify-evenly flex-wrap gap-8 w-full whitespace-nowrap">
       <Link href={`/${lang}/math/level`}>
         <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_LEVELS, lang)}</TextButton>
       </Link>

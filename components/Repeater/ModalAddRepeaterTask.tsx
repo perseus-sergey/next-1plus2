@@ -1,3 +1,4 @@
+import { SeoSVG } from '../Svg/SeoSVG';
 import { BaseButton } from '../TextButton/BaseButton';
 
 interface IProps {
@@ -22,8 +23,8 @@ const InputField = ({
   labelTitle: string;
 }) => {
   return (
-    <div className="mb-4">
-      <label className="block text-gray-500 text-sm mb-2">{labelTitle}</label>
+    <div className="w-full">
+      <label className="block text-gray-500 text-sm mb-1">{labelTitle}</label>
       <input
         type="text"
         className="border bg-white px-4 py-2 w-full"
@@ -46,8 +47,28 @@ export const ModalAddRepeaterTask = ({
   newTranscription,
 }: IProps) => (
   <div className="fixed inset-0 bg-gray-600/80 flex items-center justify-center">
-    <div className="bg-white p-6 rounded text-slate-600">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="relative max-h-screen max-w-lg overflow-y-auto w-full flex flex-wrap gap-4 bg-white p-6 rounded text-slate-600">
+      {isEditMode ? (
+        <SeoSVG
+          strokeWidth={0.2}
+          viewBox="0 0 24 24"
+          className=" absolute top-4 left-4 w-8 h-8 text-slate-400"
+        >
+          <path
+            fill="currentColor"
+            d="M3 6v2h11V6zm0 4v2h11v-2zm17 .1c-.1 0-.3.1-.4.2l-1 1l2.1 2.1l1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8l-6.1 6V20h2.1l6.1-6.1zM3 14v2h7v-2z"
+          />
+        </SeoSVG>
+      ) : (
+        <SeoSVG
+          strokeWidth={2}
+          viewBox="0 0 24 24"
+          className=" absolute top-4 left-4 w-8 h-8 text-slate-400"
+        >
+          <path d="M19 10H5m0-4h14m-5 8H5m0 4h6m7-3v6m-3-3h6" />
+        </SeoSVG>
+      )}
+      <h2 className="m-auto text-xl font-bold">
         {isEditMode ? 'Edit Translation' : 'Add Translation'}
       </h2>
 
@@ -61,7 +82,7 @@ export const ModalAddRepeaterTask = ({
 
       <InputField labelTitle="Ukrainian" value={newUkrainian} onChangeFn={setNewUkrainian} />
 
-      <div className="flex justify-between">
+      <div className="flex justify-between items-end">
         <BaseButton
           ariaLabel="Close the modal window"
           className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
@@ -87,14 +108,16 @@ export const ModalAddRepeaterTask = ({
 export const ModalDeleteTask = ({
   closeDeleteModal,
   confirmDelete,
+  isDeleteAll = false,
 }: {
   closeDeleteModal: () => void;
   confirmDelete: () => void;
+  isDeleteAll: boolean;
 }) => (
   <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
     <div className="bg-white p-6 rounded shadow-lg text-slate-600">
       <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
-      <p>Are you sure you want to delete this row?</p>
+      <p>Are you sure you want to delete {isDeleteAll ? 'ALL TASKS' : 'this task'}?</p>
       <div className="flex justify-end mt-4">
         <button
           className="bg-gray-500 text-white px-4 py-2 rounded mr-2"

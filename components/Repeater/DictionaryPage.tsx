@@ -27,7 +27,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
   const [newUkrainian, setNewUkrainian] = useState('');
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Модальне вікно для підтвердження видалення
-  const [deleteId, setDeleteId] = useState<number | null>(null); // ID рядка, який будемо видаляти
+  const [deleteId, setDeleteId] = useState<number | 'all' | null>(null); // ID рядка, який будемо видаляти
 
   const [generatedData, setGeneratedData] = useState<string[][] | null>([]); // Модальне вікно для підтвердження видалення
 
@@ -91,22 +91,29 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
       ...generatedData.map((item, idx) => ({
         id: newId + idx,
         english: item[0],
-        transcription: item[1],
+        transcription: item[1].replace(/^\/|\/$/g, ''),
         ukrainian: item[2],
       })),
     ]);
   }, [generatedData]);
 
-  const openDeleteModal = (id: number) => {
+  const openDeleteModal = (id: number | 'all') => {
     setDeleteId(id);
     setIsDeleteModalOpen(true);
   };
 
   const confirmDelete = () => {
-    if (deleteId !== null) {
-      setTranslations((prev) => prev.filter((item) => item.id !== deleteId));
+    if (deleteId === null) {
       closeDeleteModal();
+      return;
     }
+
+    if (deleteId === 'all') {
+      setTranslations([]);
+    } else {
+      setTranslations((prev) => prev.filter((item) => item.id !== deleteId));
+    }
+    closeDeleteModal();
   };
 
   const closeDeleteModal = () => {
@@ -124,56 +131,47 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
             <p className="p-4">
               TOTAL: <span className="text-teal-300 text-xl">{translations.length}</span> phrases
             </p>
-            <table className="table-auto w-full text-slate-50 bg-slate-900/60">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 border border-stone-500">English</th>
-                  <th className="px-4 py-2 border border-stone-500">Transcription</th>
-                  <th className="px-4 py-2 border border-stone-500">Ukrainian</th>
-                  <th className="px-4 py-2 border border-stone-500">
-                    <span className="hidden sm:inline-block">Action</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {translations.map((translation) => (
-                  <tr key={translation.id}>
-                    <td
-                      className="px-4 py-2 border border-stone-500 cursor-pointer"
-                      onClick={() => openModal(translation)}
-                    >
-                      {translation.english}
-                    </td>
-                    <td
-                      className="px-4 py-2 border border-stone-500 cursor-pointer"
-                      onClick={() => openModal(translation)}
-                    >
+
+            <BaseButton
+              ariaLabel="Delete item from translation table"
+              className="bg-red-700 hover:bg-red-600 font-bold text-center p-1 rounded-full"
+              onClick={() => openDeleteModal('all')}
+            >
+              <SeoSVG strokeWidth={0.1}>
+                <path
+                  fill="currentColor"
+                  d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
+                />
+              </SeoSVG>
+            </BaseButton>
+
+            <ul className="flex flex-col gap-2 min-w-72">
+              {translations.map((translation) => (
+                <li key={translation.id} className="flex gap-2 p-2 bg-slate-900/60">
+                  <ul className="w-full flex flex-col gap-3" onClick={() => openModal(translation)}>
+                    <li className="bg-blue-900 p-1 sm:px-4">{translation.english}</li>
+                    <li className="bg-gray-700 p-1 sm:px-4 text-center">
                       {translation.transcription}
-                    </td>
-                    <td
-                      className="px-4 py-2 border border-stone-500 cursor-pointer"
-                      onClick={() => openModal(translation)}
+                    </li>
+                    <li className="bg-sky-900 p-1 sm:px-4">{translation.ukrainian}</li>
+                  </ul>
+                  <div className="ml-auto shrink-0 w-12 flex items-center justify-end border-l border-slate-300">
+                    <BaseButton
+                      ariaLabel="Delete item from translation table"
+                      className="bg-red-700 hover:bg-red-600 font-bold text-center p-1 rounded-full"
+                      onClick={() => openDeleteModal(translation.id)}
                     >
-                      {translation.ukrainian}
-                    </td>
-                    <td className="p-2 border border-stone-500 text-center">
-                      <BaseButton
-                        ariaLabel="Delete item from translation table"
-                        className="bg-red-700 hover:bg-red-600 font-bold text-center p-1 rounded-full"
-                        onClick={() => openDeleteModal(translation.id)}
-                      >
-                        <SeoSVG strokeWidth={0.1}>
-                          <path
-                            fill="currentColor"
-                            d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
-                          />
-                        </SeoSVG>
-                      </BaseButton>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <SeoSVG strokeWidth={0.1}>
+                        <path
+                          fill="currentColor"
+                          d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
+                        />
+                      </SeoSVG>
+                    </BaseButton>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </>
         )}
 
@@ -246,7 +244,11 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
         )}
 
         {isDeleteModalOpen && (
-          <ModalDeleteTask closeDeleteModal={closeDeleteModal} confirmDelete={confirmDelete} />
+          <ModalDeleteTask
+            closeDeleteModal={closeDeleteModal}
+            confirmDelete={confirmDelete}
+            isDeleteAll={deleteId === 'all'}
+          />
         )}
 
         {isGenerateModalOpen && (
