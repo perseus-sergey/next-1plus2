@@ -3,9 +3,7 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 import { ETaskType, promptModel } from './repeater.model';
 
-// add button remove all phrases
 // shuffle array
-// wrap functions into useCallback
 
 const {
   maxLevel,

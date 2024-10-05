@@ -1,7 +1,7 @@
 import { BaseButton } from '../TextButton/BaseButton';
 import { SeoSVG } from '../Svg/SeoSVG';
 import { Title } from '../Title/Title';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { ModalAddRepeaterTask, ModalDeleteTask } from './ModalAddRepeaterTask';
 import { ModalAiGenerateTasks } from './ModalAiGenerateTasks';
 import { ITranslation } from '@/libs/repeater/repeater.model';
@@ -47,39 +47,56 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
     setCurrentTranslation(null);
-  };
+  }, []);
 
-  const saveTranslation = () => {
+  const saveTranslation = useCallback(() => {
+    const newEngTrimmed = newEnglish.trim();
+    const newUkrTrimmed = newUkrainian.trim();
+
+    if (!newEngTrimmed || !newUkrTrimmed) {
+      return;
+    }
+
     if (isEditMode && currentTranslation) {
+      // Редагування існуючого перекладу
       setTranslations((prev) =>
         prev.map((item) =>
           item.id === currentTranslation.id
             ? {
                 ...item,
-                english: newEnglish.trim(),
+                english: newEngTrimmed,
                 transcription: newTranscription.trim(),
-                ukrainian: newUkrainian.trim(),
+                ukrainian: newUkrTrimmed,
               }
             : item
         )
       );
     } else {
-      const newId = translations.length ? translations[translations.length - 1].id + 1 : 1;
-      setTranslations([
-        ...translations,
+      // Додавання нового перекладу
+      setTranslations((prev) => [
+        ...prev,
         {
-          id: newId,
-          english: newEnglish.trim(),
+          id: prev.length ? prev[prev.length - 1].id + 1 : 1, // Генеруємо новий ID
+          english: newEngTrimmed,
           transcription: newTranscription.trim(),
-          ukrainian: newUkrainian.trim(),
+          ukrainian: newUkrTrimmed,
         },
       ]);
     }
-    closeModal();
-  };
+
+    closeModal(); // Закриваємо модальне вікно
+  }, [
+    isEditMode,
+    currentTranslation,
+    newEnglish,
+    newTranscription,
+    newUkrainian,
+    setTranslations,
+    closeModal,
+  ]);
 
   useEffect(() => {
     if (!generatedData || generatedData.length === 0) return;
@@ -102,7 +119,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = useCallback(() => {
     if (deleteId === null) {
       closeDeleteModal();
       return;
@@ -114,12 +131,12 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
       setTranslations((prev) => prev.filter((item) => item.id !== deleteId));
     }
     closeDeleteModal();
-  };
+  }, [deleteId]);
 
-  const closeDeleteModal = () => {
+  const closeDeleteModal = useCallback(() => {
     setDeleteId(null);
     setIsDeleteModalOpen(false);
-  };
+  }, []);
 
   return (
     <>
@@ -132,27 +149,16 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
               TOTAL: <span className="text-teal-300 text-xl">{translations.length}</span> phrases
             </p>
 
-            <BaseButton
-              ariaLabel="Delete item from translation table"
-              className="bg-red-700 hover:bg-red-600 font-bold text-center p-1 rounded-full"
-              onClick={() => openDeleteModal('all')}
-            >
-              <SeoSVG strokeWidth={0.1}>
-                <path
-                  fill="currentColor"
-                  d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
-                />
-              </SeoSVG>
-            </BaseButton>
-
-            <ul className="flex flex-col gap-2 min-w-72">
+            <ul className="flex flex-col gap-2 min-w-72 text-xl">
               {translations.map((translation) => (
                 <li key={translation.id} className="flex gap-2 p-2 bg-slate-900/60">
                   <ul className="w-full flex flex-col gap-3" onClick={() => openModal(translation)}>
                     <li className="bg-blue-900 p-1 sm:px-4">{translation.english}</li>
-                    <li className="bg-gray-700 p-1 sm:px-4 text-center">
-                      {translation.transcription}
-                    </li>
+                    {translation.transcription && (
+                      <li className="bg-gray-700 p-1 sm:px-4 text-center">
+                        {translation.transcription}
+                      </li>
+                    )}
                     <li className="bg-sky-900 p-1 sm:px-4">{translation.ukrainian}</li>
                   </ul>
                   <div className="ml-auto shrink-0 w-12 flex items-center justify-end border-l border-slate-300">
@@ -208,21 +214,37 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
           </BaseButton>
 
           {translations.length > 0 && (
-            <BaseButton
-              ariaLabel="Start the test according to the dictionary"
-              className={`${btnBaseStyle} bg-blue-500 hover:bg-blue-600`}
-              onClick={() => startTest()}
-            >
-              <SeoSVG strokeWidth={0.2} viewBox="0 0 14 14" className={svgBaseStyle}>
-                <path
-                  fill="currentColor"
-                  fillRule="evenodd"
-                  d="m6.547 10.263l-2.81-2.81c.309-.517.617-1.052.922-1.584c1.016-1.766 2.008-3.49 2.938-4.387c2.524-2.524 5.981-1.06 5.981-1.06s1.463 3.457-1.06 5.981c-.89.922-2.587 1.9-4.34 2.908c-.546.315-1.097.632-1.631.952m2.14-6.532a1.582 1.582 0 1 1 3.164 0a1.582 1.582 0 0 1-3.163 0Zm-4.09-.232c-1.418-.377-2.749.321-3.93 1.404a.48.48 0 0 0 .089.765l1.905 1.148l.002-.004c.275-.46.582-.993.894-1.533c.355-.617.716-1.243 1.04-1.78m2.587 7.84l1.148 1.905a.48.48 0 0 0 .765.088c1.083-1.18 1.782-2.512 1.404-3.93c-.522.314-1.07.63-1.613.943l-.083.048c-.548.316-1.091.628-1.616.943zM2.622 9.343a2 2 0 0 1 1.402 3.46c-.222.212-.569.378-.89.506a11 11 0 0 1-1.1.358c-.367.1-.717.18-.982.233a6 6 0 0 1-.336.059l-.133.013a.5.5 0 0 1-.198-.022a.5.5 0 0 1-.241-.156a.5.5 0 0 1-.11-.22a.6.6 0 0 1-.012-.176c.003-.04.009-.086.015-.128c.013-.088.033-.203.06-.334c.053-.264.135-.612.235-.977c.1-.364.222-.754.359-1.095c.128-.321.294-.667.506-.888a2 2 0 0 1 1.425-.633"
-                  clipRule="evenodd"
-                />
-              </SeoSVG>
-              <span className="sm:block hidden">Start Test</span>
-            </BaseButton>
+            <>
+              <BaseButton
+                ariaLabel="Delete all tasks from translation table"
+                className={`${btnBaseStyle} bg-red-500 hover:bg-red-600`}
+                onClick={() => openDeleteModal('all')}
+              >
+                <SeoSVG strokeWidth={0.1} className={svgBaseStyle}>
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
+                  />
+                </SeoSVG>
+                <span className="sm:block hidden">Delete All</span>
+              </BaseButton>
+
+              <BaseButton
+                ariaLabel="Start the test according to the dictionary"
+                className={`${btnBaseStyle} bg-blue-500 hover:bg-blue-600`}
+                onClick={() => startTest()}
+              >
+                <SeoSVG strokeWidth={0.2} viewBox="0 0 14 14" className={svgBaseStyle}>
+                  <path
+                    fill="currentColor"
+                    fillRule="evenodd"
+                    d="m6.547 10.263l-2.81-2.81c.309-.517.617-1.052.922-1.584c1.016-1.766 2.008-3.49 2.938-4.387c2.524-2.524 5.981-1.06 5.981-1.06s1.463 3.457-1.06 5.981c-.89.922-2.587 1.9-4.34 2.908c-.546.315-1.097.632-1.631.952m2.14-6.532a1.582 1.582 0 1 1 3.164 0a1.582 1.582 0 0 1-3.163 0Zm-4.09-.232c-1.418-.377-2.749.321-3.93 1.404a.48.48 0 0 0 .089.765l1.905 1.148l.002-.004c.275-.46.582-.993.894-1.533c.355-.617.716-1.243 1.04-1.78m2.587 7.84l1.148 1.905a.48.48 0 0 0 .765.088c1.083-1.18 1.782-2.512 1.404-3.93c-.522.314-1.07.63-1.613.943l-.083.048c-.548.316-1.091.628-1.616.943zM2.622 9.343a2 2 0 0 1 1.402 3.46c-.222.212-.569.378-.89.506a11 11 0 0 1-1.1.358c-.367.1-.717.18-.982.233a6 6 0 0 1-.336.059l-.133.013a.5.5 0 0 1-.198-.022a.5.5 0 0 1-.241-.156a.5.5 0 0 1-.11-.22a.6.6 0 0 1-.012-.176c.003-.04.009-.086.015-.128c.013-.088.033-.203.06-.334c.053-.264.135-.612.235-.977c.1-.364.222-.754.359-1.095c.128-.321.294-.667.506-.888a2 2 0 0 1 1.425-.633"
+                    clipRule="evenodd"
+                  />
+                </SeoSVG>
+                <span className="sm:block hidden">Start Test</span>
+              </BaseButton>
+            </>
           )}
         </div>
         {!generatedData && (
@@ -261,3 +283,5 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
     </>
   );
 };
+
+export default React.memo(DictionaryPage);

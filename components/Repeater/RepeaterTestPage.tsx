@@ -1,6 +1,14 @@
 import styles from '../EndLevel/EndLevel.module.scss';
 import { Title } from '../Title/Title';
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  KeyboardEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { shuffleArray, sleep } from '@/libs/utils';
 import { BaseButton } from '../TextButton/BaseButton';
 import { SeoSVG } from '../Svg/SeoSVG';
@@ -31,17 +39,14 @@ const makeUniqueArray = (array: ITranslation[]): ITranslation[] => {
   });
 };
 
-export const RepeaterTestPage = ({
-  translations,
-  setIsTestStarted,
-  translationsLength,
-}: IProps) => {
+const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength }: IProps) => {
   const [shuffledArray, setShuffledArray] = useState<ITranslation[]>(translations);
   const [currentTask, setCurrentTask] = useState<ITranslation | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [errorArray, setErrorArray] = useState<ITranslation[]>([]);
   const [isTestCompleted, setIsTestCompleted] = useState(false);
   const [answerStatus, setAnswerStatus] = useState(EAnswerStatus._);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { audioDel, audioRightAnsw, audioWrongAnsw, audioLevelFinish } = useMySound();
 
@@ -56,7 +61,7 @@ export const RepeaterTestPage = ({
 
     setAnswerStatus(EAnswerStatus._);
     setUserAnswer(''); // Очищуємо інпут після правильної відповіді
-  }, [audioRightAnsw, setAnswerStatus, setShuffledArray, sleep, setUserAnswer]);
+  }, [audioRightAnsw, setAnswerStatus, setShuffledArray, setUserAnswer]);
 
   // Функція для обробки неправильної відповіді
   const handleWrongAnswer = useCallback(
@@ -73,7 +78,7 @@ export const RepeaterTestPage = ({
 
       setAnswerStatus(EAnswerStatus._);
     },
-    [audioWrongAnsw, setAnswerStatus, setErrorArray, currentTask, setShuffledArray, sleep]
+    [audioWrongAnsw, setAnswerStatus, setErrorArray, currentTask, setShuffledArray]
   );
 
   const handleSubmit = async () => {
@@ -133,6 +138,16 @@ export const RepeaterTestPage = ({
   useEffect(() => {
     if (isTestCompleted && errorArray.length === 0) playSound(audioLevelFinish);
   }, [isTestCompleted]);
+
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.focus();
+  }, [currentTask, shuffledArray, errorArray, answerStatus]);
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
 
   if (!currentTask) return null;
 
@@ -206,9 +221,11 @@ export const RepeaterTestPage = ({
                 </p>
                 <div className="relative">
                   <input
+                    ref={inputRef}
                     type="text"
                     value={userAnswer}
                     onChange={(e) => setUserAnswer(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     className="bg-slate-900/30 pr-8 border border-slate-400 rounded px-4 py-2 w-full text-slate-50"
                   />
                   <BaseButton
@@ -218,6 +235,7 @@ export const RepeaterTestPage = ({
                     onClick={() => {
                       playSound(audioDel);
                       setUserAnswer('');
+                      if (inputRef.current) inputRef.current.focus();
                     }}
                   >
                     <SeoSVG strokeWidth={0.2} className="w-6 h-6" viewBox="0 0 56 56">
@@ -267,3 +285,5 @@ export const RepeaterTestPage = ({
     </>
   );
 };
+
+export default React.memo(RepeaterTestPage);
