@@ -4,7 +4,12 @@ import { generateAiText } from '@/libs/repeater/repeater.controller';
 import { z } from 'zod';
 import { FieldError, FieldErrorsImpl, Merge, useForm, UseFormRegister } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ETaskType, IGenerateAiSettings, promptModel } from '@/libs/repeater/repeater.model';
+import {
+  ETaskType,
+  IGenerateAiSettings,
+  LANGUAGES,
+  promptModel,
+} from '@/libs/repeater/repeater.model';
 import { SeoSVG } from '../Svg/SeoSVG';
 
 interface IGenerateAiProps {
@@ -12,13 +17,14 @@ interface IGenerateAiProps {
   setGeneratedData: (lessons: string[][] | null) => void;
 }
 
-type TValidFieldNames = 'level' | 'quantity' | 'taskType' | 'topic';
+type TValidFieldNames = 'level' | 'quantity' | 'taskType' | 'topic' | 'language';
 
 const taskTypes = Object.values(ETaskType) as [ETaskType, ...ETaskType[]];
 
 const { maxLevel, maxTaskGeneration } = promptModel;
 
 const generateTaskSchema = z.object({
+  language: z.string().nonempty({ message: 'Please select a language.' }),
   level: z.preprocess(
     (val) => (val === '' ? undefined : val),
     z
@@ -52,7 +58,7 @@ const generateTaskSchema = z.object({
 
 interface FormFieldProps {
   label?: string;
-  type: 'text' | 'number' | 'radio';
+  type: 'text' | 'number' | 'radio' | 'select';
   id: TValidFieldNames;
   register: UseFormRegister<IGenerateAiSettings>;
   placeholder?: string;
@@ -87,6 +93,18 @@ const FormField = ({
             </label>
           ))}
         </div>
+      ) : type === 'select' && options ? (
+        <select
+          id={id}
+          {...register(id)}
+          className="border-2 border-solid rounded bg-white px-4 py-2 w-full"
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       ) : (
         <input
           type={type}
@@ -111,6 +129,7 @@ export const ModalAiGenerateTasks = ({
     formState: { errors, isSubmitting },
   } = useForm<IGenerateAiSettings>({
     defaultValues: {
+      language: 'English',
       taskType: ETaskType.words, // Значення за замовчуванням для поля "taskType"
       level: 3,
       quantity: 5,
@@ -128,6 +147,17 @@ export const ModalAiGenerateTasks = ({
     <div className="fixed inset-0 bg-gray-600/80 flex items-center justify-center">
       <div className="max-h-screen max-w-lg overflow-y-auto w-full flex flex-wrap gap-4 bg-white p-6 rounded text-slate-600">
         <h2 className="w-full text-center text-xl font-bold">Select options</h2>
+
+        <div className="w-full">
+          <FormField
+            label="Choose the language"
+            type="select"
+            id="language"
+            register={register}
+            options={LANGUAGES.map((language) => ({ value: language, label: language }))}
+            error={errors.language?.message}
+          />
+        </div>
 
         <FormField
           valueAsNumber

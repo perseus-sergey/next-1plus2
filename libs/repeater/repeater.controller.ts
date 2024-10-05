@@ -1,7 +1,7 @@
 'use server';
 
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
-import { ETaskType, promptModel } from './repeater.model';
+import { IGenerateAiSettings, promptModel } from './repeater.model';
 
 // shuffle array
 
@@ -20,12 +20,8 @@ export const generateAiText = async ({
   quantity,
   taskType,
   topic,
-}: {
-  level: number;
-  quantity: number;
-  taskType: ETaskType;
-  topic: string;
-}) => {
+  language = 'English',
+}: IGenerateAiSettings) => {
   const generationConfig = {
     temperature: 1,
     topP: 0.95,
@@ -53,7 +49,7 @@ export const generateAiText = async ({
     },
   ];
 
-  const systemInstruction = `You are an English teacher.
+  const systemInstruction = `You are a teacher of language: ${language}.
 Your task is to generate exercises for students according to the following criteria:
 - Difficulty level: from 1 (easy) to ${maxLevel} (hard)
 - Number of tasks: from 1 to ${maxTaskGeneration}
@@ -65,14 +61,14 @@ Each type of task has specific word count requirements:
   - "sentences" must contain up to ${maxWordsInSentences} words
 Create complete tasks (do not use "...").
 Each task must include:
-- The English sentence/phrase
-- The phonetic transcription of the English sentence/phrase/words
+- The ${language} sentence/phrase
+- The phonetic transcription of the ${language} sentence/phrase/words
 - The Ukrainian translation
 Format the tasks as JSON in the following format:
 {
   "lessons": [
-    ["English phrase", "English transcription", "Український переклад"],
-    ["English phrase 2", "English transcription 2", "Український переклад 2"]
+    ["${language} phrase", "${language} transcription", "Український переклад"],
+    ["${language} phrase 2", "${language} transcription 2", "Український переклад 2"]
   ]
 }`;
   const prompt = `Level: ${Math.min(level, maxLevel)}; Number of tasks: ${Math.min(quantity, maxTaskGeneration)}; Type: ${taskType || defaultTaskType}; Topic: ${topic || defaultTopic}`;

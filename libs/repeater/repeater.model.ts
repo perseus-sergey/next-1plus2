@@ -10,6 +10,7 @@ export interface IGenerateAiSettings {
   level: number;
   quantity: number;
   topic: string;
+  language: string;
 }
 
 export enum ETaskType {
@@ -27,3 +28,22 @@ export const promptModel = {
   maxWordsInPhrases: 3,
   maxWordsInSentences: 11,
 };
+
+export const LANGUAGES = [
+  'English',
+  'Greek',
+  'Chinese',
+  'Spanish',
+  'Hindi',
+  'Arabic',
+  'Bengali',
+  'Portuguese',
+  'Japanese',
+  'Turkish',
+  'Korean',
+  'French',
+  'German',
+  'Italian',
+  'Polish',
+  'Czech',
+];
