@@ -3,8 +3,6 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 import { IGenerateAiSettings, promptModel } from './repeater.model';
 
-// shuffle array
-
 const {
   maxLevel,
   maxTaskGeneration,
@@ -20,7 +18,8 @@ export const generateAiText = async ({
   quantity,
   taskType,
   topic,
-  language = 'English',
+  languageAnswer = 'English',
+  languageAsk = 'Ukrainian',
 }: IGenerateAiSettings) => {
   const generationConfig = {
     temperature: 1,
@@ -49,7 +48,7 @@ export const generateAiText = async ({
     },
   ];
 
-  const systemInstruction = `You are a teacher of language: ${language}.
+  const systemInstruction = `You are a teacher of language: ${languageAnswer}.
 Your task is to generate exercises for students according to the following criteria:
 - Difficulty level: from 1 (easy) to ${maxLevel} (hard)
 - Number of tasks: from 1 to ${maxTaskGeneration}
@@ -61,14 +60,14 @@ Each type of task has specific word count requirements:
   - "sentences" must contain up to ${maxWordsInSentences} words
 Create complete tasks (do not use "...").
 Each task must include:
-- The ${language} sentence/phrase
-- The phonetic transcription of the ${language} sentence/phrase/words
-- The Ukrainian translation
+- The ${languageAnswer} sentence/phrase
+- The phonetic transcription of the ${languageAnswer} sentence/phrase/words
+- The ${languageAsk} translation
 Format the tasks as JSON in the following format:
 {
   "lessons": [
-    ["${language} phrase", "${language} transcription", "Український переклад"],
-    ["${language} phrase 2", "${language} transcription 2", "Український переклад 2"]
+    ["${languageAnswer} phrase", "${languageAnswer} transcription", "${languageAsk} translation"],
+    ["${languageAnswer} phrase 2", "${languageAnswer} transcription 2", "${languageAsk} translation 2"]
   ]
 }`;
   const prompt = `Level: ${Math.min(level, maxLevel)}; Number of tasks: ${Math.min(quantity, maxTaskGeneration)}; Type: ${taskType || defaultTaskType}; Topic: ${topic || defaultTopic}`;

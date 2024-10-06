@@ -13,8 +13,8 @@ interface IProps {
 }
 
 const btnBaseStyle =
-  'flex sm:flex-row flex-col items-center gap-2 justify-center text-white p-4 sm:px-4 sm:py-2 rounded-lg sm:rounded';
-const svgBaseStyle = 'sm:w-6 w-8 sm:h-6 h-8';
+  'w-fit flex items-center gap-4 justify-center text-xl text-white p-4 sm:py-2 rounded-lg sm:rounded';
+const svgBaseStyle = 'w-8 h-8';
 
 export const DictionaryPage = ({ translations, setTranslations, startTest }: IProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -181,7 +181,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
           </>
         )}
 
-        <div className="w-full flex items-center gap-2 justify-around py-6 px-2 sm:px-6">
+        <div className="w-64 sm:w-fit grid grid-cols-2 flex-wrap items-center gap-8 justify-items-center sm:py-12 py-6 px-2">
           <BaseButton
             ariaLabel="Add item to translation table"
             className={`${btnBaseStyle} bg-orange-500 hover:bg-orange-600`}
@@ -193,9 +193,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
                 d="M14 14q.425 0 .713-.288T15 13v-2h2q.425 0 .713-.288T18 10t-.288-.712T17 9h-2V7q0-.425-.288-.712T14 6t-.712.288T13 7v2h-2q-.425 0-.712.288T10 10t.288.713T11 11h2v2q0 .425.288.713T14 14m-6 4q-.825 0-1.412-.587T6 16V4q0-.825.588-1.412T8 2h12q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18zm-4 4q-.825 0-1.412-.587T2 20V7q0-.425.288-.712T3 6t.713.288T4 7v13h13q.425 0 .713.288T18 21t-.288.713T17 22z"
               />
             </SeoSVG>
-            <span className="hidden sm:block text-xs text-green-200 group-hover:text-green-50">
-              add task
-            </span>
+            <span className="hidden sm:block">add task</span>
           </BaseButton>
 
           <BaseButton
@@ -248,7 +246,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
           )}
         </div>
         {!generatedData && (
-          <p className="bg-red-600">Failed to load data. Please try again later.</p>
+          <p className="bg-red-600 p-2">Failed to load data. Please try again later.</p>
         )}
 
         {isModalOpen && (

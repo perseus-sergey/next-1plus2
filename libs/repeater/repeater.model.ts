@@ -10,7 +10,8 @@ export interface IGenerateAiSettings {
   level: number;
   quantity: number;
   topic: string;
-  language: string;
+  languageAsk: string;
+  languageAnswer: string;
 }
 
 export enum ETaskType {
@@ -31,6 +32,7 @@ export const promptModel = {
 
 export const LANGUAGES = [
   'English',
+  'Ukrainian',
   'Greek',
   'Chinese',
   'Spanish',
