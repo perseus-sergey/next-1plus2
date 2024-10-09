@@ -49,7 +49,7 @@ export const generateMetadata = async ({
 
 export const generateStaticParams = ({ params: { cat } }: IProps) => {
   const catObj = categoriesMap.get(cat);
-  if (!catObj) return { [EUrlParams.MAX_NUM]: '100' };
+  if (!catObj) return [{ [EUrlParams.MAX_NUM]: '100' }];
 
   return createMaxNumArray(catObj.exercise).map((item) => ({ [EUrlParams.MAX_NUM]: `${item}` }));
 };
