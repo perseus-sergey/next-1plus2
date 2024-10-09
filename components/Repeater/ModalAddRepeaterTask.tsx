@@ -1,8 +1,10 @@
-import { ReactNode } from 'react';
 import { SeoSVG } from '../Svg/SeoSVG';
 import { BaseButton } from '../TextButton/BaseButton';
+import { ELang } from '@/models/types';
+import { ModalWrapper } from '../Modals/ModalWrapper';
 
 interface IProps {
+  lang: ELang;
   isEditMode: boolean;
   closeModal: () => void;
   saveTranslation: () => void;
@@ -37,6 +39,7 @@ const InputField = ({
 };
 
 export const ModalAddRepeaterTask = ({
+  lang,
   isEditMode,
   closeModal,
   saveTranslation,
@@ -47,7 +50,7 @@ export const ModalAddRepeaterTask = ({
   newUkrainian,
   newTranscription,
 }: IProps) => (
-  <ModalWrapper title={isEditMode ? 'Edit Task' : 'Add Task'} closeFn={closeModal}>
+  <ModalWrapper title={isEditMode ? 'Edit Task' : 'Add Task'} closeFn={closeModal} lang={lang}>
     {isEditMode ? (
       <SeoSVG
         strokeWidth={0.2}
@@ -105,12 +108,14 @@ export const ModalDeleteTask = ({
   closeDeleteModal,
   confirmDelete,
   isDeleteAll = false,
+  lang,
 }: {
   closeDeleteModal: () => void;
   confirmDelete: () => void;
   isDeleteAll: boolean;
+  lang: ELang;
 }) => (
-  <ModalWrapper title="Confirm Deletion" closeFn={closeDeleteModal}>
+  <ModalWrapper title="Confirm Deletion" closeFn={closeDeleteModal} lang={lang}>
     <p>Are you sure you want to delete {isDeleteAll ? 'ALL TASKS' : 'this task'}?</p>
     <div className="flex justify-end mt-4">
       <button className="bg-gray-500 text-white px-4 py-2 rounded mr-2" onClick={closeDeleteModal}>
@@ -123,26 +128,24 @@ export const ModalDeleteTask = ({
   </ModalWrapper>
 );
 
-export const ModalWrapper = ({
-  title,
-  children,
-  closeFn,
+export const ModalConfirmExitTask = ({
+  closeModal,
+  confirmExit,
+  lang,
 }: {
-  title: string;
-  children: ReactNode;
-  closeFn: () => void;
+  closeModal: () => void;
+  confirmExit: () => void;
+  lang: ELang;
 }) => (
-  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-    <div className="relative max-h-screen max-w-lg overflow-y-auto w-full flex flex-wrap gap-4 bg-white p-6 rounded text-xl text-slate-600">
-      <h2 className="w-full text-center text-3xl font-bold mb-4">{title}</h2>
-      {children}
-      <BaseButton
-        ariaLabel="Close the modal window"
-        className="absolute top-2 right-2 text-5xl font-extralight text-slate-400 rotate-45"
-        onClick={() => closeFn()}
-      >
-        +
-      </BaseButton>
+  <ModalWrapper title="Confirm Deletion" closeFn={closeModal} lang={lang}>
+    <p>Are you sure you want to leave the test?</p>
+    <div className="flex justify-end mt-4">
+      <button className="bg-gray-500 text-white px-4 py-2 rounded mr-2" onClick={closeModal}>
+        Cancel
+      </button>
+      <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmExit}>
+        Leave test
+      </button>
     </div>
-  </div>
+  </ModalWrapper>
 );

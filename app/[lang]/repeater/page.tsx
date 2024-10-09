@@ -1,31 +1,37 @@
-'use client';
+import RepeaterPage from '@/components/Repeater/RepeaterPage';
+import { ELang } from '@models/types';
+import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
+import { META_REPEATER } from '@/models/repeater.model';
+import { Metadata } from 'next';
 
-import DictionaryPage from '@/components/Repeater/DictionaryPage';
-import RepeaterTestPage from '@/components/Repeater/RepeaterTestPage';
-import { ITranslation } from '@/libs/repeater/repeater.model';
-import { useCallback, useState } from 'react';
+interface IProps {
+  params: { lang: ELang };
+}
 
-const Page = () => {
-  const [translations, setTranslations] = useState<ITranslation[]>([]);
-  const [isTestStarted, setIsTestStarted] = useState(false);
+const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-  const startTest = useCallback(() => {
-    setIsTestStarted(true);
-  }, []);
+export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
+  return {
+    metadataBase: new URL(BASE_URL),
+    ...META_REPEATER[lang],
+    openGraph: {
+      ...DEFAULT_META_OG,
+      title: META_REPEATER[lang].title,
+      description: META_REPEATER[lang].description,
+      url: `/${lang}/${EUrlParams.REPEATER}`,
+    },
+    alternates: {
+      canonical: `/${lang}/${EUrlParams.REPEATER}`,
+      languages: {
+        en: `/${ELang.en}/${EUrlParams.REPEATER}`,
+        uk: `/${ELang.ua}/${EUrlParams.REPEATER}`,
+      },
+    },
+  };
+};
 
-  return !isTestStarted ? (
-    <DictionaryPage
-      translations={translations}
-      setTranslations={setTranslations}
-      startTest={startTest}
-    />
-  ) : (
-    <RepeaterTestPage
-      translations={translations}
-      setIsTestStarted={setIsTestStarted}
-      translationsLength={translations.length}
-    />
-  );
+const Page = ({ params: { lang } }: IProps) => {
+  return <RepeaterPage lang={lang} />;
 };
 
 export default Page;

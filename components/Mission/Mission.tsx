@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
-import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
+import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
+import { EUrlParams } from '@/models/main.model';
+import { ELang } from '@/models/types';
 
 interface MissionProps {
   lang: ELang;
@@ -9,10 +11,10 @@ interface MissionProps {
 const Mission = ({ lang }: MissionProps) => {
   return (
     <div className="flex justify-evenly flex-wrap gap-8 w-full whitespace-nowrap">
-      <Link href={`/${lang}/math/level`}>
+      <Link href={`/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_LEVEL}`}>
         <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_LEVELS, lang)}</TextButton>
       </Link>
-      <Link href={`/${lang}/math/category`}>
+      <Link href={`/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}`}>
         <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_CAT, lang)}</TextButton>
       </Link>
     </div>

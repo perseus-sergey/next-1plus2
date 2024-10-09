@@ -5,8 +5,8 @@ import { capitalizedWord } from '@/libs/utils';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { getCatFromMap } from '@/libs/exercises/math';
-import { EExerciseCategories } from '@/libs/exercises/math.model';
 import React from 'react';
+import { EExerciseCategories } from '@/models/math/types';
 
 interface ICatComplete {
   exsQuant: number;

@@ -1,8 +1,9 @@
-import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
+import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { Title } from '../Title/Title';
 import styles from './EndLevel.module.scss';
 import Link from 'next/link';
 import TextButton from '../TextButton/TextButton';
+import { ELang } from '@/models/types';
 
 const EndLevel = ({ language, maxNumb }: { language: ELang; maxNumb: number }) => (
   <>

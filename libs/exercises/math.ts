@@ -1,6 +1,8 @@
 import { TMathHint } from '../hooks/useExerciseParams';
-import { ELang, EMessageNames } from '../langMessages';
-import { EExerciseCategories, EMinusPlus, TCatObject, categoriesMap } from './math.model';
+import { EMessageNames } from '../langMessages';
+import { categoriesMap } from '../../models/math/math.model';
+import { ELang } from '@/models/types';
+import { EExerciseCategories, EMinusPlus, TCatObject } from '@/models/math/types';
 
 export const NUMBER_OF_EXERCISES = 10;
 export const HARD_LEVELS_IN_ARRAY = 2;

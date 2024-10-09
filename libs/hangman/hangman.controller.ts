@@ -1,5 +1,5 @@
+import { ELang } from '@/models/types';
 import { poolQuery } from '../db/pg';
-import { ELang } from '../langMessages';
 
 interface IHangmanLesson {
   word: string;

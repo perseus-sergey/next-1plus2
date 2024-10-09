@@ -4,19 +4,21 @@ import { Title } from '../Title/Title';
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { ModalAddRepeaterTask, ModalDeleteTask } from './ModalAddRepeaterTask';
 import { ModalAiGenerateTasks } from './ModalAiGenerateTasks';
-import { ITranslation } from '@/libs/repeater/repeater.model';
+import { ELang } from '@models/types';
+import { ITranslation, REPEATER_PAGE_TEXT } from '@/models/repeater.model';
 
 interface IProps {
   translations: ITranslation[];
   setTranslations: Dispatch<SetStateAction<ITranslation[]>>;
   startTest: () => void;
+  lang: ELang;
 }
 
 const btnBaseStyle =
   'w-fit flex items-center gap-4 justify-center text-xl text-white p-4 sm:py-2 rounded-lg sm:rounded';
 const svgBaseStyle = 'w-8 h-8';
 
-export const DictionaryPage = ({ translations, setTranslations, startTest }: IProps) => {
+export const DictionaryPage = ({ translations, setTranslations, startTest, lang }: IProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -140,10 +142,13 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
 
   return (
     <>
-      <Title name="Dictionary" className="text-2xl font-bold mb-4" />
+      <Title
+        name={lang === ELang.ua ? 'Репетитор' : 'Repeater'}
+        className="text-2xl font-bold mb-4"
+      />
 
       <article className="container min-h-[75vh] mx-auto p-4 text-white flex flex-col items-center">
-        {translations.length > 0 && (
+        {translations.length > 0 ? (
           <>
             <p className="p-4">
               TOTAL: <span className="text-teal-300 text-xl">{translations.length}</span> phrases
@@ -179,6 +184,10 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
               ))}
             </ul>
           </>
+        ) : (
+          <p className="max-w-screen-md p-4 space-y-4 bg-slate-900/30 rounded-md text-xl font-inter">
+            {REPEATER_PAGE_TEXT[lang]}
+          </p>
         )}
 
         <div className="w-64 sm:w-fit grid grid-cols-2 flex-wrap items-center gap-8 justify-items-center sm:py-12 py-6 px-2">
@@ -251,6 +260,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
 
         {isModalOpen && (
           <ModalAddRepeaterTask
+            lang={lang}
             isEditMode={isEditMode}
             closeModal={closeModal}
             saveTranslation={saveTranslation}
@@ -265,6 +275,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
 
         {isDeleteModalOpen && (
           <ModalDeleteTask
+            lang={lang}
             closeDeleteModal={closeDeleteModal}
             confirmDelete={confirmDelete}
             isDeleteAll={deleteId === 'all'}
@@ -273,6 +284,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest }: IPr
 
         {isGenerateModalOpen && (
           <ModalAiGenerateTasks
+            lang={lang}
             setGeneratedData={setGeneratedData}
             setIsGenerateModalOpen={setIsGenerateModalOpen}
           />

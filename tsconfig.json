@@ -30,9 +30,17 @@
     "paths": {
       "@/*": ["./*"],
       "@config/*": ["config/*"],
-      "@libs/*": ["libs/*"]
+      "@libs/*": ["libs/*"],
+      "@models/*": ["models/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "libs/**/*.ts", "config/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "libs/**/*.ts",
+    "config/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

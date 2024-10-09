@@ -1,8 +1,4 @@
-export const SITE_BASE_URL = 'https://www.1plus2.fun';
-export enum ELang {
-  en = 'en',
-  ua = 'ua',
-}
+import { ELang } from '@/models/types';
 
 type TLang = {
   [ELang.en]: string;
@@ -37,18 +33,9 @@ export enum EMessageNames {
 }
 
 export const titleMap: TTitleMap = new Map([
-  [EMessageNames.MISSION_CHOICE, { [ELang.en]: 'Choose the task', [ELang.ua]: 'Обери завдання' }],
   [
     EMessageNames.SHOW_END_LEVEL,
     { [ELang.en]: 'level is completed', [ELang.ua]: 'рівень пройдено' },
-  ],
-  [
-    EMessageNames.CATEGORY_CHOICE,
-    { [ELang.en]: 'Choose the category', [ELang.ua]: 'Обери категорію' },
-  ],
-  [
-    EMessageNames.CHOICE_MAX_EXS_NUM,
-    { [ELang.en]: 'Choose Level', [ELang.ua]: 'Рівень складності' },
   ],
   [EMessageNames.LEFT_EXS_NUM_MSG, { [ELang.en]: 'Remains', [ELang.ua]: 'Залишилось' }],
   [EMessageNames.BRAVO, { [ELang.en]: 'BRAVO', [ELang.ua]: 'БРАВО!' }],
@@ -68,89 +55,6 @@ export const titleMap: TTitleMap = new Map([
   [EMessageNames.TITLE_REPORT, { [ELang.en]: 'Report', [ELang.ua]: 'Звіт' }],
   [EMessageNames.EXERCISES, { [ELang.en]: 'Exercises', [ELang.ua]: 'Завдань' }],
   [EMessageNames.HANGMAN, { [ELang.en]: 'Hangman', [ELang.ua]: 'Кат' }],
-]);
-
-export enum EPageTitles {
-  'MAIN' = 'main',
-  'MATH' = 'math',
-  'CAT' = 'cat',
-}
-
-export enum EMetaTypes {
-  'TITLE' = 'title',
-  'DESCRIPTION' = 'description',
-  'KEYWORDS' = 'keywords',
-}
-
-type TMetaMap = Map<
-  EPageTitles,
-  {
-    [EMetaTypes.TITLE]: TLang;
-    [EMetaTypes.DESCRIPTION]: TLang;
-    [EMetaTypes.KEYWORDS]: TLang;
-  }
->;
-
-export const metaMap: TMetaMap = new Map([
-  [
-    EPageTitles.MAIN,
-    {
-      [EMetaTypes.TITLE]: {
-        [ELang.en]: '1+2 = Fun',
-        [ELang.ua]: '1+2 = Весело',
-      },
-      [EMetaTypes.DESCRIPTION]: {
-        [ELang.en]:
-          'Interactive online resource, homework, exams and tests. Useful for teachers, students and parents.',
-        [ELang.ua]:
-          'Інтерактивний розвиваючий онлайн ресурс, домашні роботи, іспити та тести. Корисно для вчителів, учнів та батьків.',
-      },
-      [EMetaTypes.KEYWORDS]: {
-        [ELang.en]:
-          'Interactive, homework, exams, tests, mathematics, children, teachers, students and parents.',
-        [ELang.ua]:
-          'дитяча математика, рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
-      },
-    },
-  ],
-  [
-    EPageTitles.MATH,
-    {
-      [EMetaTypes.TITLE]: {
-        [ELang.en]: '1+2 | Fun Maths',
-        [ELang.ua]: '1+2 | Весела Математика',
-      },
-      [EMetaTypes.DESCRIPTION]: {
-        [ELang.en]:
-          "Fun children's mathematics, initial level, learn to count, add, subtract, comparison, more, less, equal.",
-        [ELang.ua]:
-          'Весела дитяча математика, початковий рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
-      },
-      [EMetaTypes.KEYWORDS]: {
-        [ELang.en]:
-          'children mathematics, level, learn, count, add, subtract, comparison, more, less, equal.',
-        [ELang.ua]:
-          'дитяча математика, рівень, вчимося рахувати, додавання, віднімання, порівняння, більше, менше, дорівнює.',
-      },
-    },
-  ],
-  [
-    EPageTitles.CAT,
-    {
-      [EMetaTypes.TITLE]: {
-        [ELang.en]: '1+2',
-        [ELang.ua]: '1+2',
-      },
-      [EMetaTypes.DESCRIPTION]: {
-        [ELang.en]: "Fun children's mathematics, initial level",
-        [ELang.ua]: 'Весела дитяча математика, початковий рівень',
-      },
-      [EMetaTypes.KEYWORDS]: {
-        [ELang.en]: 'children mathematics, level, learn, count',
-        [ELang.ua]: 'дитяча математика, рівень, вчимося рахувати',
-      },
-    },
-  ],
 ]);
 
 export const getTitleFromMap = (

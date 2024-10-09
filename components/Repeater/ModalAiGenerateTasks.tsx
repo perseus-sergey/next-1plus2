@@ -4,16 +4,13 @@ import { generateAiText } from '@/libs/repeater/repeater.controller';
 import { z } from 'zod';
 import { FieldError, FieldErrorsImpl, Merge, useForm, UseFormRegister } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  ETaskType,
-  IGenerateAiSettings,
-  LANGUAGES,
-  promptModel,
-} from '@/libs/repeater/repeater.model';
+import { ETaskType, IGenerateAiSettings, LANGUAGES, promptModel } from '@/models/repeater.model';
 import { SeoSVG } from '../Svg/SeoSVG';
-import { ModalWrapper } from './ModalAddRepeaterTask';
+import { ModalWrapper } from '../Modals/ModalWrapper';
+import { ELang } from '@/models/types';
 
 interface IGenerateAiProps {
+  lang: ELang;
   setIsGenerateModalOpen: Dispatch<SetStateAction<boolean>>;
   setGeneratedData: (lessons: string[][] | null) => void;
 }
@@ -128,6 +125,7 @@ const FormField = ({
 };
 
 export const ModalAiGenerateTasks = ({
+  lang,
   setIsGenerateModalOpen,
   setGeneratedData,
 }: IGenerateAiProps) => {
@@ -153,7 +151,7 @@ export const ModalAiGenerateTasks = ({
   };
 
   return (
-    <ModalWrapper title="Select options" closeFn={() => setIsGenerateModalOpen(false)}>
+    <ModalWrapper lang={lang} title="Select options" closeFn={() => setIsGenerateModalOpen(false)}>
       <fieldset className="w-full p-4 space-y-3 border rounded-md">
         <legend className="px-2 ml-2 text-stone-500">Languages</legend>
 

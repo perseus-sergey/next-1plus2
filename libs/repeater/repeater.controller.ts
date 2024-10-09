@@ -1,7 +1,7 @@
 'use server';
 
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
-import { IGenerateAiSettings, promptModel } from './repeater.model';
+import { IGenerateAiSettings, promptModel } from '../../models/repeater.model';
 
 const {
   maxLevel,

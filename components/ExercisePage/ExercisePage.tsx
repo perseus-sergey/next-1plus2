@@ -9,14 +9,7 @@ import {
   makeExerciseParts,
 } from '@/libs/exercises/math';
 import Computer from '../Computer/Computer';
-import {
-  EExerciseCategories,
-  IExerciseParams,
-  QUESTION_MARK,
-  categoriesMap,
-  keyboardInequalKeys,
-  makeExerciseArray,
-} from '@/libs/exercises/math.model';
+import { categoriesMap, keyboardInequalKeys, makeExerciseArray } from '@/models/math/math.model';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';
 import { useMySound } from '@/libs/hooks/useSound';
@@ -27,6 +20,7 @@ import { PlayFunction } from 'use-sound/dist/types';
 import EndLevel from '../EndLevel/EndLevel';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { useDragProvider } from '@/libs/context/DragProvider';
+import { EExerciseCategories, IExerciseParams, QUESTION_MARK } from '@/models/math/types';
 
 export enum EIsRightAnswer {
   '_',

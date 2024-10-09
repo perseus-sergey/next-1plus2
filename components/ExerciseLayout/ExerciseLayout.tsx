@@ -1,10 +1,10 @@
 'use client';
 
-import { ELang } from '@/libs/langMessages';
-import { EExerciseCategories } from '@/libs/exercises/math.model';
+import { ELang } from '@models/types';
 import LanguageProvider from '@/libs/context/LangProvider';
 import DragProvider from '@/libs/context/DragProvider';
 import ExercisePage from '../ExercisePage/ExercisePage';
+import { EExerciseCategories } from '@/models/math/types';
 
 interface IProps {
   lang: ELang;

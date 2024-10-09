@@ -1,27 +1,24 @@
-// import styles from './MathPageMaxNumber.module.scss';
-import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import KeyboardButton from '../KeyboardButton/KeyboardButton';
 import { createMaxNumArray } from '@/libs/utils';
-import { Title } from '../Title/Title';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
-import { ICatNamePageProps } from '@/app/[lang]/math/category/[cat]/page';
+import { categoriesMap } from '@/models/math/math.model';
+import { ELang } from '@models/types';
+import { EUrlParams } from '@/models/main.model';
+import { EExerciseCategories } from '@/models/math/types';
 
-const MathPageMaxNumber = ({ params }: ICatNamePageProps) => {
-  const { cat, lang } = params;
+const MathPageMaxNumber = ({ lang, cat }: { lang: ELang; cat: EExerciseCategories }) => {
   const catObj = categoriesMap.get(cat);
 
-  if (!catObj) return redirect(`/${lang}/math/category`);
+  if (!catObj) return redirect(`/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}`);
+
   const getHref = (value: number) =>
     cat === EExerciseCategories['level']
-      ? `/${lang}/math/level/${value}`
-      : `/${lang}/math/category/${cat}/${value}`;
+      ? `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_LEVEL}/${value}`
+      : `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}/${value}`;
 
   return (
     <section className="keyboard" data-testid="MathPageMaxNumber">
-      <Title name={getTitleFromMap(EMessageNames.CHOICE_MAX_EXS_NUM, lang)} />
-
       <div className="keyboard-line">
         {createMaxNumArray(catObj.exercise).map((value) => (
           <Link href={getHref(value)} key={value}>

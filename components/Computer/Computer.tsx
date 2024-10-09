@@ -3,12 +3,13 @@ import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Keyboard from '../Keyboard/Keyboard';
 import { Title } from '../Title/Title';
 import { capitalizedWord } from '@/libs/utils';
-import { EExerciseCategories, IExerciseParams, keyboardNumKeys } from '@/libs/exercises/math.model';
+import { keyboardNumKeys } from '@/models/math/math.model';
 import Monitor from '../Monitor/Monitor';
 import { IExsPart, getCatFromMap } from '@/libs/exercises/math';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
 import React from 'react';
+import { EExerciseCategories, IExerciseParams } from '@/models/math/types';
 
 interface IComputerProps {
   exerciseParts: IExsPart[];

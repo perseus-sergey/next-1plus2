@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import styles from './HangmanPage.module.scss';
 import Image from 'next/image';
-import { ELang } from '@/libs/langMessages';
+import { ELang } from '@models/types';
 import { fetchRandomWord } from '@/libs/hangman/hangman.controller';
+import { BaseButton } from '../TextButton/BaseButton';
 
 const convertToCorrectLayout = (letter: string): string => {
   // Українська розкладка відповідає англійським літерам за такими ключами
@@ -157,13 +157,14 @@ function HangmanPage({ lang }: IProps) {
 
   const showWinModal = (message: string) => {
     const winMessage =
-      lang === ELang.ua ? `Ви вгадали слово: ${message}` : `You guessed the word: ${message}`;
+      lang === ELang.ua ? `Ви вгадали слово: "${message}"` : `You guessed the word: "${message}"`;
     setModalMessage(winMessage);
     setIsWinModalOpen(true);
   };
 
   const showLoseModal = (message: string) => {
-    const loseMessage = lang === ELang.ua ? `Слово було: ${message}` : `The word was: ${message}`;
+    const loseMessage =
+      lang === ELang.ua ? `Слово було: "${message}"` : `The word was: "${message}"`;
     setModalMessage(loseMessage);
     setIsLoseModalOpen(true);
   };
@@ -205,7 +206,7 @@ function HangmanPage({ lang }: IProps) {
   return (
     <section className="max-w-screen-lg flex flex-col gap-6">
       <div
-        className={`${styles.game} max-w-full p-5 flex flex-col gap-2 bg-sky-50/80 shadow-md rounded-xl text-center text-slate-900`}
+        className={`max-w-full p-5 flex flex-col gap-2 shadow-md rounded-xl text-center text-white`}
       >
         <Image
           src={`/img/hangman${wrongGuesses}.svg`}
@@ -214,33 +215,32 @@ function HangmanPage({ lang }: IProps) {
           alt="Hangman Image"
           className="w-full max-w-52 m-auto"
         />
-        <div className={styles.guesses}>{`${wrongGuesses} / 6`}</div>
-        <div className={styles.wordDisplay}>
+        <div className="text-xl flex justify-center">{`${wrongGuesses} / 6`}</div>
+        <div className="flex text-3xl gap-2 p-5 justify-center flex-wrap h-20">
           {currentWord.split('').map((letter, index) => (
             <span key={index} className="inline-block w-6 text-center">
               {guessedLetters.includes(letter) ? letter : '_'}
             </span>
           ))}
         </div>
-        <div className={styles.hint}>
+        <div className="text-xl py-5 sm:h-28 h-40">
           <b>{lang === ELang.ua ? 'Підказка:' : 'Hint:'}</b> {currentHint}
         </div>
       </div>
 
-      <div className={`${styles.keyboard} max-w-4xl m-auto flex flex-wrap justify-center gap-1`}>
-        {(lang === ELang.ua ? 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя' : 'abcdefghijklmnopqrstuvwxyz')
+      <div className={`max-w-4xl m-auto flex flex-wrap justify-center gap-1`}>
+        {(lang === ELang.ua ? `абвгґдеєжзиіїйклмнопрстуфхцчшщьюя'` : `abcdefghijklmnopqrstuvwxyz'`)
           .split('')
           .map((letter) => {
             const isCorrect = correctLetters.includes(letter);
             const isIncorrect = incorrectLetters.includes(letter);
-            const buttonClass = isCorrect ? styles.correct : isIncorrect ? styles.incorrect : '';
 
             return (
               <button
                 key={letter}
                 onClick={() => handleGuess(letter)}
                 disabled={guessedLetters.includes(letter)}
-                className={`${styles.button} ${buttonClass} ${guessedLetters.includes(letter) ? styles.disabled : ''}`}
+                className={`flex-grow flex-shrink-0 basis-1/5 text-white m-1 py-2 px-4 text-xl rounded shadow-md max-w-12 transition-colors duration-300 ${isCorrect ? 'bg-green-500' : isIncorrect ? 'bg-red-500' : 'bg-stone-600'} ${guessedLetters.includes(letter) ? 'cursor-not-allowed' : ''}`}
               >
                 {letter}
               </button>
@@ -249,34 +249,58 @@ function HangmanPage({ lang }: IProps) {
       </div>
 
       {isWinModalOpen && (
-        <div className={styles.modalBackdrop}>
-          <div className={styles.modalContent}>
-            <h2>{lang === ELang.ua ? 'Вітаємо, ви виграли!' : 'Congratulations, you won!'}</h2>
-            <p>{modalMessage}</p>
-            <div className={styles.buttonContainer}>
-              <button onClick={handleStartAgain} className={styles.modalButton}>
-                {lang === ELang.ua ? 'Продовжувати грати' : 'Continue playing'}
-              </button>
-            </div>
-          </div>
-        </div>
+        <HangmanModal
+          lang={lang}
+          titleMessage={lang === ELang.ua ? 'Вітаємо, ви виграли!' : 'Congratulations, you won!'}
+          modalMessage={modalMessage}
+          clickFn={handleStartAgain}
+          btnTitle={lang === ELang.ua ? 'Продовжувати грати' : 'Continue playing'}
+        />
       )}
 
       {isLoseModalOpen && (
-        <div className={styles.modalBackdrop}>
-          <div className={styles.modalContent}>
-            <h2>{lang === ELang.ua ? 'Ви програли' : 'You lost'}</h2>
-            <p>{modalMessage}</p>
-            <div className={styles.buttonContainer}>
-              <button onClick={handleStartAgain} className={styles.modalButton}>
-                {lang === ELang.ua ? 'почати знову' : 'Start again'}
-              </button>
-            </div>
-          </div>
-        </div>
+        <HangmanModal
+          lang={lang}
+          titleMessage={lang === ELang.ua ? 'Ви програли!' : 'You lost!'}
+          modalMessage={modalMessage}
+          clickFn={handleStartAgain}
+          btnTitle={lang === ELang.ua ? 'Почати знову' : 'Start again'}
+        />
       )}
     </section>
   );
 }
+
+const HangmanModal = ({
+  lang,
+  titleMessage,
+  modalMessage,
+  btnTitle,
+  clickFn,
+}: {
+  lang: ELang;
+  titleMessage: string;
+  modalMessage: string;
+  btnTitle: string;
+  clickFn: () => void;
+}) => {
+  return (
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+      <div className="bg-white p-5 rounded-lg text-center text-slate-600 shadow-lg max-w-[90%] w-96">
+        <h2 className="text-2xl">{titleMessage}</h2>
+        <p>{modalMessage}</p>
+        <div className="flex justify-center mt-5">
+          <BaseButton
+            ariaLabel={lang === ELang.ua ? 'Почати нову гру' : 'Start a new game'}
+            onClick={clickFn}
+            className="py-3 px-5 rounded bg-blue-500 hover:bg-blue-600 text-white"
+          >
+            {btnTitle}
+          </BaseButton>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default HangmanPage;

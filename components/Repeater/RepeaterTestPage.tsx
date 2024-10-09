@@ -14,12 +14,15 @@ import { BaseButton } from '../TextButton/BaseButton';
 import { SeoSVG } from '../Svg/SeoSVG';
 import { useMySound } from '@/libs/hooks/useSound';
 import { PlayFunction } from 'use-sound/dist/types';
-import { ITranslation } from '@/libs/repeater/repeater.model';
+import { ModalConfirmExitTask } from './ModalAddRepeaterTask';
+import { ELang } from '@models/types';
+import { ITranslation, REPEATER_PAGE_TEXT } from '@/models/repeater.model';
 
 interface IProps {
   translations: ITranslation[];
   setIsTestStarted: Dispatch<SetStateAction<boolean>>;
   translationsLength: number;
+  lang: ELang;
 }
 
 enum EAnswer {
@@ -39,13 +42,14 @@ const makeUniqueArray = (array: ITranslation[]): ITranslation[] => {
   });
 };
 
-const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength }: IProps) => {
+const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength, lang }: IProps) => {
   const [shuffledArray, setShuffledArray] = useState<ITranslation[]>(translations);
   const [currentTask, setCurrentTask] = useState<ITranslation | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [errorArray, setErrorArray] = useState<ITranslation[]>([]);
   const [isTestCompleted, setIsTestCompleted] = useState(false);
   const [answerStatus, setAnswerStatus] = useState(EAnswer._);
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { audioDel, audioRightAnsw, audioWrongAnsw, audioLevelFinish } = useMySound();
@@ -151,6 +155,8 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength }
     }
   };
 
+  const closeExitModal = () => setIsExitModalOpen(false);
+
   if (!currentTask) return null;
 
   return (
@@ -167,22 +173,29 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength }
       />
 
       <article className="container min-h-[75vh] mx-auto p-4 text-white flex flex-col items-center">
+        <p>{REPEATER_PAGE_TEXT[lang]}</p>
         <div className="text-white relative w-full max-w-3xl text-center">
           {/* Екран статистики */}
           {isTestCompleted ? (
             <>
               {errorArray.length > 0 && (
-                <div className="text-center">
+                <section className="flex flex-col justify-center items-center text-xl">
                   <p>Total phrases: {translationsLength}</p>
                   <p>Total errors: {errorArray.length}</p>
                   <BaseButton
                     ariaLabel="Correct the mistakes"
-                    className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+                    className="w-fit flex items-center gap-4 bg-blue-500 hover:bg-blue-600 text-white p-4 rounded mt-8"
                     onClick={handleErrorCorrection}
                   >
+                    <SeoSVG strokeWidth={0.2}>
+                      <path
+                        fill="currentColor"
+                        d="m20 7l-.95-2.05L17 4l2.05-.95L20 1l.95 2.05L23 4l-2.05.95L20 7ZM8.5 7l-.95-2.05L5.5 4l2.05-.95L8.5 1l.95 2.05L11.5 4l-2.05.95L8.5 7ZM20 18.5l-.95-2.05L17 15.5l2.05-.95l.95-2.05l.95 2.05l2.05.95l-2.05.95L20 18.5ZM5.1 21.7l-2.8-2.8q-.3-.3-.3-.725t.3-.725L13.45 6.3q.3-.3.725-.3t.725.3l2.8 2.8q.3.3.3.725t-.3.725L6.55 21.7q-.3.3-.725.3t-.725-.3Zm.75-2.1L13 12.4L11.6 11l-7.2 7.15l1.45 1.45Z"
+                      />
+                    </SeoSVG>
                     Error Correction
                   </BaseButton>
-                </div>
+                </section>
               )}
 
               {errorArray.length === 0 && (
@@ -202,12 +215,12 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength }
               <BaseButton
                 ariaLabel="Finish test and come back to dictionary"
                 className="absolute top-0 left-0 flex flex-col items-center text-slate-300 hover:text-slate-400"
-                onClick={handleEndTest}
+                onClick={() => setIsExitModalOpen(true)}
               >
                 <SeoSVG className="w-8 h-8" strokeWidth={1.5} viewBox="0 0 24 24">
                   <g fill="none" stroke="currentColor">
                     <path d="M9 4.5H8c-2.357 0-3.536 0-4.268.732S3 7.143 3 9.5v5c0 2.357 0 3.535.732 4.268S5.643 19.5 8 19.5h1M9 6.476c0-2.293 0-3.44.707-4.067s1.788-.439 3.95-.062l2.33.407c2.394.417 3.591.626 4.302 1.504c.711.879.711 2.149.711 4.69v6.105c0 2.54 0 3.81-.71 4.689c-.712.878-1.91 1.087-4.304 1.505l-2.328.406c-2.162.377-3.243.565-3.95-.062S9 19.817 9 17.524z" />
-                    <path stroke-linecap="round" d="M12 11v2" />
+                    <path strokeLinecap="round" d="M12 11v2" />
                   </g>
                 </SeoSVG>
                 <span className="text-xs">{`< exit`}</span>
@@ -289,6 +302,13 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength }
           )}
         </div>
       </article>
+      {isExitModalOpen && (
+        <ModalConfirmExitTask
+          lang={lang}
+          confirmExit={() => handleEndTest()}
+          closeModal={() => closeExitModal()}
+        />
+      )}
     </>
   );
 };

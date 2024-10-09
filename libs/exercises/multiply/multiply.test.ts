@@ -1,4 +1,5 @@
-import { EExerciseCategories, categoriesMap, makeExerciseArray } from '../math.model';
+import { EExerciseCategories } from '@/models/math/types';
+import { categoriesMap, makeExerciseArray } from '../../../models/math/math.model';
 
 const cat = EExerciseCategories['multiply'];
 const attempts = 10;

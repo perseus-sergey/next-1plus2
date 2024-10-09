@@ -1,5 +1,5 @@
+import { ELang } from '@/models/types';
 import React, { createContext, useContext } from 'react';
-import { ELang } from '../langMessages';
 
 interface IProps {
   children: React.ReactNode;

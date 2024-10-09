@@ -1,5 +1,5 @@
+import { EExerciseCategories } from '@/models/math/types';
 import { createContext, useContext, useState } from 'react';
-import { EExerciseCategories } from '../exercises/math.model';
 
 interface IProps {
   children: React.ReactNode;

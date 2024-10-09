@@ -1,5 +1,5 @@
+import { EExerciseCategories, EMinusPlus } from '@/models/math/types';
 import { useCallback, useEffect, useState } from 'react';
-import { EExerciseCategories, EMinusPlus } from '../exercises/math.model';
 
 const EMPTY_HINT = {
   hintN1: '',

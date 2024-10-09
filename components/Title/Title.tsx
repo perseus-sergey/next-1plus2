@@ -1,5 +1,7 @@
+import { ReactNode } from 'react';
+
 interface Props extends React.HTMLAttributes<HTMLElement> {
-  name: string;
+  name: ReactNode;
 }
 
 export const Title = ({ name, className, ...attributes }: Props) => (

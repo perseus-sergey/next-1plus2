@@ -1,19 +1,14 @@
 import TextButton from '../TextButton/TextButton';
-import { Title } from '../Title/Title';
-import styles from './MathCategories.module.scss';
-import { ELang, EMessageNames, getTitleFromMap } from '@/libs/langMessages';
+import { ELang } from '@models/types';
 import Link from 'next/link';
-import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
 import { getCatFromMap } from '@/libs/exercises/math';
-import { ICatPageProps } from '@/app/[lang]/math/category/page';
+import { categoriesMap } from '@/models/math/math.model';
+import { EExerciseCategories } from '@/models/math/types';
 
-const MathCategories = (props: ICatPageProps) => {
-  const { lang = ELang.en } = props.params;
-
+const MathCategories = ({ lang }: { lang: ELang }) => {
   return (
     <section data-testid="MathCategories">
-      <Title name={getTitleFromMap(EMessageNames.CATEGORY_CHOICE, lang)} />
-      <div className={styles.MathCategories}>
+      <div className="max-w-screen-lg flex flex-wrap justify-center content-around gap-x-10 gap-y-14">
         {[...categoriesMap.keys()]
           .filter((c) => c !== EExerciseCategories['level'])
           .map((catSlug) => (

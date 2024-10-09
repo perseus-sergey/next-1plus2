@@ -1,44 +1,61 @@
 import ExerciseLayout from '@/components/ExerciseLayout/ExerciseLayout';
-import WrongSegment from '@/components/WrongSegment/WrongSegment';
-import { EExerciseCategories, categoriesMap } from '@/libs/exercises/math.model';
-import { ELang } from '@/libs/langMessages';
+import { createMaxNumArray } from '@/libs/utils';
+import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
+import { categoriesMap } from '@/models/math/math.model';
+import { MATH_TESTS } from '@/models/math/mathTests.model';
+import { EExerciseCategories, IPageData } from '@/models/math/types';
+import { ELang } from '@models/types';
+import { Metadata } from 'next';
 
-export interface IExercisePageProps {
+export interface IProps {
   params: { lang: ELang; cat: EExerciseCategories; maxNum: string };
 }
 
-export default ({ params }: IExercisePageProps) => {
-  const { lang, cat, maxNum } = params;
+interface IModuleData {
+  PAGE_DATA: IPageData;
+}
 
-  if (!ELang[lang])
-    return (
-      <WrongSegment wrongMessage="Wrong Language" redirectPath="/" btnTitle="Go to start page" />
-    );
+const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-  const exerciseParams = categoriesMap.get(cat);
+export const generateMetadata = async ({
+  params: { lang, cat, maxNum },
+}: IProps): Promise<Metadata> => {
+  const { PAGE_DATA }: IModuleData = await MATH_TESTS[EExerciseCategories[cat]]();
 
-  if (!exerciseParams)
-    return (
-      <WrongSegment
-        wrongMessage="Wrong Category"
-        redirectPath={`/${lang}/math/category`}
-        btnTitle="Choose category"
-      />
-    );
+  const title = PAGE_DATA.metaLevel[lang].getTitle(maxNum);
+  const description = PAGE_DATA.metaLevel[lang].getDescription(maxNum);
+  const path = `${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}/${maxNum}`;
 
-  const chosenMaxNum = +maxNum;
-  if (
-    !chosenMaxNum ||
-    chosenMaxNum < exerciseParams.exercise.start ||
-    chosenMaxNum > exerciseParams.exercise.max
-  )
-    return (
-      <WrongSegment
-        wrongMessage="Wrong Max Number of Exercise"
-        redirectPath={`/${lang}/math/category/${cat}`}
-        btnTitle="Choose Max Number"
-      />
-    );
+  return {
+    metadataBase: new URL(BASE_URL),
+    title,
+    description,
+    keywords: PAGE_DATA.metaLevel[lang].getKeywords(maxNum),
+    openGraph: {
+      ...DEFAULT_META_OG,
+      title,
+      description,
+      url: `/${lang}/${path}`,
+    },
+    alternates: {
+      canonical: `/${lang}/${path}`,
+      languages: {
+        en: `/${ELang.en}/${path}`,
+        uk: `/${ELang.ua}/${path}`,
+      },
+    },
+  };
+};
 
-  return <ExerciseLayout lang={lang} chosenMaxNum={chosenMaxNum} cat={cat} />;
+export const generateStaticParams = ({ params: { cat } }: IProps) => {
+  const catObj = categoriesMap.get(cat);
+  if (!catObj) return { [EUrlParams.MAX_NUM]: '100' };
+
+  return createMaxNumArray(catObj.exercise).map((item) => ({ [EUrlParams.MAX_NUM]: `${item}` }));
+};
+
+export const dynamicParams = false;
+
+export default ({ params: { lang, cat, maxNum } }: IProps) => {
+  return <ExerciseLayout lang={lang} chosenMaxNum={+maxNum} cat={cat} />;
 };

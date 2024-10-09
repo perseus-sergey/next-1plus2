@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { ELang } from '@/libs/langMessages';
+import { ELang } from '@models/types';
 import { BaseButton } from '../TextButton/BaseButton';
 
 const LanguageSwitcher = () => {
