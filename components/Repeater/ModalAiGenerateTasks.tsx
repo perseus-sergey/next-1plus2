@@ -165,7 +165,7 @@ export const ModalAiGenerateTasks = ({
         />
 
         <FormField
-          label="Ask"
+          label="Question"
           type="select"
           id="languageAsk"
           register={register}
