@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { ELang } from '@models/types';
 import { Inter, Lobster } from 'next/font/google';
@@ -71,6 +72,7 @@ export default function RootLayout({ children, params }: IProps) {
         </main>
 
         <FlyingDigits />
+        <Analytics />
       </body>
     </html>
   );
