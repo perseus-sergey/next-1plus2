@@ -2,6 +2,7 @@ export const MAIN_URL = 'https://www.1plus2.fun';
 
 // ================================================
 // add aria-label and titles` to all buttons
+// remove analitics in production
 // translate all
 // change breadcrumbs
 // add logo
