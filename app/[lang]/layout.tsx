@@ -1,4 +1,6 @@
 import { Analytics } from '@vercel/analytics/react';
+import { GoogleTagManager } from '@next/third-parties/google';
+
 import type { Metadata } from 'next';
 import { ELang } from '@models/types';
 import { Inter, Lobster } from 'next/font/google';
@@ -27,6 +29,7 @@ const inter = Inter({
 });
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
+const GTM_KEY = process.env.GTM_KEY || '';
 
 export function generateStaticParams() {
   return Object.values(ELang).map((l) => ({ [EUrlParams.LANG]: l }));
@@ -61,6 +64,7 @@ export default function RootLayout({ children, params }: IProps) {
 
   return (
     <html lang={lang === ELang.ua ? 'uk' : 'en'} className="!scroll-smooth">
+      <GoogleTagManager gtmId={GTM_KEY} />
       <body
         className={`${inter.variable} ${lobsterFont.variable} flex flex-col items-center`}
         suppressHydrationWarning={true}
