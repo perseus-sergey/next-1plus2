@@ -25,6 +25,8 @@ export const generateMetadata = async ({
   const title = PAGE_DATA.metaLevel[lang].getTitle(maxNum);
   const description = PAGE_DATA.metaLevel[lang].getDescription(maxNum);
   const path = `${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}/${maxNum}`;
+  const catObj = categoriesMap.get(cat);
+  const canonicalNum = catObj ? catObj.exercise.max : 10;
 
   return {
     metadataBase: new URL(BASE_URL),
@@ -38,7 +40,7 @@ export const generateMetadata = async ({
       url: `/${lang}/${path}`,
     },
     alternates: {
-      canonical: `/${lang}/${path}`,
+      canonical: `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}/${canonicalNum}`,
       languages: {
         en: `/${ELang.en}/${path}`,
         uk: `/${ELang.ua}/${path}`,

@@ -10,7 +10,9 @@ export const MAIN_URL = 'https://www.1plus2.fun';
 // make sitemap
 // split all modules
 // seolinks
+// repeater - remove ... after generated tasks
 // hangman generated tasks must includes 1 word
+// make cron script ai add to db hangman tasks 50 tasks per day
 // ================================================
 
 export enum EUrlParams {

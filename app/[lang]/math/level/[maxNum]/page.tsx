@@ -18,6 +18,8 @@ export const generateMetadata = ({ params: { lang, maxNum } }: IProps): Metadata
   const title = PAGE_DATA.metaLevel[lang].getTitle(maxNum);
   const description = PAGE_DATA.metaLevel[lang].getDescription(maxNum);
   const path = `${EUrlParams.MATH}/${EUrlParams.MATH_LEVEL}/${maxNum}`;
+  const catObj = categoriesMap.get(EExerciseCategories.level);
+  const canonicalNum = catObj ? catObj.exercise.max : 100;
 
   return {
     metadataBase: new URL(BASE_URL),
@@ -32,7 +34,7 @@ export const generateMetadata = ({ params: { lang, maxNum } }: IProps): Metadata
       url: `/${lang}/${path}`,
     },
     alternates: {
-      canonical: `/${lang}/${path}`,
+      canonical: `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_LEVEL}/${canonicalNum}`,
       languages: {
         en: `/${ELang.en}/${path}`,
         uk: `/${ELang.ua}/${path}`,
