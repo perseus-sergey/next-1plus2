@@ -1,17 +1,15 @@
 export const MAIN_URL = 'https://www.1plus2.fun';
 
 // ================================================
+// change static imports to dynamic
+// change breadcrumbs
+// repeater - remove ... after generated tasks
 // add aria-label and titles` to all buttons
 // translate all
-// change breadcrumbs
 // add logo
-// add images
 // make footer with about-us and all pages
-// make sitemap
 // split all modules
 // seolinks
-// alt
-// repeater - remove ... after generated tasks
 // hangman generated tasks must includes 1 word
 // make cron script ai add to db hangman tasks 50 tasks per day
 // ================================================

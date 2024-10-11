@@ -91,9 +91,15 @@ Format the tasks as JSON in the following format:
     const jsonParsed = await JSON.parse(cleanResult);
 
     const { lessons } = jsonParsed as { lessons: string[][] };
-    return lessons || null;
+    if (!lessons) return null;
+
+    return lessons.map((lesson) => [
+      lesson[0].replace(/\.+$/, ''),
+      lesson[1],
+      lesson[2].replace(/\.+$/, ''),
+    ]);
   } catch (error) {
-    console.log(error instanceof Error ? error : new Error('Wrong AI generation of JSON parsing'));
+    // console.log(error instanceof Error ? error : new Error('Wrong AI generation of JSON parsing'));
     return null;
   }
 };

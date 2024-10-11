@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import BreadCrumb from '../BreadCrumb/BreadCrumb';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
-
-import logoImg from 'public/img/logo_w100.png';
 import { ELang } from '@/models/types';
 import SeoLink from '../SeoLink';
+
+import logoImg from 'public/img/1plus2-logo_w180.png';
 
 export const Header = ({ lang }: { lang: ELang }) => (
   <header className="flex justify-between w-full max-w-screen-xl p-1 sm:p-4">
