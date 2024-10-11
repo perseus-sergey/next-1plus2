@@ -69,7 +69,7 @@ export default function RootLayout({ children, params }: IProps) {
         className={`${inter.variable} ${lobsterFont.variable} flex flex-col items-center`}
         suppressHydrationWarning={true}
       >
-        <Header />
+        <Header lang={lang} />
 
         <main className="max-w-screen-lg flex-1 flex flex-col justify-around items-center p-1 sm:p-4">
           {children}

@@ -1,8 +1,10 @@
-import ArticleWrapper from '@/components/ArticleWrapper';
 import { ELang } from '@models/types';
 import { ABOUT_PAGE_TEXT, META_ABOUT } from '@/models/about.model';
 import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
 import { Metadata } from 'next';
+import ArticleWithImage from '@/components/ArticleWithImage';
+
+import aboutImg from 'public/img/about_300.jpg';
 
 interface IProps {
   params: { lang: ELang };
@@ -32,9 +34,16 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
 
 const Page = ({ params: { lang } }: IProps) => {
   return (
-    <ArticleWrapper h1Title={lang === ELang.ua ? 'Про "1plus2.fun"' : 'About "1plus2.fun"'}>
-      {ABOUT_PAGE_TEXT[lang]}
-    </ArticleWrapper>
+    <ArticleWithImage
+      titleH1={lang === ELang.ua ? 'Про "1plus2.fun"' : 'About "1plus2.fun"'}
+      imgSrc={aboutImg}
+      imgAlt={
+        lang === ELang.ua
+          ? 'Ілюстрація для сторінки Про нас з дружніми персонажами, книгами та навчальними символами.'
+          : 'Illustration for the About Us page featuring friendly characters, books, and educational symbols.'
+      }
+      innerHtml={ABOUT_PAGE_TEXT[lang]}
+    />
   );
 };
 

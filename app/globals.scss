@@ -129,10 +129,12 @@ a {
   display: flex;
   justify-content: center;
   color: rgba(var(--color-title-h1));
-  padding: 1vh;
+  padding: 1rem;
+  // padding: 1vh;
   font-weight: bold;
   text-align: center;
-  font-size: 6vh;
+  font-size: 3rem;
+  // font-size: 6vh;
   text-shadow:
     0px -2px 0 #191f40,
     0px -2px 0 #191f40,
@@ -166,8 +168,8 @@ a {
     }
   }
 
-  @media screen and (orientation: portrait) {
-    font-size: 7vw;
+  @media (width < 640px) {
+    font-size: 2.5rem;
   }
 }
 

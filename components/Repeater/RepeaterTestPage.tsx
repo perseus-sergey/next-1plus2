@@ -16,7 +16,7 @@ import { useMySound } from '@/libs/hooks/useSound';
 import { PlayFunction } from 'use-sound/dist/types';
 import { ModalConfirmExitTask } from './ModalAddRepeaterTask';
 import { ELang } from '@models/types';
-import { ITranslation, REPEATER_PAGE_TEXT } from '@/models/repeater.model';
+import { ITranslation } from '@/models/repeater.model';
 
 interface IProps {
   translations: ITranslation[];
@@ -173,8 +173,7 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength, 
       />
 
       <article className="container min-h-[75vh] mx-auto p-4 text-white flex flex-col items-center">
-        <p>{REPEATER_PAGE_TEXT[lang]}</p>
-        <div className="text-white relative w-full max-w-3xl text-center">
+        <div className="text-white relative w-full min-w-[40vw] max-w-3xl text-center">
           {/* Екран статистики */}
           {isTestCompleted ? (
             <>

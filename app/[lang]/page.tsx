@@ -2,14 +2,15 @@ import HomeLinks from '@/components/HomeLinks/HomeLinks';
 import { Title } from '@/components/Title/Title';
 import { MAIN_PAGE_TEXT } from '@/models/mainMeta.model';
 import { ELang } from '@models/types';
-import mainImg from 'public/img/1plus2_350.jpg';
 import Image from 'next/image';
+
+import mainImg from 'public/img/1plus2_300.jpg';
 
 export interface IMathPageProps {
   params: { lang: ELang };
 }
 
-const MathPage = ({ params }: IMathPageProps) => {
+const Page = ({ params }: IMathPageProps) => {
   const { lang } = params;
 
   return (
@@ -26,7 +27,7 @@ const MathPage = ({ params }: IMathPageProps) => {
         }
         priority
       />
-      <article className="max-w-screen-sm p-4 space-y-4 bg-slate-900/30 rounded-md text-xl font-inter">
+      <article className="max-w-screen-sm p-4 my-4 space-y-4 bg-slate-900/30 rounded-md text-xl font-inter">
         {MAIN_PAGE_TEXT[lang]}
       </article>
       <HomeLinks lang={lang} />
@@ -34,4 +35,4 @@ const MathPage = ({ params }: IMathPageProps) => {
   );
 };
 
-export default MathPage;
+export default Page;

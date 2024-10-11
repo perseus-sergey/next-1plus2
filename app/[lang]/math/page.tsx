@@ -1,9 +1,11 @@
 import Mission from '@/components/Mission/Mission';
 import { ELang } from '@models/types';
-import ArticleWrapper from '@/components/ArticleWrapper';
 import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
 import { Metadata } from 'next';
 import { MATH_PAGE_TEXT, META_MATH } from '@/models/math/mathMeta.model';
+
+import mathImg from 'public/img/math_300.jpg';
+import ArticleWithImage from '@/components/ArticleWithImage';
 
 interface IProps {
   params: { lang: ELang };
@@ -34,9 +36,16 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
 export default function Page({ params: { lang } }: IProps) {
   return (
     <>
-      <ArticleWrapper h1Title={lang === ELang.ua ? 'Обери завдання' : 'Choose the task'}>
-        {MATH_PAGE_TEXT[lang]}
-      </ArticleWrapper>
+      <ArticleWithImage
+        titleH1={lang === ELang.ua ? 'Обери завдання' : 'Choose the task'}
+        imgSrc={mathImg}
+        imgAlt={
+          lang === ELang.ua
+            ? 'Ілюстрація яскравої математичної сцени з числами, символами та геометричними фігурами.'
+            : 'Illustration of a colorful math scene with numbers, symbols, and geometric shapes.'
+        }
+        innerHtml={MATH_PAGE_TEXT[lang]}
+      />
 
       <Mission lang={lang} />
     </>

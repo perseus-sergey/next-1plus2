@@ -1,57 +1,74 @@
 import Link from 'next/link';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
-// import TextButton from '../TextButton/TextButton';
 import { EUrlParams } from '@/models/main.model';
 import { ELang } from '@/models/types';
 import Image from 'next/image';
-import mathLinkImg from 'public/img/main-pencil_300.png';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+
+import mathLinkImg from 'public/img/math_160.jpg';
+import hangmanLinkImg from 'public/img/hangman-page_160.jpg';
+import repeaterLinkImg from 'public/img/repeater_160.jpg';
 
 const { MATH, REPEATER, HANGMAN } = EUrlParams;
 
 const HomeLinks = ({ lang }: { lang: ELang }) => (
-  <div className="h-60 flex justify-evenly flex-wrap gap-8 w-full whitespace-nowrap">
-    <Link href={`/${lang}/${MATH}`} className="flex flex-col items-center gap-2">
-      <Image
-        className="sm:rounded-full sm:border-zinc-300 sm:border w-36 hover:w-44 duration-300"
-        src={mathLinkImg}
-        alt={
-          lang === ELang.ua
-            ? 'Креативна ілюстрація для головної сторінки сайту, що символізує освіту та навчання з книгами, математичними символами і лампочкою, яка представляє ідеї та знання.'
-            : 'A creative illustration for a website homepage, symbolizing education and learning with books, mathematical symbols, and a light bulb representing ideas and knowledge.'
-        }
-      />
-      {/* <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_MATH, lang)}</TextButton> */}
-      {getTitleFromMap(EMessageNames.BTN_MATH, lang)}
-    </Link>
+  <div className="h-60 flex justify-evenly flex-wrap gap-4 w-full px-2 sm:px-4 whitespace-nowrap">
+    <LinkToSegment
+      imgSrc={mathLinkImg}
+      href={`/${lang}/${MATH}`}
+      alt={
+        lang === ELang.ua
+          ? 'Ілюстрація яскравої математичної сцени з числами, символами та геометричними фігурами.'
+          : 'Illustration of a colorful math scene with numbers, symbols, and geometric shapes.'
+      }
+      linkText={getTitleFromMap(EMessageNames.BTN_MATH, lang)}
+    />
 
-    <Link href={`/${lang}/${HANGMAN}`} className="flex flex-col items-center gap-2">
-      <Image
-        className="sm:rounded-full sm:border-zinc-300 sm:border w-36 hover:w-44 duration-300"
-        src={mathLinkImg}
-        alt={
-          lang === ELang.ua
-            ? 'Креативна ілюстрація для головної сторінки сайту, що символізує освіту та навчання з книгами, математичними символами і лампочкою, яка представляє ідеї та знання.'
-            : 'A creative illustration for a website homepage, symbolizing education and learning with books, mathematical symbols, and a light bulb representing ideas and knowledge.'
-        }
-      />
-      {/* <TextButton isLink>{lang === ELang.ua ? 'Гра "Кат"' : '"Hangman" Game'}</TextButton> */}
-      {lang === ELang.ua ? 'Гра "Кат"' : '"Hangman" Game'}
-    </Link>
+    <LinkToSegment
+      imgSrc={hangmanLinkImg}
+      href={`/${lang}/${HANGMAN}`}
+      alt={
+        lang === ELang.ua
+          ? `Ілюстрація веселої гри 'Кат' із грайливими літерами та врятованим персонажем.`
+          : 'Illustration of a fun and friendly Hangman game with playful letters and a saved character.'
+      }
+      linkText={lang === ELang.ua ? 'Гра "Кат"' : '"Hangman" Game'}
+    />
 
-    <Link href={`/${lang}/${REPEATER}`} className="flex flex-col items-center gap-2">
-      <Image
-        className="sm:rounded-full sm:border-zinc-300 sm:border w-36 hover:w-44 duration-300"
-        src={mathLinkImg}
-        alt={
-          lang === ELang.ua
-            ? 'Креативна ілюстрація для головної сторінки сайту, що символізує освіту та навчання з книгами, математичними символами і лампочкою, яка представляє ідеї та знання.'
-            : 'A creative illustration for a website homepage, symbolizing education and learning with books, mathematical symbols, and a light bulb representing ideas and knowledge.'
-        }
-      />
-      {/* <TextButton isLink>{lang === ELang.ua ? 'Вивчання мов' : 'Learning languages'}</TextButton> */}
-      {lang === ELang.ua ? 'Вивчання мов' : 'Learning languages'}
-    </Link>
+    <LinkToSegment
+      imgSrc={repeaterLinkImg}
+      href={`/${lang}/${REPEATER}`}
+      alt={
+        lang === ELang.ua
+          ? 'Ілюстрація веселої сцени вивчення мов із бульбашками тексту та дружнім AI-помічником.'
+          : 'Illustration of a playful language learning scene with speech bubbles and a friendly AI assistant.'
+      }
+      linkText={lang === ELang.ua ? 'Вивчання мов' : 'Learning languages'}
+    />
   </div>
 );
+
+const LinkToSegment = ({
+  href,
+  alt,
+  linkText,
+  imgSrc,
+}: {
+  href: string;
+  alt: string;
+  linkText: string;
+  imgSrc: StaticImport;
+}) => {
+  return (
+    <Link href={href} className="flex flex-col items-center gap-2 text-zinc-300 text-2xl">
+      <Image
+        className="rounded-full border-4 border-zinc-300 w-36 lg:hover:w-40 duration-300"
+        src={imgSrc}
+        alt={alt}
+      />
+      {linkText}
+    </Link>
+  );
+};
 
 export default HomeLinks;

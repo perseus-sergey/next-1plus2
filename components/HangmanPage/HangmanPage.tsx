@@ -204,12 +204,10 @@ function HangmanPage({ lang }: IProps) {
   }, [guessedLetters, wrongGuesses, currentWord, lang]);
 
   return (
-    <section className="max-w-screen-lg flex flex-col gap-6">
-      <div
-        className={`max-w-full p-5 flex flex-col gap-2 shadow-md rounded-xl text-center text-white`}
-      >
+    <section className="max-w-screen-lg pb-6">
+      <div className={`max-w-full p-5 flex flex-col gap-2 text-center text-white`}>
         <Image
-          src={`/img/hangman${wrongGuesses}.svg`}
+          src={`/img/hangman/hangman${wrongGuesses}.svg`}
           width={250}
           height={250}
           alt="Hangman Image"

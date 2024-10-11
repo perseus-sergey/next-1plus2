@@ -2,14 +2,14 @@ import { Header } from '@/components/Header/Header';
 import { SeoSVG } from '@/components/Svg/SeoSVG';
 import TextButton from '@/components/TextButton/TextButton';
 import { Title } from '@/components/Title/Title';
-import { ELang } from '@models/types';
+import { DEFAULT_LANG, ELang } from '@models/types';
 import Link from 'next/link';
 
 export default function NotFound() {
   return (
     <html lang={ELang.en}>
       <body suppressHydrationWarning={true} className="bg-slate-950">
-        <Header />
+        <Header lang={DEFAULT_LANG} />
         <main className="flex-1 flex flex-col justify-around items-center px-1 sm:px-4">
           <Title name="Page not found (404)" />
           <SeoSVG viewBox="0 0 14 14" className="h-40 w-40 text-sky-200">

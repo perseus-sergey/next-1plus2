@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { BaseButton } from '../TextButton/BaseButton';
 import { ELang } from '@/models/types';
 import CloseModalBtn from '../TextButton/CloseModalBtn';
+import { SeoSVG } from '../Svg/SeoSVG';
 
 export default function HangmanRules({ lang }: { lang: ELang }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,21 +14,24 @@ export default function HangmanRules({ lang }: { lang: ELang }) {
   return (
     <>
       <BaseButton
+        className="text-slate-200 hover:text-slate-50"
         ariaLabel={lang === ELang.ua ? 'Відкрити правила гри' : 'Open the rules of the game'}
         onClick={toggleOpen}
       >
-        {/* Стрілочка */}
-        <svg
-          className={`ml-2 w-6 h-6 transform transition-transform duration-300 ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-        </svg>
+        <SeoSVG strokeWidth={1} viewBox="0 0 14 14">
+          <circle cx="7" cy="7" r="6.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5.5 5.5A1.5 1.5 0 1 1 7 7v1"
+          />
+          <path
+            stroke="none"
+            fill="currentColor"
+            d="M7 9.5a.75.75 0 1 0 .75.75A.76.76 0 0 0 7 9.5Z"
+          />
+        </SeoSVG>
       </BaseButton>
 
       {/* Контент з правилами гри */}

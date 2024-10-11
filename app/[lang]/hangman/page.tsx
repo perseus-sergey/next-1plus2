@@ -37,7 +37,7 @@ export default ({ params }: IProps) => {
 
   return (
     <>
-      <div className="flex items-center gap-4">
+      <div className="flex gap-2">
         <Title name={lang === ELang.ua ? '«Кат»' : '«Hangman»'} />
         <HangmanRules lang={lang} />
       </div>

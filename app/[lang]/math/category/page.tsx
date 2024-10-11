@@ -1,9 +1,11 @@
-import ArticleWrapper from '@/components/ArticleWrapper';
 import MathCategories from '@/components/MathCategories/MathCategories';
 import { ELang } from '@models/types';
 import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
 import { Metadata } from 'next';
 import { MATH_CATEGORY_PAGE_TEXT, META_MATH_CATEGORY } from '@/models/math/mathCategories.model';
+import ArticleWithImage from '@/components/ArticleWithImage';
+
+import catImg from 'public/img/math-cats_300.jpg';
 
 interface IProps {
   params: { lang: ELang };
@@ -34,9 +36,16 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
 export default ({ params: { lang } }: IProps) => {
   return (
     <>
-      <ArticleWrapper h1Title={lang === ELang.ua ? 'Обери категорію' : 'Choose the category'}>
-        {MATH_CATEGORY_PAGE_TEXT[lang]}
-      </ArticleWrapper>
+      <ArticleWithImage
+        titleH1={lang === ELang.ua ? 'Обери категорію' : 'Choose the category'}
+        imgSrc={catImg}
+        imgAlt={
+          lang === ELang.ua
+            ? 'Ілюстрація для сторінки категорій математики з яскравими математичними символами та геометричними фігурами на темно-синьому фоні.'
+            : 'Illustration for the Math Categories page with colorful mathematical symbols and geometric shapes on a dark blue background.'
+        }
+        innerHtml={MATH_CATEGORY_PAGE_TEXT[lang]}
+      />
       <MathCategories lang={lang} />;
     </>
   );
