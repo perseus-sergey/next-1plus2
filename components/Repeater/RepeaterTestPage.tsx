@@ -240,6 +240,10 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength, 
                 <div className="relative">
                   <input
                     ref={inputRef}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck="false"
                     type="text"
                     value={userAnswer}
                     onChange={(e) => setUserAnswer(e.target.value)}
