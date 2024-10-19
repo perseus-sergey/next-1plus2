@@ -1,6 +1,8 @@
-import { IExsPart } from '@/libs/exercises/math';
-import styles from './ColumnExercise.module.scss';
 import React from 'react';
+
+import styles from './ColumnExercise.module.scss';
+
+import { IExsPart } from '@/libs/exercises/math';
 import { useDragProvider } from '@/libs/context/DragProvider';
 
 interface IColumnExerciseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -18,22 +20,15 @@ const ColumnExercise = ({
   const { isOverDropZone } = useDragProvider();
 
   return (
-    <button
-      type="button"
-      onClick={clickHandler}
-      className={className ? `${styles.ColumnExsBtn} ${className}` : styles.ColumnExsBtn}
-      data-testid="ColumnExercise"
-    >
+    <button type="button" onClick={clickHandler} className={className} data-testid="ColumnExercise">
       <table className={styles.columnTable}>
         <tbody>
           <tr>
-            <td className={styles.minusPlus} rowSpan={2}>
+            <td className="pr-2" rowSpan={2}>
               {exerciseParts[1].value}
             </td>
             {exerciseParts[0].isQuestionPart ? (
-              <td
-                className={`${styles.exsAskPart}${isOverDropZone ? ` ${styles.overDropZone}` : ''}`}
-              >
+              <td className={`text-blue-300 ${isOverDropZone ? ` ${styles.overDropZone}` : ''}`}>
                 {userAnswer}
               </td>
             ) : (
@@ -42,9 +37,7 @@ const ColumnExercise = ({
           </tr>
           <tr>
             {exerciseParts[2].isQuestionPart ? (
-              <td
-                className={`${styles.exsAskPart}${isOverDropZone ? ` ${styles.overDropZone}` : ''}`}
-              >
+              <td className={`text-blue-300 ${isOverDropZone ? ` ${styles.overDropZone}` : ''}`}>
                 {userAnswer}
               </td>
             ) : (
@@ -55,7 +48,7 @@ const ColumnExercise = ({
             {exerciseParts[4].isQuestionPart ? (
               <td
                 colSpan={2}
-                className={`${styles.exsAskPart}${isOverDropZone ? ` ${styles.overDropZone}` : ''}`}
+                className={`text-blue-300 ${isOverDropZone ? ` ${styles.overDropZone}` : ''}`}
               >
                 {userAnswer}
               </td>

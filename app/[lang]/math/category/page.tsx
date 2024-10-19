@@ -1,15 +1,20 @@
 import MathCategories from '@/components/MathCategories/MathCategories';
 import { ELang } from '@models/types';
-import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
+import { DEFAULT_META_OG, ESegments, MAIN_URL } from '@/models/main.model';
 import { Metadata } from 'next';
 import { MATH_CATEGORY_PAGE_TEXT, META_MATH_CATEGORY } from '@/models/math/mathCategories.model';
 import ArticleWithImage from '@/components/ArticleWithImage';
 
 import catImg from 'public/img/math-cats_300.jpg';
+import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
+import { breadCrumbList } from '@/models/math/breadCrumb.model';
 
 interface IProps {
   params: { lang: ELang };
 }
+
+const { MATH, MATH_CATEGORY } = ESegments;
+const { en, ua } = ELang;
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
@@ -21,13 +26,13 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
       ...DEFAULT_META_OG,
       title: META_MATH_CATEGORY[lang].title,
       description: META_MATH_CATEGORY[lang].description,
-      url: `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}`,
+      url: `/${lang}/${MATH}/${MATH_CATEGORY}`,
     },
     alternates: {
-      canonical: `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}`,
+      canonical: `/${lang}/${MATH}/${MATH_CATEGORY}`,
       languages: {
-        en: `/${ELang.en}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}`,
-        uk: `/${ELang.ua}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}`,
+        en: `/${en}/${MATH}/${MATH_CATEGORY}`,
+        uk: `/${ua}/${MATH}/${MATH_CATEGORY}`,
       },
     },
   };
@@ -36,17 +41,21 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
 export default ({ params: { lang } }: IProps) => {
   return (
     <>
+      <BreadCrumbServer
+        lang={lang}
+        breadCrumbList={[breadCrumbList.math, breadCrumbList.mathCategory.title[lang]]}
+      />
       <ArticleWithImage
-        titleH1={lang === ELang.ua ? 'Обери категорію' : 'Choose the category'}
+        titleH1={lang === ua ? 'Обери категорію' : 'Choose the category'}
         imgSrc={catImg}
         imgAlt={
-          lang === ELang.ua
+          lang === ua
             ? 'Ілюстрація для сторінки категорій математики з яскравими математичними символами та геометричними фігурами на темно-синьому фоні.'
             : 'Illustration for the Math Categories page with colorful mathematical symbols and geometric shapes on a dark blue background.'
         }
         innerHtml={MATH_CATEGORY_PAGE_TEXT[lang]}
       />
-      <MathCategories lang={lang} />;
+      <MathCategories lang={lang} />
     </>
   );
 };

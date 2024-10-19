@@ -1,11 +1,13 @@
 import Mission from '@/components/Mission/Mission';
 import { ELang } from '@models/types';
-import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
+import { DEFAULT_META_OG, ESegments, MAIN_URL } from '@/models/main.model';
 import { Metadata } from 'next';
 import { MATH_PAGE_TEXT, META_MATH } from '@/models/math/mathMeta.model';
 
 import mathImg from 'public/img/math_300.jpg';
 import ArticleWithImage from '@/components/ArticleWithImage';
+import { getELangKey } from '@/libs/validSearchParam';
+import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 
 interface IProps {
   params: { lang: ELang };
@@ -13,7 +15,9 @@ interface IProps {
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
+export const generateMetadata = ({ params }: IProps): Metadata => {
+  const lang = getELangKey(params.lang);
+
   return {
     metadataBase: new URL(BASE_URL),
     ...META_MATH[lang],
@@ -21,21 +25,25 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
       ...DEFAULT_META_OG,
       title: META_MATH[lang].title,
       description: META_MATH[lang].description,
-      url: `/${lang}/${EUrlParams.MATH}`,
+      url: `/${lang}/${ESegments.MATH}`,
     },
     alternates: {
-      canonical: `/${lang}/${EUrlParams.MATH}`,
+      canonical: `/${lang}/${ESegments.MATH}`,
       languages: {
-        en: `/${ELang.en}/${EUrlParams.MATH}`,
-        uk: `/${ELang.ua}/${EUrlParams.MATH}`,
+        en: `/${ELang.en}/${ESegments.MATH}`,
+        uk: `/${ELang.ua}/${ESegments.MATH}`,
       },
     },
   };
 };
 
-export default function Page({ params: { lang } }: IProps) {
+export default function Page({ params }: IProps) {
+  const lang = getELangKey(params.lang);
+
   return (
     <>
+      <BreadCrumbServer lang={lang} />
+
       <ArticleWithImage
         titleH1={lang === ELang.ua ? 'Обери завдання' : 'Choose the task'}
         imgSrc={mathImg}

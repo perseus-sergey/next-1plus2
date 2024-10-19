@@ -1,21 +1,16 @@
-import { IExsPart, NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
+import React, { useEffect, useRef } from 'react';
+
+import { IExsPart } from '@/libs/exercises/math';
 import TextButton from '../TextButton/TextButton';
 import styles from './Monitor.module.scss';
 import ExercisePart from '../ExercisePart/ExercisePart';
 import ColumnExercise from '../ColumnExercise/ColumnExercise';
-import React, { useEffect, useReducer, useRef } from 'react';
 import { Loader } from '../loaders/Loader';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { EIsRightAnswer } from '../ExercisePage/ExercisePage';
 import { useDragProvider } from '@/libs/context/DragProvider';
-import { addRemoveClassName } from '@/libs/utils';
-
-const addSmallExsClassReducer = (oldArr: string[], isAdd: boolean) =>
-  addRemoveClassName(oldArr, styles.smallExercise, isAdd);
-
-const addBigColumnClassReducer = (oldArr: string[], isAdd: boolean) =>
-  addRemoveClassName(oldArr, styles.bigColumn, isAdd);
+import { NUMBER_OF_EXERCISES } from '@/models/math/math.model';
 
 interface MonitorProps {
   exerciseParts: IExsPart[];
@@ -38,12 +33,8 @@ const Monitor = ({
   isColumn = false,
   isDelBtnActive = true,
 }: MonitorProps) => {
-  const [exsClassNames, addSmallExsClass] = useReducer(addSmallExsClassReducer, [
-    styles.displayExsButton,
-  ]);
-  const [columnClassNames, addBigColumnClass] = useReducer(addBigColumnClassReducer, []);
   const { language } = useLangProvider();
-  const { setIsColumn, setDropZoneRect, draggedValue } = useDragProvider();
+  const { setIsColumn, isColumn: isBigColumn, setDropZoneRect, draggedValue } = useDragProvider();
 
   const reference = useRef<HTMLDivElement>(null);
 
@@ -55,30 +46,25 @@ const Monitor = ({
   }, [setDropZoneRect, draggedValue]);
 
   const exerciseClick = () => {
-    if (columnClassNames.includes(styles.bigColumn)) {
-      addBigColumnClass(false);
-      addSmallExsClass(false);
-      setIsColumn(false);
-    }
+    setIsColumn(false);
   };
 
   const columnClick = () => {
-    if (!columnClassNames.includes(styles.bigColumn)) {
-      addBigColumnClass(true);
-      addSmallExsClass(true);
-      setIsColumn(true);
-    }
+    setIsColumn(true);
   };
 
   return (
     <section className={styles.Monitor} data-testid="Monitor">
-      <div className={styles.monitorHeader}>
-        <span className={styles.exsQuant}>{`${getTitleFromMap(
+      <div
+        className="flex justify-between p-1 sm:p-2 sm:text-xl"
+        style={{ textShadow: '1px 1px 1px #000000' }}
+      >
+        <span className="text-blue-100">{`${getTitleFromMap(
           EMessageNames.LEFT_EXS_NUM_MSG,
           language
         )}: ${arrExsLength}`}</span>
         {!!mistakes && (
-          <span className={styles.mistakeQuant}>
+          <span className="text-red-300">
             {`${getTitleFromMap(EMessageNames.MISTAKES, language)}: ${mistakes}`}
           </span>
         )}
@@ -92,20 +78,20 @@ const Monitor = ({
                   clickHandler={columnClick}
                   exerciseParts={exerciseParts}
                   userAnswer={userAnswer}
-                  className={columnClassNames.join(' ')}
+                  className={`
+                    ${isBigColumn ? 'text-4xl font-bold ml-8' : 'text-xs font-normal m-0'} 
+                    ${isRightAnswer === EIsRightAnswer.BAD ? 'text-red-400' : isRightAnswer === EIsRightAnswer.RIGHT ? 'text-green-200' : ''}
+                    duration-300 border-none outline-none bg-none px-2 sm:px-8`}
                 />
               )}
 
               <button
                 onClick={exerciseClick}
                 type="button"
-                className={
-                  isRightAnswer === EIsRightAnswer.BAD
-                    ? [...exsClassNames, styles.badAnswer].join(' ')
-                    : isRightAnswer === EIsRightAnswer.RIGHT
-                      ? [...exsClassNames, styles.properAnswer].join(' ')
-                      : exsClassNames.join(' ')
-                }
+                className={`
+                ${isBigColumn ? 'text-xs font-normal' : 'text-4xl font-bold'} 
+                ${isRightAnswer === EIsRightAnswer.BAD ? 'text-red-400' : isRightAnswer === EIsRightAnswer.RIGHT ? 'text-green-200' : ''} 
+                flex gap-2 sm:gap-4 pl-4 border-none outline-none bg-none duration-300`}
               >
                 {exerciseParts.map(({ value, hint, isQuestionPart }, indx) => (
                   <ExercisePart

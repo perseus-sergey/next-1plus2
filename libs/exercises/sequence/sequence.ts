@@ -1,5 +1,6 @@
 import { createArray } from '@/libs/utils';
-import { NUMBER_OF_EXERCISES, isWrongPushedIntoArray } from '../math';
+import { isWrongPushedIntoArray } from '../math';
+import { NUMBER_OF_EXERCISES } from '@/models/math/math.model';
 
 const makeExsParts = (quant: number, maxNum: number, existingParts: number[][]): number[] => {
   const n = Math.floor(Math.random() * maxNum) + 1; //  1 to maxNum
@@ -19,9 +20,7 @@ const makeArrUpTo10 = (numOfExs = NUMBER_OF_EXERCISES) => {
 };
 
 //  => [n1, n2, res]
-const setArrSequence = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): number[][] =>
+export const setArrSequence = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): number[][] =>
   maxNum <= 10
     ? makeArrUpTo10(numOfExs)
     : createArray(numOfExs).reduce((acc) => [...acc, makeExsParts(numOfExs, maxNum, acc)], []);
-
-export default setArrSequence;

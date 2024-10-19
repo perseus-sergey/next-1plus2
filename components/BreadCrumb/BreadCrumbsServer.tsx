@@ -1,0 +1,117 @@
+import { ELang } from '@/models/types';
+import React, { ReactNode } from 'react';
+import SeoLink from '../SeoLink';
+
+export interface IBreadCrumbLink {
+  title: { [ELang.ua]: string; [ELang.en]: string } | string;
+  href?: string;
+}
+
+const BREAD_SEPARATOR = '჻';
+
+interface IProps extends React.HTMLAttributes<HTMLElement> {
+  lang: ELang;
+  breadCrumbList?: (IBreadCrumbLink | string)[];
+  homeTitle?: ReactNode;
+  separator?: ReactNode;
+  activeLinkColor?: string;
+  hasHomeLink?: boolean;
+}
+
+const BreadCrumbServer = ({
+  lang,
+  breadCrumbList,
+  className,
+  activeLinkColor,
+  homeTitle,
+  separator = BREAD_SEPARATOR,
+  hasHomeLink = true,
+}: IProps) => {
+  return (
+    <nav
+      aria-label="Breadcrumb"
+      className={`border border-gray-400 rounded-md mt-0.5 mb-0 mx-0 bg-indigo-950${className ? ` ${className}` : ''}`}
+      data-testid="BreadCrumb"
+    >
+      <ol className="flex flex-wrap gap-3 items-center py-2 px-5 text-cyan-100">
+        {hasHomeLink && (
+          <li className={`list-none text-white`}>
+            <SeoLink
+              href={`/${lang}/`}
+              className="hover:underline text-xl"
+              title={lang === ELang.ua ? `Перейти до початкової сторінки` : `Go to the home page`}
+            >
+              {homeTitle || lang === ELang.ua ? 'На головну' : 'Home'}
+            </SeoLink>
+          </li>
+        )}
+        {breadCrumbList && breadCrumbList.length > 0 && (
+          <>
+            {hasHomeLink && <li className="text-gray-300"> {separator} </li>}
+            {breadCrumbList.map(async (item, index) => {
+              if (!item) return;
+
+              const isCurrentUrl = breadCrumbList.length === index + 1;
+              const linkText =
+                typeof item === 'string'
+                  ? item
+                  : typeof item.title === 'string'
+                    ? item.title
+                    : item.title[lang];
+              const itemStyle =
+                isCurrentUrl && activeLinkColor ? { color: activeLinkColor } : undefined;
+              const itemClassName = isCurrentUrl ? `list-none text-slate-200` : 'list-none';
+
+              return !isCurrentUrl ? (
+                <React.Fragment key={index}>
+                  <li className={itemClassName} style={itemStyle}>
+                    {typeof item !== 'string' && item.href ? (
+                      <SeoLink
+                        href={`/${lang}/${item.href}`}
+                        className="hover:underline"
+                        title={
+                          lang === ELang.ua
+                            ? `Перейти до сторінки "${linkText}"`
+                            : `Go to page "${linkText}"`
+                        }
+                      >
+                        {linkText}
+                      </SeoLink>
+                    ) : (
+                      <div>{linkText}</div>
+                    )}
+                  </li>
+                  <li className="text-gray-300"> {separator} </li>
+                </React.Fragment>
+              ) : (
+                <React.Fragment key={index}>
+                  <li className={itemClassName} style={itemStyle}>
+                    {typeof item !== 'string' && item.href ? (
+                      <>
+                        <SeoLink
+                          href={`/${lang}/${item.href}`}
+                          className="hover:underline"
+                          title={
+                            lang === ELang.ua
+                              ? `Перейти до сторінки "${linkText}"`
+                              : `Go to page "${linkText}"`
+                          }
+                        >
+                          {linkText}
+                        </SeoLink>
+                      </>
+                    ) : (
+                      <span>{linkText}</span>
+                    )}
+                  </li>
+                </React.Fragment>
+              );
+            })}
+          </>
+        )}
+      </ol>
+    </nav>
+  );
+};
+
+export default BreadCrumbServer;

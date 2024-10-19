@@ -14,15 +14,16 @@ export const MAIN_URL = 'https://www.1plus2.fun';
 // make cron script ai add to db hangman tasks 50 tasks per day
 // ================================================
 
-export enum EUrlParams {
-  LANG = 'lang',
-  MAX_NUM = 'maxNum',
-  REPEATER = 'repeater',
+export enum ESegments {
+  DYNAMIC_LANG = 'lang',
+  ABOUT = 'about-us',
   HANGMAN = 'hangman',
   MATH = 'math',
+  REPEATER = 'repeater',
   MATH_CATEGORY = 'category',
+  DYNAMIC_CATEGORY = 'cat',
+  DYNAMIC_MAX_NUM = 'maxNum',
   MATH_LEVEL = 'level',
-  ABOUT = 'about-us',
 }
 
 export const DEFAULT_META_OG = {

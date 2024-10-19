@@ -2,14 +2,9 @@
 
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
 // import styles from './ExercisePage.module.scss';
-import {
-  IExsPart,
-  NUMBER_OF_EXERCISES,
-  getCatComplTitles,
-  makeExerciseParts,
-} from '@/libs/exercises/math';
+import { IExsPart, getCatComplTitles, makeExerciseParts } from '@/libs/exercises/math';
 import Computer from '../Computer/Computer';
-import { categoriesMap, keyboardInequalKeys, makeExerciseArray } from '@/models/math/math.model';
+import { categoriesMap, keyboardInequalKeys, NUMBER_OF_EXERCISES } from '@/models/math/math.model';
 import { Loader } from '../loaders/Loader';
 import { arrayShift, sleep } from '@/libs/utils';
 import { useMySound } from '@/libs/hooks/useSound';
@@ -21,6 +16,7 @@ import EndLevel from '../EndLevel/EndLevel';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { useDragProvider } from '@/libs/context/DragProvider';
 import { EExerciseCategories, IExerciseParams, QUESTION_MARK } from '@/models/math/types';
+import { makeExerciseArray } from '@/libs/math/math.controller';
 
 export enum EIsRightAnswer {
   '_',
@@ -62,11 +58,17 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
   const router = useRouter();
 
   useEffect(() => {
-    const currCat = isLevel ? currentLevels[0] : cat;
+    const fetchData = async () => {
+      const currCat = isLevel ? currentLevels[0] : cat;
 
-    setExsParams(categoriesMap.get(EExerciseCategories[currCat]));
-    setCurrentCat(currCat);
-    setExerciseArray(makeExerciseArray(currCat, chosenMaxNum));
+      setExsParams(categoriesMap.get(EExerciseCategories[currCat]));
+      setCurrentCat(currCat);
+
+      const exerciseArray = await makeExerciseArray(currCat, chosenMaxNum);
+      setExerciseArray(exerciseArray);
+    };
+
+    fetchData();
   }, [cat, chosenMaxNum, isLevel]);
 
   useEffect(() => {
@@ -176,7 +178,7 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
     [isColumn, audioKey]
   );
 
-  const onNextCatBtnClicked = () => {
+  const onNextCatBtnClicked = async () => {
     if (mistakes.length) {
       setExerciseArray(mistakes);
       setExsArrayLength(mistakes.length);
@@ -186,7 +188,7 @@ const ExercisePage = ({ cat, chosenMaxNum, levels = [] }: IExerciseComponentProp
       shiftLevelsArray();
       setCurrentCat(currentLevels[1]);
       setExsParams(categoriesMap.get(EExerciseCategories[currentLevels[1]]));
-      setExerciseArray(makeExerciseArray(currentLevels[1], chosenMaxNum));
+      setExerciseArray(await makeExerciseArray(currentLevels[1], chosenMaxNum));
     }
     setIsCatFinish(false);
     setMistakes([]);

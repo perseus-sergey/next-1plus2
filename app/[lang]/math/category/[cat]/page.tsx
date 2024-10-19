@@ -4,6 +4,8 @@ import { ELang } from '@models/types';
 import ArticleWrapper from '@/components/ArticleWrapper';
 import { EExerciseCategories } from '@/models/math/types';
 import { MATH_TESTS } from '@/models/math/mathTests.model';
+import { breadCrumbList } from '@/models/math/breadCrumb.model';
+import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 
 export interface IPage {
   params: { lang: ELang; cat: EExerciseCategories };
@@ -16,6 +18,14 @@ export default async ({ params: { lang, cat } }: IPage) => {
 
   return (
     <>
+      <BreadCrumbServer
+        lang={lang}
+        breadCrumbList={[
+          breadCrumbList.math,
+          breadCrumbList.mathCategory,
+          breadCrumbList.mathMaxNumber.title[lang],
+        ]}
+      />
       <ArticleWrapper
         h1Title={
           lang === ELang.ua
@@ -25,7 +35,7 @@ export default async ({ params: { lang, cat } }: IPage) => {
       >
         {PAGE_DATA.text[lang]}
       </ArticleWrapper>
-      <MathPageMaxNumber lang={lang} cat={cat} />;
+      <MathPageMaxNumber lang={lang} cat={cat} />
     </>
   );
 };

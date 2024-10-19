@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ELang } from '@models/types';
-import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
+import { DEFAULT_META_OG, ESegments, MAIN_URL } from '@/models/main.model';
 import { EExerciseCategories, IPageData } from '@/models/math/types';
 import { MATH_TESTS } from '@/models/math/mathTests.model';
 import { categoriesMap } from '@/models/math/math.model';
@@ -18,6 +18,7 @@ const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
 export const generateMetadata = async ({ params: { lang, cat } }: IProps): Promise<Metadata> => {
   const { PAGE_DATA }: IModuleData = await MATH_TESTS[EExerciseCategories[cat]]();
+  const { MATH, MATH_CATEGORY } = ESegments;
 
   return {
     metadataBase: new URL(BASE_URL),
@@ -25,13 +26,13 @@ export const generateMetadata = async ({ params: { lang, cat } }: IProps): Promi
     openGraph: {
       ...DEFAULT_META_OG,
       ...PAGE_DATA.meta[lang],
-      url: `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}`,
+      url: `/${lang}/${MATH}/${MATH_CATEGORY}/${cat}`,
     },
     alternates: {
-      canonical: `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}`,
+      canonical: `/${lang}/${MATH}/${MATH_CATEGORY}/${cat}`,
       languages: {
-        en: `/${ELang.en}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}`,
-        uk: `/${ELang.ua}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}`,
+        en: `/${ELang.en}/${MATH}/${MATH_CATEGORY}/${cat}`,
+        uk: `/${ELang.ua}/${MATH}/${MATH_CATEGORY}/${cat}`,
       },
     },
   };

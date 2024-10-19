@@ -1,6 +1,10 @@
+'use client';
+
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { BaseButton } from '../TextButton/BaseButton';
 import { SeoSVG } from '../Svg/SeoSVG';
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { ModalAddRepeaterTask, ModalDeleteTask } from './ModalAddRepeaterTask';
 import { ModalAiGenerateTasks } from './ModalAiGenerateTasks';
 import { ELang } from '@models/types';
@@ -8,6 +12,9 @@ import { ITranslation, REPEATER_PAGE_TEXT } from '@/models/repeater.model';
 import ArticleWithImage from '../ArticleWithImage';
 
 import repeaterImg from 'public/img/repeater_300.jpg';
+import ArticleWrapper from '../ArticleWrapper';
+import ExitButtonWithModal from '../TextButton/ExitButtonWithModal';
+import LazyAppearing from '../intersection/LazyAppearing';
 
 interface IProps {
   translations: ITranslation[];
@@ -34,6 +41,7 @@ export const DictionaryPage = ({ translations, setTranslations, startTest, lang 
   const [deleteId, setDeleteId] = useState<number | 'all' | null>(null); // ID рядка, який будемо видаляти
 
   const [generatedData, setGeneratedData] = useState<string[][] | null>([]); // Модальне вікно для підтвердження видалення
+  const router = useRouter();
 
   const openModal = (translation?: ITranslation) => {
     if (translation) {
@@ -142,50 +150,73 @@ export const DictionaryPage = ({ translations, setTranslations, startTest, lang 
     setIsDeleteModalOpen(false);
   }, []);
 
+  const handleEndTest = () => {
+    router.push(`/${lang}`);
+  };
+
   return (
     <>
+      <ExitButtonWithModal
+        className="self-start pl-1 sm:pl-4"
+        lang={lang}
+        modalText={
+          lang === 'ua'
+            ? 'Ви дійсно впевнені що бажаєте залишити цю сторінку?'
+            : 'Are you sure you want to leave this page?'
+        }
+        confirmBtnTitle={lang === 'ua' ? 'Вийти' : 'Leave'}
+        exitHandler={() => handleEndTest()}
+        ariaLabel={
+          lang === 'ua'
+            ? 'Залишити цю сторінку і повернутися до домашньої'
+            : 'Finish this page and come back to home'
+        }
+      />
+
       {translations.length > 0 ? (
         <>
-          <p className="p-4">
-            TOTAL: <span className="text-teal-300 text-xl">{translations.length}</span> phrases
-          </p>
+          <ArticleWrapper h1Title={lang === 'ua' ? 'Словник' : 'Dictionary'}>
+            <p className="p-4">
+              TOTAL: <span className="text-teal-300 text-xl">{translations.length}</span> phrases
+            </p>
 
-          <ul className="flex flex-col gap-2 min-w-72 text-xl">
-            {translations.map((translation) => (
-              <li key={translation.id} className="flex gap-2 p-2 bg-slate-900/60">
-                <ul className="w-full flex flex-col gap-3" onClick={() => openModal(translation)}>
-                  <li className="bg-blue-900 p-1 sm:px-4">{translation.english}</li>
-                  {translation.transcription && (
-                    <li className="bg-gray-700 p-1 sm:px-4 text-center">
-                      {translation.transcription}
-                    </li>
-                  )}
-                  <li className="bg-sky-900 p-1 sm:px-4">{translation.ukrainian}</li>
-                </ul>
-                <div className="ml-auto shrink-0 w-12 flex items-center justify-end border-l border-slate-300">
-                  <BaseButton
-                    ariaLabel="Delete item from translation table"
-                    className="bg-red-700 hover:bg-red-600 font-bold text-center p-1 rounded-full"
-                    onClick={() => openDeleteModal(translation.id)}
-                  >
-                    <SeoSVG strokeWidth={0.1}>
-                      <path
-                        fill="currentColor"
-                        d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
-                      />
-                    </SeoSVG>
-                  </BaseButton>
-                </div>
-              </li>
-            ))}
-          </ul>
+            <ul className="flex flex-col gap-2 min-w-72 text-xl">
+              {translations.map((translation) => (
+                <li key={translation.id} className="flex gap-2 p-2 bg-slate-900/60">
+                  <ul className="w-full flex flex-col gap-3" onClick={() => openModal(translation)}>
+                    <li className="bg-blue-900 p-1 sm:px-4">{translation.english}</li>
+                    {translation.transcription && (
+                      <li className="bg-gray-700 p-1 sm:px-4 text-center">
+                        {translation.transcription}
+                      </li>
+                    )}
+                    <li className="bg-sky-900 p-1 sm:px-4">{translation.ukrainian}</li>
+                  </ul>
+                  <div className="ml-auto shrink-0 w-12 flex items-center justify-end border-l border-slate-300">
+                    <BaseButton
+                      ariaLabel="Delete item from translation table"
+                      className="bg-red-700 hover:bg-red-600 font-bold text-center p-1 rounded-full"
+                      onClick={() => openDeleteModal(translation.id)}
+                    >
+                      <SeoSVG strokeWidth={0.1}>
+                        <path
+                          fill="currentColor"
+                          d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
+                        />
+                      </SeoSVG>
+                    </BaseButton>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </ArticleWrapper>
         </>
       ) : (
         <ArticleWithImage
-          titleH1={lang === ELang.ua ? 'Репетитор' : 'Repeater'}
+          titleH1={lang === 'ua' ? 'Словник' : 'Dictionary'}
           imgSrc={repeaterImg}
           imgAlt={
-            lang === ELang.ua
+            lang === 'ua'
               ? 'Ілюстрація веселої сцени вивчення мов із бульбашками тексту та дружнім AI-помічником.'
               : 'Illustration of a playful language learning scene with speech bubbles and a friendly AI assistant.'
           }
@@ -194,34 +225,38 @@ export const DictionaryPage = ({ translations, setTranslations, startTest, lang 
       )}
 
       <div className="w-64 sm:w-fit grid grid-cols-2 flex-wrap items-center gap-8 justify-items-center sm:py-12 py-6 px-2">
-        <BaseButton
-          ariaLabel="Add item to translation table"
-          className={`${btnBaseStyle} bg-orange-500 hover:bg-orange-600`}
-          onClick={() => openModal()}
-        >
-          <SeoSVG strokeWidth={0.2} className={svgBaseStyle}>
-            <path
-              fill="currentColor"
-              d="M14 14q.425 0 .713-.288T15 13v-2h2q.425 0 .713-.288T18 10t-.288-.712T17 9h-2V7q0-.425-.288-.712T14 6t-.712.288T13 7v2h-2q-.425 0-.712.288T10 10t.288.713T11 11h2v2q0 .425.288.713T14 14m-6 4q-.825 0-1.412-.587T6 16V4q0-.825.588-1.412T8 2h12q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18zm-4 4q-.825 0-1.412-.587T2 20V7q0-.425.288-.712T3 6t.713.288T4 7v13h13q.425 0 .713.288T18 21t-.288.713T17 22z"
-            />
-          </SeoSVG>
-          <span className="hidden sm:block">add task</span>
-        </BaseButton>
+        <LazyAppearing transformDirection="right">
+          <BaseButton
+            ariaLabel="Add item to translation table"
+            className={`${btnBaseStyle} bg-orange-500 hover:bg-orange-600`}
+            onClick={() => openModal()}
+          >
+            <SeoSVG strokeWidth={0.2} className={svgBaseStyle}>
+              <path
+                fill="currentColor"
+                d="M14 14q.425 0 .713-.288T15 13v-2h2q.425 0 .713-.288T18 10t-.288-.712T17 9h-2V7q0-.425-.288-.712T14 6t-.712.288T13 7v2h-2q-.425 0-.712.288T10 10t.288.713T11 11h2v2q0 .425.288.713T14 14m-6 4q-.825 0-1.412-.587T6 16V4q0-.825.588-1.412T8 2h12q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18zm-4 4q-.825 0-1.412-.587T2 20V7q0-.425.288-.712T3 6t.713.288T4 7v13h13q.425 0 .713.288T18 21t-.288.713T17 22z"
+              />
+            </SeoSVG>
+            <span className="hidden sm:block">add task</span>
+          </BaseButton>
+        </LazyAppearing>
 
-        <BaseButton
-          ariaLabel="Generate tasks"
-          className={`${btnBaseStyle} bg-green-500 hover:bg-green-600`}
-          onClick={() => setIsGenerateModalOpen(true)}
-        >
-          <SeoSVG viewBox="0 0 32 32" className={svgBaseStyle}>
-            <path
-              fill="currentColor"
-              d="M19 22v-2h1v-7h-1v-2h4v2h-1v7h1v2zm-3.5 0h2L14 11h-3L7.503 22h2l.601-2h4.778zm-4.794-4l1.628-5.411l.256-.003L14.264 18zM32 4h-4V0h-2v4h-4v2h4v4h2V6h4zm-2 8h2v2h-2zM18 0h2v2h-2z"
-            />
-            <path fill="currentColor" d="M32 32H0V0h14v2H2v28h28V18h2z" />
-          </SeoSVG>
-          <span className="sm:block hidden">Generate</span>
-        </BaseButton>
+        <LazyAppearing transformDirection="left">
+          <BaseButton
+            ariaLabel="Generate tasks"
+            className={`${btnBaseStyle} bg-green-500 hover:bg-green-600`}
+            onClick={() => setIsGenerateModalOpen(true)}
+          >
+            <SeoSVG viewBox="0 0 32 32" className={svgBaseStyle}>
+              <path
+                fill="currentColor"
+                d="M19 22v-2h1v-7h-1v-2h4v2h-1v7h1v2zm-3.5 0h2L14 11h-3L7.503 22h2l.601-2h4.778zm-4.794-4l1.628-5.411l.256-.003L14.264 18zM32 4h-4V0h-2v4h-4v2h4v4h2V6h4zm-2 8h2v2h-2zM18 0h2v2h-2z"
+              />
+              <path fill="currentColor" d="M32 32H0V0h14v2H2v28h28V18h2z" />
+            </SeoSVG>
+            <span className="sm:block hidden">Generate</span>
+          </BaseButton>
+        </LazyAppearing>
 
         {translations.length > 0 && (
           <>

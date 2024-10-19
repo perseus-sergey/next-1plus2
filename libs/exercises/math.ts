@@ -4,9 +4,6 @@ import { categoriesMap } from '../../models/math/math.model';
 import { ELang } from '@/models/types';
 import { EExerciseCategories, EMinusPlus, TCatObject } from '@/models/math/types';
 
-export const NUMBER_OF_EXERCISES = 10;
-export const HARD_LEVELS_IN_ARRAY = 2;
-
 export const getCatFromMap = (
   msg: EExerciseCategories,
   lang: ELang = ELang.en,

@@ -1,5 +1,3 @@
-import styles from '../EndLevel/EndLevel.module.scss';
-import { Title } from '../Title/Title';
 import React, {
   Dispatch,
   KeyboardEvent,
@@ -9,14 +7,18 @@ import React, {
   useRef,
   useState,
 } from 'react';
+
+import styles from '../EndLevel/EndLevel.module.scss';
+
+import { Title } from '../Title/Title';
 import { shuffleArray, sleep } from '@/libs/utils';
 import { BaseButton } from '../TextButton/BaseButton';
 import { SeoSVG } from '../Svg/SeoSVG';
 import { useMySound } from '@/libs/hooks/useSound';
 import { PlayFunction } from 'use-sound/dist/types';
-import { ModalConfirmExitTask } from './ModalAddRepeaterTask';
 import { ELang } from '@models/types';
 import { ITranslation } from '@/models/repeater.model';
+import ExitButtonWithModal from '../TextButton/ExitButtonWithModal';
 
 interface IProps {
   translations: ITranslation[];
@@ -49,7 +51,6 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength, 
   const [errorArray, setErrorArray] = useState<ITranslation[]>([]);
   const [isTestCompleted, setIsTestCompleted] = useState(false);
   const [answerStatus, setAnswerStatus] = useState(EAnswer._);
-  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { audioDel, audioRightAnsw, audioWrongAnsw, audioLevelFinish } = useMySound();
@@ -128,13 +129,13 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength, 
     if (shuffledArray.length === 0) {
       // Якщо масив завдань порожній, через 1 секунду показуємо екран статистики
       const finishTest = async () => {
-        await sleep(); // Затримка перед показом статистики
-        setIsTestCompleted(true); // Переходимо на екран статистики
+        await sleep();
+        setIsTestCompleted(true);
       };
       finishTest();
     } else {
       const nextTask = async () => {
-        await sleep(); // Затримка перед показом статистики
+        await sleep();
         setCurrentTask(shuffledArray[0]);
       };
       nextTask();
@@ -155,12 +156,27 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength, 
     }
   };
 
-  const closeExitModal = () => setIsExitModalOpen(false);
-
   if (!currentTask) return null;
 
   return (
     <>
+      <ExitButtonWithModal
+        className="self-start pl-1 sm:pl-4"
+        lang={lang}
+        modalText={
+          lang === 'ua'
+            ? 'Ви дійсно впевнені що бажаєте залишити тест?'
+            : 'Are you sure you want to leave the test?'
+        }
+        confirmBtnTitle={lang === 'ua' ? 'Вийти з тесту' : 'Leave test'}
+        exitHandler={() => handleEndTest()}
+        ariaLabel={
+          lang === 'ua'
+            ? 'Залишити тест і повернутися до словника'
+            : 'Finish test and come back to dictionary'
+        }
+      />
+
       <Title
         name={
           isTestCompleted
@@ -211,21 +227,7 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength, 
             <>
               {/* Екран Test */}
 
-              <BaseButton
-                ariaLabel="Finish test and come back to dictionary"
-                className="absolute top-0 left-0 flex flex-col items-center text-slate-300 hover:text-slate-400"
-                onClick={() => setIsExitModalOpen(true)}
-              >
-                <SeoSVG className="w-8 h-8" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <g fill="none" stroke="currentColor">
-                    <path d="M9 4.5H8c-2.357 0-3.536 0-4.268.732S3 7.143 3 9.5v5c0 2.357 0 3.535.732 4.268S5.643 19.5 8 19.5h1M9 6.476c0-2.293 0-3.44.707-4.067s1.788-.439 3.95-.062l2.33.407c2.394.417 3.591.626 4.302 1.504c.711.879.711 2.149.711 4.69v6.105c0 2.54 0 3.81-.71 4.689c-.712.878-1.91 1.087-4.304 1.505l-2.328.406c-2.162.377-3.243.565-3.95-.062S9 19.817 9 17.524z" />
-                    <path strokeLinecap="round" d="M12 11v2" />
-                  </g>
-                </SeoSVG>
-                <span className="text-xs">{`< exit`}</span>
-              </BaseButton>
-
-              <section className="text-right text-xl">
+              <section className="flex justify-between text-xl">
                 <p className="text-green-100">Tasks left: {shuffledArray.length}</p>
                 <p className="text-red-100">Errors: {errorArray.length}</p>
               </section>
@@ -305,13 +307,6 @@ const RepeaterTestPage = ({ translations, setIsTestStarted, translationsLength, 
           )}
         </div>
       </article>
-      {isExitModalOpen && (
-        <ModalConfirmExitTask
-          lang={lang}
-          confirmExit={() => handleEndTest()}
-          closeModal={() => closeExitModal()}
-        />
-      )}
     </>
   );
 };

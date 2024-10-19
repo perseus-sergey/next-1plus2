@@ -1,6 +1,7 @@
+import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 import ExerciseLayout from '@/components/ExerciseLayout/ExerciseLayout';
-import { createMaxNumArray } from '@/libs/utils';
-import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
+import { DEFAULT_META_OG, ESegments, MAIN_URL } from '@/models/main.model';
+import { breadCrumbList } from '@/models/math/breadCrumb.model';
 import { categoriesMap } from '@/models/math/math.model';
 import { MATH_TESTS } from '@/models/math/mathTests.model';
 import { EExerciseCategories, IPageData } from '@/models/math/types';
@@ -17,6 +18,8 @@ interface IModuleData {
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
+const { MATH, MATH_CATEGORY } = ESegments;
+
 export const generateMetadata = async ({
   params: { lang, cat, maxNum },
 }: IProps): Promise<Metadata> => {
@@ -24,7 +27,7 @@ export const generateMetadata = async ({
 
   const title = PAGE_DATA.metaLevel[lang].getTitle(maxNum);
   const description = PAGE_DATA.metaLevel[lang].getDescription(maxNum);
-  const path = `${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}/${maxNum}`;
+  const path = `${MATH}/${MATH_CATEGORY}/${cat}/${maxNum}`;
   const catObj = categoriesMap.get(cat);
   const canonicalNum = catObj ? catObj.exercise.max : 10;
 
@@ -40,7 +43,7 @@ export const generateMetadata = async ({
       url: `/${lang}/${path}`,
     },
     alternates: {
-      canonical: `/${lang}/${EUrlParams.MATH}/${EUrlParams.MATH_CATEGORY}/${cat}/${canonicalNum}`,
+      canonical: `/${lang}/${MATH}/${MATH_CATEGORY}/${cat}/${canonicalNum}`,
       languages: {
         en: `/${ELang.en}/${path}`,
         uk: `/${ELang.ua}/${path}`,
@@ -49,15 +52,22 @@ export const generateMetadata = async ({
   };
 };
 
-export const generateStaticParams = ({ params: { cat } }: IProps) => {
-  const catObj = categoriesMap.get(cat);
-  if (!catObj) return [{ [EUrlParams.MAX_NUM]: '100' }];
-
-  return createMaxNumArray(catObj.exercise).map((item) => ({ [EUrlParams.MAX_NUM]: `${item}` }));
-};
-
-export const dynamicParams = false;
-
 export default ({ params: { lang, cat, maxNum } }: IProps) => {
-  return <ExerciseLayout lang={lang} chosenMaxNum={+maxNum} cat={cat} />;
+  return (
+    <>
+      <BreadCrumbServer
+        lang={lang}
+        breadCrumbList={[
+          breadCrumbList.math,
+          breadCrumbList.mathCategory,
+          {
+            href: `${MATH}/${MATH_CATEGORY}/${cat}`,
+            title: categoriesMap.get(cat)?.[lang].title || '',
+          },
+          maxNum,
+        ]}
+      />
+      <ExerciseLayout lang={lang} chosenMaxNum={+maxNum} cat={cat} />
+    </>
+  );
 };

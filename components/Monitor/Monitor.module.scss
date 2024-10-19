@@ -3,11 +3,15 @@ $media_width_medium: 600px;
 $media_height_medium: 450px;
 
 .Monitor {
+  min-width: 300px;
+  max-width: 800px;
+  width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   position: relative;
   padding: 0 10px 12px;
+  margin: 0 auto;
   border-radius: 5px;
   border-bottom: 1px solid #222c44;
   background-color: #3c4d77;
@@ -16,25 +20,6 @@ $media_height_medium: 450px;
 
   @media screen and (orientation: portrait) {
     gap: 5%;
-  }
-}
-
-.monitorHeader {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.3rem;
-  padding: 0.3rem;
-  text-shadow: 1px 1px 1px #000000;
-
-  @media screen and (max-width: $media_width_medium), (max-height: $media_height_medium) {
-    font-size: 1rem;
-  }
-
-  .exsQuant {
-    color: rgba(var(--color-title-h1));
-  }
-  .mistakeQuant {
-    color: rgb(251 129 85);
   }
 }
 
@@ -62,14 +47,6 @@ $media_height_medium: 450px;
   border-radius: 4px;
   background-color: #2b3755;
   gap: 1vw;
-}
-
-.properAnswer * {
-  color: aquamarine !important;
-}
-
-.badAnswer * {
-  color: #f06d70 !important;
 }
 
 .minusPlus {
@@ -138,35 +115,6 @@ $media_height_medium: 450px;
       top,
       50px 0;
   }
-}
-
-.bigColumn {
-  font-size: 2em;
-  font-weight: bold;
-  margin-left: 12%;
-  transition: all 0.3s ease-in-out;
-}
-
-.displayExsButton {
-  color: white;
-  display: flex;
-  gap: 1rem;
-  padding-left: 5%;
-  border: none;
-  outline: none;
-  background: none;
-  font-family: inherit;
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
-
-  @media screen and (orientation: portrait) {
-    gap: 5%;
-  }
-}
-
-.smallExercise {
-  font-size: 0.4em;
-  transition: all 0.5s ease-in-out;
 }
 
 .clearButton {

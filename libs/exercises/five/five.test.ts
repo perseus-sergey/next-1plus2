@@ -1,6 +1,7 @@
 import { deepUniqueArraySize } from '@/libs/utils';
-import { categoriesMap, makeExerciseArray } from '../../../models/math/math.model';
+import { categoriesMap } from '../../../models/math/math.model';
 import { EExerciseCategories } from '@/models/math/types';
+import { makeExerciseArray } from '@/libs/math/math.controller';
 
 const cat = EExerciseCategories['equal-five'];
 const attempts = 100;
@@ -13,17 +14,17 @@ describe(`🚀 ~ Category: ${cat}`, () => {
   for (let maxN = start; maxN < max + 1; maxN += step) {
     const numExercisesInArray = Math.min(maxN, 10);
 
-    it(`array quantity should be equal ${numExercisesInArray}. \nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${numExercisesInArray}`, () => {
+    it(`array quantity should be equal ${numExercisesInArray}. \nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${numExercisesInArray}`, async () => {
       for (let index = 0; index < attempts; index++) {
-        const arr = makeExerciseArray(cat, maxN);
+        const arr = await makeExerciseArray(cat, maxN);
         // console.log(`🚀 ~ file: ${cat}.test ~ arr:`, arr);
         expect(arr.length).toEqual(numExercisesInArray);
       }
     });
 
-    it(`Max Number in every parts should be <= ${maxN}.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${numExercisesInArray}`, () => {
+    it(`Max Number in every parts should be <= ${maxN}.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexerciseQuant: ${numExercisesInArray}`, async () => {
       for (let index = 0; index < attempts; index++) {
-        const arr = makeExerciseArray(cat, maxN);
+        const arr = await makeExerciseArray(cat, maxN);
 
         arr.forEach((part) =>
           part.forEach((n) => {
@@ -38,9 +39,9 @@ describe(`🚀 ~ Category: ${cat}`, () => {
     const uniq = numExercisesInArray < maxN;
 
     if (uniq) {
-      it(`array parts SHOULD be unique.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexercisesInArray: ${numExercisesInArray}`, () => {
+      it(`array parts SHOULD be unique.\nTesting attempts: ${attempts}\nmaxNum: ${maxN}\nexercisesInArray: ${numExercisesInArray}`, async () => {
         for (let index = 0; index < attempts; index++) {
-          const arr = makeExerciseArray(cat, maxN);
+          const arr = await makeExerciseArray(cat, maxN);
           expect(arr.length).toEqual(deepUniqueArraySize(arr));
         }
       });

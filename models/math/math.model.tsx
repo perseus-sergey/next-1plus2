@@ -1,15 +1,8 @@
 import { ELang } from '@models/types';
-import { setArrCompos } from '@/libs/exercises/composition/composition';
-import setArrEqual from '@/libs/exercises/equal/equal';
-import setArrFive from '@/libs/exercises/five/five';
-import { setArrInequal } from '@/libs/exercises/inequal/inequal';
-import { NUMBER_OF_EXERCISES } from '@/libs/exercises/math';
-import { setArrDivision, setArrMultiply } from '@/libs/exercises/multiply/multiply';
-import { setArrOverTen } from '@/libs/exercises/overTen/overTen';
-import setArrPair from '@/libs/exercises/pairs/pairs';
-import setArrSequence from '@/libs/exercises/sequence/sequence';
-import { setArrTen } from '@/libs/exercises/ten/ten';
 import { EExerciseCategories, IExerciseParams } from './types';
+
+export const NUMBER_OF_EXERCISES = 10;
+export const HARD_LEVELS_IN_ARRAY = 2;
 
 export const keyboardNumKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 export const keyboardInequalKeys = ['<', '=', '>'];
@@ -148,37 +141,3 @@ export const categoriesMap: TCatMap = new Map([
     },
   ],
 ]);
-
-export const makeExerciseArray = (
-  category: EExerciseCategories,
-  maxNum = 100,
-  numOfExs = NUMBER_OF_EXERCISES
-): (string | number)[][] => {
-  switch (category) {
-    case EExerciseCategories['equality']:
-      return setArrEqual(maxNum, numOfExs);
-    case EExerciseCategories['sequence']:
-      return setArrSequence(maxNum, numOfExs);
-    case EExerciseCategories['pairs']:
-      return setArrPair(maxNum, numOfExs);
-    case EExerciseCategories['link-equality']:
-      return setArrEqual(maxNum, numOfExs);
-    case EExerciseCategories['inequality']:
-      return setArrInequal(maxNum, numOfExs);
-    case EExerciseCategories['equal-ten']:
-      return setArrTen(maxNum, numOfExs);
-    case EExerciseCategories['composition']:
-      return setArrCompos(maxNum, numOfExs);
-    case EExerciseCategories['equal-five']:
-      return setArrFive(maxNum, numOfExs);
-    case EExerciseCategories['equal-over-ten']:
-      return setArrOverTen(maxNum, numOfExs);
-    case EExerciseCategories['multiply']:
-      return setArrMultiply(maxNum, numOfExs);
-    case EExerciseCategories['division']:
-      return setArrDivision(maxNum, numOfExs);
-
-    default:
-      return setArrEqual(maxNum, numOfExs);
-  }
-};

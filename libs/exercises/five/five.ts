@@ -1,5 +1,5 @@
 import { createMaxNumArray } from '@/libs/utils';
-import { NUMBER_OF_EXERCISES } from '../math';
+import { NUMBER_OF_EXERCISES } from '@/models/math/math.model';
 
 const getArr = (maxNum: number) =>
   createMaxNumArray({ start: 0, max: maxNum - 5, step: 5 }).reduce((acc: number[][], current) => {
@@ -9,7 +9,7 @@ const getArr = (maxNum: number) =>
   }, []);
 
 //  => [n1, n2, res]
-const setArrFive = (maxNum: number, numOfExs = NUMBER_OF_EXERCISES): number[][] => {
+export const setArrFive = (maxNum: number, numOfExs = NUMBER_OF_EXERCISES): number[][] => {
   let arr = getArr(maxNum);
 
   while (arr.length < numOfExs) {
@@ -20,5 +20,3 @@ const setArrFive = (maxNum: number, numOfExs = NUMBER_OF_EXERCISES): number[][] 
   if (arr.length > 9) arr.length = Math.min(10, numOfExs);
   return arr;
 };
-
-export default setArrFive;

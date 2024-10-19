@@ -1,18 +1,18 @@
 import { MetadataRoute } from 'next';
 import { DEFAULT_LANG, ELang } from '@/models/types';
 import { getFormattedDateStrYearFirst } from '@/libs/dates/dates';
-import { EUrlParams, MAIN_URL } from '@/models/main.model';
+import { ESegments, MAIN_URL } from '@/models/main.model';
 import { categoriesMap } from '@/models/math/math.model';
 import { EExerciseCategories } from '@/models/math/types';
 
 const BASE = process.env.BASE_URL || MAIN_URL;
 const { ua, en } = ELang;
-const { REPEATER, HANGMAN, MATH, MATH_CATEGORY, MATH_LEVEL, ABOUT } = EUrlParams;
+const { REPEATER, HANGMAN, MATH, MATH_CATEGORY, MATH_LEVEL, ABOUT } = ESegments;
 
 type TChangeFrequency = 'always' | 'never' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
 
 interface IItemData {
-  startPath: (EUrlParams | EExerciseCategories | number | '')[];
+  startPath: (ESegments | EExerciseCategories | number | '')[];
   changeFrequency?: TChangeFrequency;
   addedPath?: string;
   cpuIsDate?: boolean;

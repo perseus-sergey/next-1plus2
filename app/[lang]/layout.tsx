@@ -1,11 +1,11 @@
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleTagManager } from '@next/third-parties/google';
+import { Inter, Lobster } from 'next/font/google';
 
 import type { Metadata } from 'next';
 import { ELang } from '@models/types';
-import { Inter, Lobster } from 'next/font/google';
 import FlyingDigits from '@/components/FlyingDigits/FlyingDigits';
-import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
+import { DEFAULT_META_OG, ESegments, MAIN_URL } from '@/models/main.model';
 import { Header } from '@/components/Header/Header';
 import { getELangKey } from '@/libs/validSearchParam';
 import { DEFAULT_META_DATA } from '@/models/mainMeta.model';
@@ -32,7 +32,7 @@ const BASE_URL = process.env.BASE_URL || MAIN_URL;
 const GTM_KEY = process.env.GTM_KEY || '';
 
 export function generateStaticParams() {
-  return Object.values(ELang).map((l) => ({ [EUrlParams.LANG]: l }));
+  return Object.values(ELang).map((l) => ({ [ESegments.DYNAMIC_LANG]: l }));
 }
 
 export const dynamicParams = false;
@@ -71,7 +71,7 @@ export default function RootLayout({ children, params }: IProps) {
       >
         <Header lang={lang} />
 
-        <main className="max-w-screen-lg flex-1 flex flex-col justify-around items-center p-1 sm:p-4">
+        <main className="max-w-screen-lg w-full flex-1 flex flex-col justify-start items-center p-1 sm:p-4">
           {children}
         </main>
 

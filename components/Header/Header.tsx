@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import BreadCrumb from '../BreadCrumb/BreadCrumb';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { ELang } from '@/models/types';
 import SeoLink from '../SeoLink';
@@ -7,7 +6,7 @@ import SeoLink from '../SeoLink';
 import logoImg from 'public/img/1plus2-logo_w180.png';
 
 export const Header = ({ lang }: { lang: ELang }) => (
-  <header className="flex justify-between w-full max-w-screen-xl p-1 sm:p-4">
+  <header className="flex justify-between w-full max-w-screen-xl p-2 sm:p-4">
     <SeoLink
       title={
         lang === ELang.ua ? 'Перейти на домашню сторінку сайту' : 'Go to the home page of the site'
@@ -23,7 +22,7 @@ export const Header = ({ lang }: { lang: ELang }) => (
         }
       />
     </SeoLink>
-    <BreadCrumb homeElement={'Home'} isCapitalizeLinks />
+    {/* <BreadCrumb homeElement={'Home'} isCapitalizeLinks /> */}
     <LanguageSwitcher />
   </header>
 );

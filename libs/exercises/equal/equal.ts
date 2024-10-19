@@ -1,5 +1,6 @@
 import { createArray } from '@/libs/utils';
-import { HARD_LEVELS_IN_ARRAY, NUMBER_OF_EXERCISES, isWrongPushedIntoArray } from '../math';
+import { isWrongPushedIntoArray } from '../math';
+import { HARD_LEVELS_IN_ARRAY, NUMBER_OF_EXERCISES } from '@/models/math/math.model';
 
 const makeRandForEqual = (maxN = 100): (string | number)[] => {
   const randN1 = (): number => {
@@ -34,7 +35,10 @@ const makeExsParts = (
   return exerciseParts;
 };
 
-const setArrEqual = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): (string | number)[][] => {
+export const setArrEqual = (
+  maxNum = 100,
+  numOfExs = NUMBER_OF_EXERCISES
+): (string | number)[][] => {
   const maxNumOfLevel = Math.floor(maxNum / HARD_LEVELS_IN_ARRAY);
   const quantExsPerLevel = Math.floor(numOfExs / HARD_LEVELS_IN_ARRAY);
 
@@ -50,5 +54,3 @@ const setArrEqual = (maxNum = 100, numOfExs = NUMBER_OF_EXERCISES): (string | nu
   }, []);
   return arrTest;
 };
-
-export default setArrEqual;

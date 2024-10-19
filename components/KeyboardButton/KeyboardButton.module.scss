@@ -40,22 +40,24 @@ $keyBgColorDefault: $keyBgColorBlue;
 }
 
 .KeyboardButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   background-image: linear-gradient(rgb(255 58 126), rgb(251 0 86));
   @include fontColor(rgb(60, 138, 221));
   font-family: var(--font-lobster);
-  font-size: 5.5vw;
-  border-radius: 50%;
-  min-width: 1.25em;
+  font-size: 2.5rem;
+  border-radius: 999rem;
+  width: 3rem;
+  height: 3rem;
   outline: none;
   border: none;
 
-  @media screen and (orientation: portrait) {
-    font-size: 9vw;
-  }
-
-  @media (height < 500px) and (width > 500px) {
-    font-size: 4.5vw;
+  @media (width > 640px) {
+    font-size: 3rem;
+    width: 4rem;
+    height: 4rem;
   }
 
   &.shake {

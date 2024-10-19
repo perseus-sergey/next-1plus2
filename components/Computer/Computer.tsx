@@ -1,4 +1,3 @@
-import styles from './Computer.module.scss';
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import Keyboard from '../Keyboard/Keyboard';
 import { Title } from '../Title/Title';
@@ -43,7 +42,7 @@ const Computer = ({
   return (
     <>
       <Title name={`${capitalizedWord(getCatFromMap(category, language).title)}`} />
-      <section className={styles.Computer} data-testid="Computer">
+      <section className="text-white w-full space-y-8" data-testid="Computer">
         <Monitor
           exerciseParts={exerciseParts}
           userAnswer={answerElementValue}

@@ -1,6 +1,3 @@
-$media_width_medium: 600px;
-$media_height_medium: 450px;
-
 .exercisePart {
   display: flex;
   flex-direction: column;
@@ -24,29 +21,6 @@ $media_height_medium: 450px;
   100% {
     transform: scale(1);
   }
-}
-
-.exsMain {
-  font-size: 3.5em;
-
-  @media screen and (max-width: $media_width_medium), (max-height: $media_height_medium) {
-    font-size: 2.5em;
-  }
-}
-
-.exsHint {
-  font-size: 1.5em;
-  color: #38d6f3;
-  display: block;
-  white-space: nowrap;
-
-  @media screen and (max-width: $media_width_medium), (max-height: $media_height_medium) {
-    font-size: 1em;
-  }
-}
-
-.exsAskPart {
-  color: #3eaef2;
 }
 
 .overDropZone {

@@ -1,6 +1,6 @@
 import { createArray } from '@/libs/utils';
-import setArrEqual from '../equal/equal';
 import { isWrongPushedIntoArray } from '../math';
+import { setArrEqual } from '../equal/equal';
 
 const rightAnswIneq = (sideL: number, sideR: number, equal = sideL - sideR) =>
   equal > 0 ? '>' : !equal ? '=' : '<';

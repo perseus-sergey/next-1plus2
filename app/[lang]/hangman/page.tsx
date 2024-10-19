@@ -1,8 +1,9 @@
+import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 import HangmanPage from '@/components/HangmanPage/HangmanPage';
 import HangmanRules from '@/components/HangmanPage/HangmanRules';
 import { Title } from '@/components/Title/Title';
 import { META_HANGMAN } from '@/models/hangman.model';
-import { DEFAULT_META_OG, EUrlParams, MAIN_URL } from '@/models/main.model';
+import { DEFAULT_META_OG, ESegments, MAIN_URL } from '@/models/main.model';
 import { ELang } from '@models/types';
 import { Metadata } from 'next';
 
@@ -20,13 +21,13 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
       ...DEFAULT_META_OG,
       title: META_HANGMAN[lang].title,
       description: META_HANGMAN[lang].description,
-      url: `/${lang}/${EUrlParams.HANGMAN}`,
+      url: `/${lang}/${ESegments.HANGMAN}`,
     },
     alternates: {
-      canonical: `/${lang}/${EUrlParams.HANGMAN}`,
+      canonical: `/${lang}/${ESegments.HANGMAN}`,
       languages: {
-        en: `/${ELang.en}/${EUrlParams.HANGMAN}`,
-        uk: `/${ELang.ua}/${EUrlParams.HANGMAN}`,
+        en: `/${ELang.en}/${ESegments.HANGMAN}`,
+        uk: `/${ELang.ua}/${ESegments.HANGMAN}`,
       },
     },
   };
@@ -34,11 +35,14 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
 
 export default ({ params }: IProps) => {
   const { lang } = params;
+  const title = lang === ELang.ua ? '«Кат»' : '«Hangman»';
 
   return (
     <>
+      <BreadCrumbServer lang={lang} breadCrumbList={[title]} />
+
       <div className="flex gap-2">
-        <Title name={lang === ELang.ua ? '«Кат»' : '«Hangman»'} />
+        <Title name={title} />
         <HangmanRules lang={lang} />
       </div>
       <HangmanPage lang={lang} />
