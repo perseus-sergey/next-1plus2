@@ -37,10 +37,10 @@ export const DictionaryPage = ({ translations, setTranslations, startTest, lang 
   const [newTranscription, setNewTranscription] = useState('');
   const [newUkrainian, setNewUkrainian] = useState('');
 
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Модальне вікно для підтвердження видалення
-  const [deleteId, setDeleteId] = useState<number | 'all' | null>(null); // ID рядка, який будемо видаляти
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | 'all' | null>(null);
 
-  const [generatedData, setGeneratedData] = useState<string[][] | null>([]); // Модальне вікно для підтвердження видалення
+  const [generatedData, setGeneratedData] = useState<string[][] | null>([]);
   const router = useRouter();
 
   const openModal = (translation?: ITranslation) => {

@@ -10,6 +10,7 @@ export enum EExerciseCategories {
   'equal-ten' = 'equal-ten',
   'equal-five' = 'equal-five',
   'equal-over-ten' = 'equal-over-ten',
+  'equal-over-hundred' = 'equal-over-hundred',
   'multiply' = 'multiply',
   'division' = 'division',
   'level' = 'level',

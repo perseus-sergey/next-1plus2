@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FieldError, FieldErrorsImpl, Merge, useForm, UseFormRegister } from 'react-hook-form';
+
 import { BaseButton } from '../TextButton/BaseButton';
 import { generateAiText } from '@/libs/repeater/repeater.controller';
-import { z } from 'zod';
-import { FieldError, FieldErrorsImpl, Merge, useForm, UseFormRegister } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ETaskType, IGenerateAiSettings, LANGUAGES, promptModel } from '@/models/repeater.model';
 import { SeoSVG } from '../Svg/SeoSVG';
 import { ModalWrapper } from '../Modals/ModalWrapper';

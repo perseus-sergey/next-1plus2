@@ -10,6 +10,7 @@ export const MATH_TESTS = {
   [EExerciseCategories['equal-ten']]: () => import('./equal-ten.model'),
   [EExerciseCategories['equal-five']]: () => import('./equal-five.model'),
   [EExerciseCategories['equal-over-ten']]: () => import('./equal-over-ten.model'),
+  [EExerciseCategories['equal-over-hundred']]: () => import('./equal-over-hundred.model'),
   [EExerciseCategories.multiply]: () => import('./multiply.model'),
   [EExerciseCategories.division]: () => import('./division.model'),
   [EExerciseCategories.level]: () => import('./level.model'),

@@ -45,6 +45,10 @@ export const makeExerciseArray = async (
       const { setArrOverTen } = await import('@/libs/exercises/overTen/overTen');
       return setArrOverTen(maxNum, numOfExs);
 
+    case EExerciseCategories['equal-over-hundred']:
+      const { setArrOverHundred } = await import('@/libs/exercises/overHundred/overHundred');
+      return setArrOverHundred(numOfExs);
+
     case EExerciseCategories['multiply']:
       const { setArrMultiply } = await import('@/libs/exercises/multiply/multiply');
       return setArrMultiply(maxNum, numOfExs);

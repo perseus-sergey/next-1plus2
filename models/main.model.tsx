@@ -1,12 +1,8 @@
 export const MAIN_URL = 'https://www.1plus2.fun';
 
 // ================================================
-// change static imports to dynamic
-// change breadcrumbs
-// repeater - remove ... after generated tasks
 // add aria-label and titles` to all buttons
 // translate all
-// add logo
 // make footer with about-us and all pages
 // split all modules
 // seolinks

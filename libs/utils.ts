@@ -18,7 +18,7 @@ export const deepUniqueArray = <T>(arr: T[][]) =>
   Array.from(new Set(arr.map((mapItem) => JSON.stringify(mapItem))), (jItem) => JSON.parse(jItem));
 
 export const getExerciseQuantity = ({ start = 10, max = 100, step = 10 }) =>
-  Math.floor((max + step - start) / step);
+  Math.floor((max + step - start) / step) || 1;
 
 export const createMaxNumArray = ({ start = 10, max = 100, step = 10 }) =>
   createArray(getExerciseQuantity({ start, max, step })).map((_, i) => i * step + start);

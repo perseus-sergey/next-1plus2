@@ -108,6 +108,17 @@ export const categoriesMap: TCatMap = new Map([
     },
   ],
   [
+    EExerciseCategories['equal-over-hundred'],
+    {
+      [ELang.en]: { title: 'Hundreds', description: '123 + 45' },
+      [ELang.ua]: { title: 'Сотні', description: '123 + 45' },
+      exercise: { start: 1000, max: 1000, step: 0 },
+      equalMark: '=',
+      keyboardKeys: keyboardNumKeys,
+      isColumn: true,
+    },
+  ],
+  [
     EExerciseCategories['multiply'],
     {
       [ELang.en]: { title: 'Multiply', description: '2 x 3' },

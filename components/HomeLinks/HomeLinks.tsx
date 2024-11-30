@@ -1,16 +1,22 @@
-import Link from 'next/link';
+import Image from 'next/image';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+
 import { EMessageNames, getTitleFromMap } from '@/libs/langMessages';
 import { ESegments } from '@/models/main.model';
 import { ELang } from '@/models/types';
-import Image from 'next/image';
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 import mathLinkImg from 'public/img/math_160.jpg';
 import hangmanLinkImg from 'public/img/hangman-page_160.jpg';
 import repeaterLinkImg from 'public/img/repeater_160.jpg';
 import LazyAppearing from '../intersection/LazyAppearing';
+import SeoLink from '../SeoLink';
+import { MAIN_PAGE_LANG } from '@/models/mainPage.model';
 
 const { MATH, REPEATER, HANGMAN } = ESegments;
+
+const {
+  links: { mathLink, hangmanLink, langLearningLink },
+} = MAIN_PAGE_LANG;
 
 const HomeLinks = ({ lang }: { lang: ELang }) => (
   <section className="h-60 flex justify-evenly flex-wrap gap-4 w-full px-2 sm:px-4 whitespace-nowrap">
@@ -18,11 +24,8 @@ const HomeLinks = ({ lang }: { lang: ELang }) => (
       <LinkToSegment
         imgSrc={mathLinkImg}
         href={`/${lang}/${MATH}`}
-        alt={
-          lang === ELang.ua
-            ? 'Ілюстрація яскравої математичної сцени з числами, символами та геометричними фігурами.'
-            : 'Illustration of a colorful math scene with numbers, symbols, and geometric shapes.'
-        }
+        alt={mathLink.imgAlt[lang]}
+        ariaLabel={mathLink.ariaLabel[lang]}
         linkText={getTitleFromMap(EMessageNames.BTN_MATH, lang)}
       />
     </LazyAppearing>
@@ -31,11 +34,8 @@ const HomeLinks = ({ lang }: { lang: ELang }) => (
       <LinkToSegment
         imgSrc={hangmanLinkImg}
         href={`/${lang}/${HANGMAN}`}
-        alt={
-          lang === ELang.ua
-            ? `Ілюстрація веселої гри 'Кат' із грайливими літерами та врятованим персонажем.`
-            : 'Illustration of a fun and friendly Hangman game with playful letters and a saved character.'
-        }
+        alt={hangmanLink.imgAlt[lang]}
+        ariaLabel={hangmanLink.ariaLabel[lang]}
         linkText={lang === ELang.ua ? 'Гра "Кат"' : '"Hangman" Game'}
       />
     </LazyAppearing>
@@ -44,11 +44,8 @@ const HomeLinks = ({ lang }: { lang: ELang }) => (
       <LinkToSegment
         imgSrc={repeaterLinkImg}
         href={`/${lang}/${REPEATER}`}
-        alt={
-          lang === ELang.ua
-            ? 'Ілюстрація веселої сцени вивчення мов із бульбашками тексту та дружнім AI-помічником.'
-            : 'Illustration of a playful language learning scene with speech bubbles and a friendly AI assistant.'
-        }
+        alt={langLearningLink.imgAlt[lang]}
+        ariaLabel={langLearningLink.ariaLabel[lang]}
         linkText={lang === ELang.ua ? 'Вивчання мов' : 'Learning languages'}
       />
     </LazyAppearing>
@@ -60,21 +57,27 @@ const LinkToSegment = ({
   alt,
   linkText,
   imgSrc,
+  ariaLabel,
 }: {
   href: string;
   alt: string;
+  ariaLabel: string;
   linkText: string;
   imgSrc: StaticImport;
 }) => {
   return (
-    <Link href={href} className="flex flex-col items-center gap-2 text-zinc-300 text-2xl">
+    <SeoLink
+      title={ariaLabel}
+      href={href}
+      className="flex flex-col items-center gap-2 text-zinc-300 text-2xl"
+    >
       <Image
         className="rounded-full border-4 border-zinc-300 w-36 lg:hover:w-40 duration-300"
         src={imgSrc}
         alt={alt}
       />
       {linkText}
-    </Link>
+    </SeoLink>
   );
 };
 
