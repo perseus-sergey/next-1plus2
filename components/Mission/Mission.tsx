@@ -10,7 +10,7 @@ interface MissionProps {
 
 const Mission = ({ lang }: MissionProps) => {
   return (
-    <div className="flex justify-evenly flex-wrap gap-8 w-full whitespace-nowrap">
+    <div className="m-4 flex justify-evenly flex-wrap gap-8 w-full whitespace-nowrap">
       <Link href={`/${lang}/${ESegments.MATH}/${ESegments.MATH_LEVEL}`}>
         <TextButton isLink>{getTitleFromMap(EMessageNames.BTN_LEVELS, lang)}</TextButton>
       </Link>
