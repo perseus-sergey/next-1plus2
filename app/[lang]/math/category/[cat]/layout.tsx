@@ -7,7 +7,7 @@ import { categoriesMap } from '@/models/math/math.model';
 
 export interface IProps {
   children?: React.ReactNode;
-  params: Promise<{ lang: ELang; cat: EExerciseCategories }>;
+  params: Promise<{ lang: string; cat: string }>;
 }
 
 interface IModuleData {
@@ -21,22 +21,25 @@ export const generateMetadata = async (props: IProps): Promise<Metadata> => {
 
   const { lang, cat } = params;
 
-  const { PAGE_DATA }: IModuleData = await MATH_TESTS[EExerciseCategories[cat]]();
+  const typedLang = lang as ELang;
+  const typedCat = cat as EExerciseCategories;
+
+  const { PAGE_DATA }: IModuleData = await MATH_TESTS[EExerciseCategories[typedCat]]();
   const { MATH, MATH_CATEGORY } = ESegments;
 
   return {
     metadataBase: new URL(BASE_URL),
-    ...PAGE_DATA.meta[lang],
+    ...PAGE_DATA.meta[typedLang],
     openGraph: {
       ...DEFAULT_META_OG,
-      ...PAGE_DATA.meta[lang],
-      url: `/${lang}/${MATH}/${MATH_CATEGORY}/${cat}`,
+      ...PAGE_DATA.meta[typedLang],
+      url: `/${lang}/${MATH}/${MATH_CATEGORY}/${typedCat}`,
     },
     alternates: {
-      canonical: `/${lang}/${MATH}/${MATH_CATEGORY}/${cat}`,
+      canonical: `/${lang}/${MATH}/${MATH_CATEGORY}/${typedCat}`,
       languages: {
-        en: `/${ELang.en}/${MATH}/${MATH_CATEGORY}/${cat}`,
-        uk: `/${ELang.ua}/${MATH}/${MATH_CATEGORY}/${cat}`,
+        en: `/${ELang.en}/${MATH}/${MATH_CATEGORY}/${typedCat}`,
+        uk: `/${ELang.ua}/${MATH}/${MATH_CATEGORY}/${typedCat}`,
       },
     },
   };

@@ -12,7 +12,7 @@ import { DEFAULT_META_DATA } from '@/models/mainMeta.model';
 
 interface IProps {
   children?: React.ReactNode;
-  params: Promise<{ lang: ELang }>;
+  params: Promise<{ lang: string }>;
 }
 
 const lobsterFont = Lobster({
@@ -22,11 +22,7 @@ const lobsterFont = Lobster({
   variable: '--font-lobster',
 });
 
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
+const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' });
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 const GTM_KEY = process.env.GTM_KEY || '';
@@ -50,13 +46,7 @@ export const generateMetadata = async (props: IProps): Promise<Metadata> => {
       description: DEFAULT_META_DATA[lang].description,
       url: `/${lang}`,
     },
-    alternates: {
-      canonical: `/${lang}`,
-      languages: {
-        en: `/${ELang.en}`,
-        uk: `/${ELang.ua}`,
-      },
-    },
+    alternates: { canonical: `/${lang}`, languages: { en: `/${ELang.en}`, uk: `/${ELang.ua}` } },
   };
 };
 
