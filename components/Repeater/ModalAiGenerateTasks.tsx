@@ -17,7 +17,12 @@ interface IGenerateAiProps {
 }
 
 type TValidFieldNames =
-  'level' | 'quantity' | 'taskType' | 'topic' | 'languageAnswer' | 'languageAsk';
+  | 'level'
+  | 'quantity'
+  | 'taskType'
+  | 'topic'
+  | 'languageAnswer'
+  | 'languageAsk';
 
 const taskTypes = Object.values(ETaskType) as [ETaskType, ...ETaskType[]];
 
