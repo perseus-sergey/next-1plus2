@@ -8,12 +8,16 @@ import { ELang } from '@models/types';
 import { Metadata } from 'next';
 
 export interface IProps {
-  params: { lang: ELang };
+  params: Promise<{ lang: ELang }>;
 }
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
+
+  const { lang } = params;
+
   return {
     metadataBase: new URL(BASE_URL),
     ...META_HANGMAN[lang],
@@ -33,7 +37,8 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
   };
 };
 
-export default ({ params }: IProps) => {
+export default async (props: IProps) => {
+  const params = await props.params;
   const { lang } = params;
   const title = lang === ELang.ua ? '«Кат»' : '«Hangman»';
 

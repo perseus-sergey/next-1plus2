@@ -10,14 +10,17 @@ import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 import { breadCrumbList } from '@/models/math/breadCrumb.model';
 
 export interface IProps {
-  params: { lang: ELang; maxNum: string };
+  params: Promise<{ lang: ELang; maxNum: string }>;
 }
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
 const { MATH, MATH_LEVEL } = ESegments;
 
-export const generateMetadata = ({ params: { lang, maxNum } }: IProps): Metadata => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
+  const { lang, maxNum } = params;
+
   const title = PAGE_DATA.metaLevel[lang].getTitle(maxNum);
   const description = PAGE_DATA.metaLevel[lang].getDescription(maxNum);
   const path = `${ESegments.MATH}/${ESegments.MATH_LEVEL}/${maxNum}`;
@@ -57,7 +60,11 @@ export const generateMetadata = ({ params: { lang, maxNum } }: IProps): Metadata
 
 // export const dynamicParams = false;
 
-export default ({ params: { lang, maxNum } }: IProps) => {
+export default async (props: IProps) => {
+  const params = await props.params;
+
+  const { lang, maxNum } = params;
+
   return (
     <>
       <BreadCrumbServer

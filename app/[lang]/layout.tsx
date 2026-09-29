@@ -12,7 +12,7 @@ import { DEFAULT_META_DATA } from '@/models/mainMeta.model';
 
 interface IProps {
   children?: React.ReactNode;
-  params: { lang: ELang };
+  params: Promise<{ lang: ELang }>;
 }
 
 const lobsterFont = Lobster({
@@ -37,7 +37,8 @@ export function generateStaticParams() {
 
 export const dynamicParams = false;
 
-export const generateMetadata = ({ params }: IProps): Metadata => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
   const lang = getELangKey(params.lang);
 
   return {
@@ -59,7 +60,11 @@ export const generateMetadata = ({ params }: IProps): Metadata => {
   };
 };
 
-export default function RootLayout({ children, params }: IProps) {
+export default async function RootLayout(props: IProps) {
+  const params = await props.params;
+
+  const { children } = props;
+
   const lang = getELangKey(params.lang);
 
   return (

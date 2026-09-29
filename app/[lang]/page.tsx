@@ -9,10 +9,11 @@ import { MAIN_PAGE_LANG } from '@/models/mainPage.model';
 
 const { titleH1, imgMainAlt } = MAIN_PAGE_LANG;
 export interface IMathPageProps {
-  params: { lang: ELang };
+  params: Promise<{ lang: ELang }>;
 }
 
-const Page = ({ params }: IMathPageProps) => {
+const Page = async (props: IMathPageProps) => {
+  const params = await props.params;
   const { lang } = params;
 
   return (

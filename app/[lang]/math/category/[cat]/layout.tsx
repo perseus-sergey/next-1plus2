@@ -7,7 +7,7 @@ import { categoriesMap } from '@/models/math/math.model';
 
 export interface IProps {
   children?: React.ReactNode;
-  params: { lang: ELang; cat: EExerciseCategories };
+  params: Promise<{ lang: ELang; cat: EExerciseCategories }>;
 }
 
 interface IModuleData {
@@ -16,7 +16,11 @@ interface IModuleData {
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-export const generateMetadata = async ({ params: { lang, cat } }: IProps): Promise<Metadata> => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
+
+  const { lang, cat } = params;
+
   const { PAGE_DATA }: IModuleData = await MATH_TESTS[EExerciseCategories[cat]]();
   const { MATH, MATH_CATEGORY } = ESegments;
 

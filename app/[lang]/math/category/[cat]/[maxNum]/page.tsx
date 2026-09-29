@@ -9,7 +9,7 @@ import { ELang } from '@models/types';
 import { Metadata } from 'next';
 
 export interface IProps {
-  params: { lang: ELang; cat: EExerciseCategories; maxNum: string };
+  params: Promise<{ lang: ELang; cat: EExerciseCategories; maxNum: string }>;
 }
 
 interface IModuleData {
@@ -20,9 +20,9 @@ const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
 const { MATH, MATH_CATEGORY } = ESegments;
 
-export const generateMetadata = async ({
-  params: { lang, cat, maxNum },
-}: IProps): Promise<Metadata> => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
+  const { lang, cat, maxNum } = params;
   const { PAGE_DATA }: IModuleData = await MATH_TESTS[EExerciseCategories[cat]]();
 
   const title = PAGE_DATA.metaLevel[lang].getTitle(maxNum);
@@ -36,23 +36,19 @@ export const generateMetadata = async ({
     title,
     description,
     keywords: PAGE_DATA.metaLevel[lang].getKeywords(maxNum),
-    openGraph: {
-      ...DEFAULT_META_OG,
-      title,
-      description,
-      url: `/${lang}/${path}`,
-    },
+    openGraph: { ...DEFAULT_META_OG, title, description, url: `/${lang}/${path}` },
     alternates: {
       canonical: `/${lang}/${MATH}/${MATH_CATEGORY}/${cat}/${canonicalNum}`,
-      languages: {
-        en: `/${ELang.en}/${path}`,
-        uk: `/${ELang.ua}/${path}`,
-      },
+      languages: { en: `/${ELang.en}/${path}`, uk: `/${ELang.ua}/${path}` },
     },
   };
 };
 
-export default ({ params: { lang, cat, maxNum } }: IProps) => {
+export default async (props: IProps) => {
+  const params = await props.params;
+
+  const { lang, cat, maxNum } = params;
+
   return (
     <>
       <BreadCrumbServer

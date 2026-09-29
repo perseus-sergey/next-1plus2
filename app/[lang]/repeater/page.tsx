@@ -5,12 +5,16 @@ import { META_REPEATER } from '@/models/repeater.model';
 import { Metadata } from 'next';
 
 interface IProps {
-  params: { lang: ELang };
+  params: Promise<{ lang: ELang }>;
 }
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
+
+  const { lang } = params;
+
   return {
     metadataBase: new URL(BASE_URL),
     ...META_REPEATER[lang],
@@ -30,6 +34,10 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
   };
 };
 
-const Page = ({ params: { lang } }: IProps) => <RepeaterPage lang={lang} />;
+const Page = async (props: IProps) => {
+  const params = await props.params;
+  const { lang } = params;
 
+  return <RepeaterPage lang={lang} />;
+};
 export default Page;

@@ -10,12 +10,13 @@ import { getELangKey } from '@/libs/validSearchParam';
 import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 
 interface IProps {
-  params: { lang: ELang };
+  params: Promise<{ lang: ELang }>;
 }
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-export const generateMetadata = ({ params }: IProps): Metadata => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
   const lang = getELangKey(params.lang);
 
   return {
@@ -37,7 +38,8 @@ export const generateMetadata = ({ params }: IProps): Metadata => {
   };
 };
 
-export default function Page({ params }: IProps) {
+export default async function Page(props: IProps) {
+  const params = await props.params;
   const lang = getELangKey(params.lang);
 
   return (

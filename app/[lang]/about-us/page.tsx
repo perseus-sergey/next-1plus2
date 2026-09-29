@@ -9,12 +9,15 @@ import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 import { breadCrumbList } from '@/models/math/breadCrumb.model';
 
 interface IProps {
-  params: { lang: ELang };
+  params: Promise<{ lang: ELang }>;
 }
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
+  const { lang } = params;
+
   return {
     metadataBase: new URL(BASE_URL),
     ...META_ABOUT[lang],
@@ -26,15 +29,16 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
     },
     alternates: {
       canonical: `/${lang}/${ESegments.ABOUT}`,
-      languages: {
-        en: `/${ELang.en}/${ESegments.ABOUT}`,
-        uk: `/${ELang.ua}/${ESegments.ABOUT}`,
-      },
+      languages: { en: `/${ELang.en}/${ESegments.ABOUT}`, uk: `/${ELang.ua}/${ESegments.ABOUT}` },
     },
   };
 };
 
-const Page = ({ params: { lang } }: IProps) => {
+const Page = async (props: IProps) => {
+  const params = await props.params;
+
+  const { lang } = params;
+
   return (
     <>
       <BreadCrumbServer lang={lang} breadCrumbList={[breadCrumbList.aboutUs.title[lang]]} />
