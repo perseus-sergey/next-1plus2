@@ -8,10 +8,14 @@ import { breadCrumbList } from '@/models/math/breadCrumb.model';
 import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 
 export interface IPage {
-  params: { lang: ELang; cat: EExerciseCategories };
+  params: Promise<{ lang: ELang; cat: EExerciseCategories }>;
 }
 
-export default async ({ params: { lang, cat } }: IPage) => {
+export default async (props: IPage) => {
+  const params = await props.params;
+
+  const { lang, cat } = params;
+
   const { PAGE_DATA } = await MATH_TESTS[EExerciseCategories[cat]]();
 
   const catName = categoriesMap.get(cat)?.[lang].title;

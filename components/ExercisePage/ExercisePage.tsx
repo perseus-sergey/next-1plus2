@@ -11,17 +11,18 @@ import { useMySound } from '@/libs/hooks/useSound';
 import CatComplete from '../CatComplete/CatComplete';
 import { useRouter } from 'next/navigation';
 import { useExerciseParams } from '@/libs/hooks/useExerciseParams';
-import { PlayFunction } from 'use-sound/dist/types';
 import EndLevel from '../EndLevel/EndLevel';
 import { useLangProvider } from '@/libs/context/LangProvider';
 import { useDragProvider } from '@/libs/context/DragProvider';
 import { EExerciseCategories, IExerciseParams, QUESTION_MARK } from '@/models/math/types';
 import { makeExerciseArray } from '@/libs/math/math.controller';
 
+type PlayFunction = ReturnType<typeof useMySound>['audioKey'];
+
 export enum EIsRightAnswer {
-  '_',
-  'RIGHT',
-  'BAD',
+  _,
+  RIGHT,
+  BAD,
 }
 
 export interface IExerciseComponentProps {

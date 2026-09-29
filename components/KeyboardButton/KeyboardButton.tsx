@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Touch, TouchEvent, useEffect, useReducer, useState } from 'react';
+import { KEY_BACKGROUNDS, KEY_COLORS } from './KeyboardButton.colors';
 
 import styles from './KeyboardButton.module.scss';
 
@@ -16,13 +17,14 @@ interface KeyboardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 
 const generateRandomColor = (): string[] => {
   const keyColorStyles = [
-    { fontColor: styles.keyColorYellow, bgColor: styles.keyBgColorYellow },
-    { fontColor: styles.keyColorOrange, bgColor: styles.keyBgColorOrange },
-    { fontColor: styles.keyColorBlue, bgColor: styles.keyBgColorBlue },
-    { fontColor: styles.keyColorGreen, bgColor: styles.keyBgColorGreen },
-    { fontColor: styles.keyColorPink, bgColor: styles.keyBgColorPink },
-    { fontColor: styles.keyColorViolet, bgColor: styles.keyBgColorViolet },
+    { fontColor: KEY_COLORS.yellow, bgColor: KEY_BACKGROUNDS.yellow },
+    { fontColor: KEY_COLORS.orange, bgColor: KEY_BACKGROUNDS.orange },
+    { fontColor: KEY_COLORS.blue, bgColor: KEY_BACKGROUNDS.blue },
+    { fontColor: KEY_COLORS.green, bgColor: KEY_BACKGROUNDS.green },
+    { fontColor: KEY_COLORS.pink, bgColor: KEY_BACKGROUNDS.pink },
+    { fontColor: KEY_COLORS.violet, bgColor: KEY_BACKGROUNDS.violet },
   ];
+
   const arrLength = keyColorStyles.length;
 
   const colorIndx = Math.floor(Math.random() * arrLength);
@@ -31,6 +33,7 @@ const generateRandomColor = (): string[] => {
   if (colorIndx === bgColorIndx) {
     return generateRandomColor();
   }
+
   return [keyColorStyles[colorIndx].fontColor, keyColorStyles[bgColorIndx].bgColor];
 };
 

@@ -20,6 +20,7 @@ export const Header = ({ lang }: { lang: ELang }) => (
             ? 'Логотип сайту 1plus2.fun з грайливими числами та навчальними символами.'
             : 'Logo of 1plus2.fun website with playful numbers and educational symbols.'
         }
+        loading="eager"
       />
     </SeoLink>
     {/* <BreadCrumb homeElement={'Home'} isCapitalizeLinks /> */}

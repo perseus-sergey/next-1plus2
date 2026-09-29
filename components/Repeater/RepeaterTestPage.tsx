@@ -15,11 +15,11 @@ import { shuffleArray, sleep } from '@/libs/utils';
 import { BaseButton } from '../TextButton/BaseButton';
 import { SeoSVG } from '../Svg/SeoSVG';
 import { useMySound } from '@/libs/hooks/useSound';
-import { PlayFunction } from 'use-sound/dist/types';
 import { ELang } from '@models/types';
 import { ITranslation } from '@/models/repeater.model';
 import ExitButtonWithModal from '../TextButton/ExitButtonWithModal';
 
+type PlayFunction = ReturnType<typeof useMySound>['audioKey'];
 interface IProps {
   translations: ITranslation[];
   setIsTestStarted: Dispatch<SetStateAction<boolean>>;
@@ -28,9 +28,9 @@ interface IProps {
 }
 
 enum EAnswer {
-  '_',
-  'RIGHT',
-  'BAD',
+  _,
+  RIGHT,
+  BAD,
 }
 
 const makeUniqueArray = (array: ITranslation[]): ITranslation[] => {

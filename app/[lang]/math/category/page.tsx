@@ -10,7 +10,7 @@ import BreadCrumbServer from '@/components/BreadCrumb/BreadCrumbsServer';
 import { breadCrumbList } from '@/models/math/breadCrumb.model';
 
 interface IProps {
-  params: { lang: ELang };
+  params: Promise<{ lang: ELang }>;
 }
 
 const { MATH, MATH_CATEGORY } = ESegments;
@@ -18,7 +18,10 @@ const { en, ua } = ELang;
 
 const BASE_URL = process.env.BASE_URL || MAIN_URL;
 
-export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
+export const generateMetadata = async (props: IProps): Promise<Metadata> => {
+  const params = await props.params;
+  const { lang } = params;
+
   return {
     metadataBase: new URL(BASE_URL),
     ...META_MATH_CATEGORY[lang],
@@ -30,15 +33,16 @@ export const generateMetadata = ({ params: { lang } }: IProps): Metadata => {
     },
     alternates: {
       canonical: `/${lang}/${MATH}/${MATH_CATEGORY}`,
-      languages: {
-        en: `/${en}/${MATH}/${MATH_CATEGORY}`,
-        uk: `/${ua}/${MATH}/${MATH_CATEGORY}`,
-      },
+      languages: { en: `/${en}/${MATH}/${MATH_CATEGORY}`, uk: `/${ua}/${MATH}/${MATH_CATEGORY}` },
     },
   };
 };
 
-export default ({ params: { lang } }: IProps) => {
+export default async (props: IProps) => {
+  const params = await props.params;
+
+  const { lang } = params;
+
   return (
     <>
       <BreadCrumbServer
