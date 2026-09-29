@@ -1,35 +1,9 @@
-$keyColorYellow: rgb(252, 222, 27);
-$keyColorOrange: rgb(251, 129, 85);
-$keyColorBlue: rgb(60, 138, 221);
-$keyColorGreen: rgb(146, 199, 32);
-$keyColorPink: rgb(241, 23, 110);
-$keyColorViolet: rgb(137, 93, 232);
-$keyBgColorYellow: linear-gradient(rgb(254, 234, 98), rgb(233, 202, 2));
-$keyBgColorViolet: linear-gradient(rgb(165, 128, 245), rgb(91, 46, 188));
-$keyBgColorOrange: linear-gradient(rgb(251, 129, 85), rgb(245, 68, 4));
-$keyBgColorPink: linear-gradient(rgb(250, 88, 194), rgb(222, 2, 146));
-$keyBgColorGreen: linear-gradient(rgb(211, 246, 136), rgb(142, 200, 16));
-$keyBgColorBlue: linear-gradient(rgb(91 164 241), rgb(69, 122, 245));
-$keyBgColorDefault: $keyBgColorBlue;
-
-:export {
-  keyColorYellow: $keyColorYellow;
-  keyColorOrange: $keyColorOrange;
-  keyColorBlue: $keyColorBlue;
-  keyColorGreen: $keyColorGreen;
-  keyColorPink: $keyColorPink;
-  keyColorViolet: $keyColorViolet;
-  keyBgColorYellow: $keyBgColorYellow;
-  keyBgColorViolet: $keyBgColorViolet;
-  keyBgColorOrange: $keyBgColorOrange;
-  keyBgColorPink: $keyBgColorPink;
-  keyBgColorGreen: $keyBgColorGreen;
-  keyBgColorBlue: $keyBgColorBlue;
-}
+@use 'sass:color';
 
 @function darker($color, $tone) {
   $adjust: -16 * $tone;
-  @return adjust-color($color, $red: $adjust, $green: $adjust, $blue: $adjust);
+
+  @return color.adjust($color, $red: $adjust, $green: $adjust, $blue: $adjust);
 }
 
 @mixin fontColor($color) {
@@ -68,9 +42,11 @@ $keyBgColorDefault: $keyBgColorBlue;
       100% {
         transform: none;
       }
+
       33% {
         transform: translateY(-1px) rotate(-2deg);
       }
+
       66% {
         transform: translateY(1px) rotate(2deg);
       }
