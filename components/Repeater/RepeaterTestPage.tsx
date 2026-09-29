@@ -28,9 +28,9 @@ interface IProps {
 }
 
 enum EAnswer {
-  '_',
-  'RIGHT',
-  'BAD',
+  _,
+  RIGHT,
+  BAD,
 }
 
 const makeUniqueArray = (array: ITranslation[]): ITranslation[] => {

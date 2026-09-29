@@ -19,9 +19,9 @@ import { EExerciseCategories, IExerciseParams, QUESTION_MARK } from '@/models/ma
 import { makeExerciseArray } from '@/libs/math/math.controller';
 
 export enum EIsRightAnswer {
-  '_',
-  'RIGHT',
-  'BAD',
+  _,
+  RIGHT,
+  BAD,
 }
 
 export interface IExerciseComponentProps {
